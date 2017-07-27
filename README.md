@@ -59,7 +59,6 @@ This is a specification for how to get input into the metadata storage and how t
     </structural_metadata>
 </metadata_wrapper>
 
-```
 {'core': {
     'title': 
     'date':
