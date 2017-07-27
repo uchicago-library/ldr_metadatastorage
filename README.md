@@ -81,7 +81,7 @@ This is a specification for how to get input into the metadata storage and how t
 }
 ```
 
-Th metadata storage will do the following on reception of the data
+The metadata storage will do the following on reception of the data
 
 1. extract the core data and generate a dublin core record conforming to dublin core schema for adding to cross-browsing metadata storage
 
@@ -102,3 +102,20 @@ Th metadata storage will do the following on reception of the data
 </metadata>
 
 ```
+
+Metadata storage must be able to answer the following questions about an intellectual unit
+
+1. What is the collection that this unit belongs to use as the main access point for the user
+2. what is the title of this unit to display as the second access point for the user
+3. what is the publication date of this unit to use as third acess point for the user
+4. Who is the creator of this unit to use as the fourth access point for the user
+5. What is the identifier for this resource to be able to locate the assets associated with this unit in order to display them to the user
+
+There are two types of metadata that will be in the ldr metadata storage system.
+
+1. units that belong to the University of Chicago library and which all assets associated are in asset storage
+2. units that do not belong to the University of Chicago lbrary and which assets are stored elsewhere
+
+This means that in order to provide functionality for the the ldr metadata storage must be able to retriever assets from either asset storage or any arbitrary outside storage accessible on the web.
+
+This also means the ldr metadata storage must be able to distinguish between a remote asset and a library-controlled asset.
