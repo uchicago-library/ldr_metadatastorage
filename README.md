@@ -13,11 +13,6 @@
 - extension (metadata) is an OPTIONAL descriptive metadata resource for an intellectual unit
 - client is a a program running on a server that is requesting a resource. This client may be acting on behalf of a biological being.
 
-## Shortcuts
-
-- [new collection post specification](#specification-for-posting-a-new-collection)
-- [new unit post specification](#specification-for-posting-a-new-unit)
-
 ## Requirements for the metadata storage system
 
 Metadata storage must be able to answer the following questions about an intellectual unit
@@ -97,27 +92,35 @@ The ldr metadata storage offers a GET method on the collections endpoint in orde
 </metadata_store_output>
 ```
 
-[Specification for posting a new collection](#specification-for-posting-a-new-collection)
+#### Specification for posting a new collection
 
 The ldr metadata storage also offers a POST method on the collections endpoint in order to allow clients to add new collections to the metadata storage. The ldr metadata storage guarantees that a POST request from this endpoint will add the inputted collection to the ldr metadata storage so long as the input obeys the following rules
 
 - collection name is unique to the ldr metadata storage
 - post data obeys the defined specification
-    1. POST data is well-formed XML in UTF-8 encoding
-    1. the root element of the XML document is "metadata_store_input" with no namespace
-    1. the second element in the XML document beneath the root is "core" with no namespace. There can be only one instance of this element.
-    1. The third element in the XML document is metadata with an implicit namespace of http://example.org/myapp. There can be only one instance of this element.
-    1. The metadata element has the follow explicit namespaces xmlns:dc="http://purl.org/dc/elements/1.1/", xmlns:dcterms="http://purl.org/dc/terms/" and xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance".
-    1. The metadata element is a compound element that contains the following
-        - the first instance of an element dc:title that contains a string containing multiple words. This is the formal title of the collection.
-        - the second instance  an element dc:title that contains a single word. This is the unique identifier for the collection.
-        - one instance of an element dc:description that contains multiple complete sentences. However, it is advised that you keep number of sentences to at most 4 unless there is a compelling need. This is the description of the collection, particulary focusing on how this collection is significant to the library.
+    1. POST data is well-formed XML in UTF-8 encoding.
+    1. the root element is input.
+    1. There is ONLY one instance of the element core beneath the root element.
+    1. There is only one instance of the element metadata beneath the element core
+    1. The element metadata has an implicit namespace
+        - ```http://example.org/myapp```
+    1. The element metadata has the following explicit namespaces
+        - ```xmlns:dc="http://purl.org/dc/elements/1.1/"```
+        - ```xmlns:dcterms="http://purl.org/dc/terms/"```
+        - ```xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"```
+    1. The element metadata is a compound element that contains the following
+        - ONLY two instances of the element dc:title
+            - The value of the first instance is a string containing multiple words composed of alphabetic or numeric characters. This is the formal title of the collection.
+            - The value of teh second instance MUST be a single  word composed exclusively of alphabetic characters. This is the unique identifier for the collection.
+        - ONLY  one instance of the element dc:description
+            - The value  of the element dc:description  is multiple complete sentences.
+            - GUIDELINE: In order to ensure easy display on a variety of screen sizes for hardware it is advised to keep to a limit of at most 4 sentences.
 
 This is an example to use for a complete understanding. Do not copy this example, since it is strictly a sample exercise and should not be considered canonical data.
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
-<metadata_store_input>
+<input>
     <core>
         <metadata
         xmlns="http://example.org/myapp/"
@@ -129,7 +132,7 @@ This is an example to use for a complete understanding. Do not copy this example
             <dc:description>[1-4 sentences describing how this collection is significant to the library]</dc:description>
         </metadata>
     </core>
-</metadata_store_input>
+</input>
 ```
 
 ### /collections/[collection identifier]
@@ -172,82 +175,112 @@ The ldr metadata storage offers a GET method on the units endpoint in order to r
 </metadata_store_output>
 ```
 
-[Specification for posting a new unit](#specification-for-posting-a-new-unit)
+#### Specification for posting a new unit
 
 The ldr metadata storage also offers a POST method on the units endpoint in order to add a new intellectual unit to the system. The ldr metadata storage guarantees that a POST request to this endpoint will add the inputted intellectual unit to the system as long as the input obeys the following rules
 
 - the intellectual unit is unique to the ldr metadata storage system
 - the input obeys the defined specification
+    1. POST data is well-formed XML in UTF-8 encoding
+    1. The root element is input
+    1. There is ONLY one instance of the element core beneath the element input
+    1. There is ONLY one instance of the element metadata beneath the element core
+    1. The element metadata has the following implicit namespace
+        - ```http://example.org/myapp```
+    1. The metadata element has the follow explicit namespaces
+        - ```xmlns:dc="http://purl.org/dc/elements/1.1/"```
+        - ```xmlns:dcterms="http://purl.org/dc/terms/"```
+        - ```xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"```
+    1. The metadata element is a compound element that contains the following
+        - ONLY one instance of an element dc:title that contains a string containing multiple words. This is the formal title of the collection.
+        - ONLY one instance of an element dc:date that contains a string conforming to ISO-8601 format. 1980, 1980-02-01 are both valid. 1980-02, 1980/02, 1980/02/?, 1980/02/??, 02/01/1980, 01/02/1980, February 02, 1980, February 2nd 1980, February 1980 are invalid values and will be rejected. Any value in this element containing alphabetic characters will be rejected. Any separate other than a hyphen will cause this input to be rejected
+        - AT LEAST one or more instances  of an element dc:creator that contains a string that is an individual who is responsible in some part for the creation of this intellectual unit. This name MUST be written as surname first followed by a comma followed by a single space followed by the given name. Where the creator's middle name is significant follow the given name with a single space then enter the middle name. In the case of honorifics or titles or Jr./Sr./II/III/IV/etc. denotations follow the last word in the given name portion of the string with a second comma followed by a single space followed by the honorific or title.
+        - AT LEAST one or more instances of an element dc:identifier
+            - this element MUST have an attribute xsi:type that can have a value dcterms:URI or dcterms:URL
+            - if the attribute xsi:type is dcterms:URI than the value of the element must be presented as the following /[asset identifier] where asset identifier is some asset located in ldr asset storage. If this URI cannot be resolved to an asset in ldr asset storage than this POST data will be rejected.
+            - if the attribute xsi:type is dcterms:URL than the value of the element must be presented as a valid and complete URL to a remote asset. If this URL does not resolve to a 200 HTTP code than this POST data will be rejected.
+        - AT LEAST one or more instances of an element dc:relation
+            - this element MUST have an attribute xsi:type with the value dcterms:URI
+            - the value of this element MUST be resolved to a collection in the ldr  metadata storage. The URI must be /collections/[collection identifier] where collection identifier is a valid identifier to a collection in ldr metadata storage. If this URI does not resolve to a collection in ldr metadata storage than this POST data will be rejected.
+    1. OPTIONALLY there is a ONLY one instance of the element extensions beneath the element input
+    1. If there an instance of the element extensions, there is AT LEAST one or more instances of the element extension
+    1. There MUST be ONLY one instance of the element type beneath the element extension.
+        - The value of the element type MUST be the string xml.
+    1. There MUST be ONLY one instance of the element name beneath the element extension.
+        - The value of the element name MUST be a single word that uniquely identifies the extension metadata in the context of the input
+    1. The element data is a compound element that contains the root element of whatever extension metadata is being added in addition to the core metadata
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
-<metadata_store_input>
+<input>
     <core>
         <metadata
         xmlns="http://example.org/myapp/"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://example.org/myapp/ http://example.org/myapp/schema.xsd"
         xmlns:dc="http://purl.org/dc/elements/1.1/"
         xmlns:dcterms="http://purl.org/dc/terms/">
             <dc:title>This is a title</dc:title>
-            <dc:creator>John Doe</dc:title>
+            <dc:creator>Doe, John</dc:title>
             <dc:date>1980-02-16</dc:date>
             <dc:identifier xsi:type="dcterms:URL">http://wwww.example.com/book1.pdf</dc:identifer>
-            <dc:relation>campub</dc:relation>
-            <dc:relation>ldr</dc:relation>
+            <dc:relation xsi:type="URI">/collections/campub</dc:relation>
         </metadata>
     </core>
-</metadata_store_input>
+</input>
 ```
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
-<metadata_store_input>
+<input>
     <core>
         <metadata
         xmlns="http://example.org/myapp/"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://example.org/myapp/ http://example.org/myapp/schema.xsd"
         xmlns:dc="http://purl.org/dc/elements/1.1/"
         xmlns:dcterms="http://purl.org/dc/terms/">
             <dc:title>This is a title</dc:title>
             <dc:creator>John Doe</dc:title>
             <dc:date>1980-02-16</dc:date>
             <dc:identifier xsi:type="dcterms:URI">/mvol-0001-0002-0004</dc:identifier>
-            <dc:relation>campub</dc:relation>
-            <dc:relation>ldr</dc:relation>
+            <dc:relation xsi:type="dcterms:URI">/collections/campub</dc:relation>
         </metadata>
     </core>
-</metadata_store_input>
+</input>
 ```
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
-<metadata_store_input>
+<input>
     <core>
         <metadata
         xmlns="http://example.org/myapp/"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://example.org/myapp/ http://example.org/myapp/schema.xsd"
         xmlns:dc="http://purl.org/dc/elements/1.1/"
         xmlns:dcterms="http://purl.org/dc/terms/">
             <dc:title>This is a title</dc:title>
             <dc:creator>John Doe</dc:title>
             <dc:date>1980-02-16</dc:date>
             <dc:identifier xsi:type="dcterms:URI">/mvol-0001-0002-0004</dc:identifier>
-            <dc:relation>campub</dc:relation>
-            <dc:relation>ldr</dc:relation>
+            <dc:relation xsi:type="dcterms:URI">/collections/campub</dc:relation>
         </metadata>
     </core>
     <extensions>
         <extension>
-            <!-- insert first optional extension metadata record here -->
+            <type>xml</type>
+            <name>VRACore</name>
+            <data>
+                <!-- insert VRACore metadata record here -->
+            </data>
         </extension>
         <extension>
-            <!-- insert second optional extension metadata record here -->
+            <type>xml</type>
+            <name>alto</name>
+            <data>
+                <!-- insert alto metadata record here -->
+            </data>
         </extension>
     </extensions>
-</metadata_store_input>
+</input>
 ```
 
 ### /units/[intellectual unit identifier]
