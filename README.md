@@ -15,8 +15,8 @@
 
 ## Shortcuts
 
-- [new collection post specification](#Specification-for-posting-a-new-collection)
-- [new unit post specification])(#Specification-for-posting-a-new-unit)
+- [new collection post specification](####Specification-for-posting-a-new-collection)
+- [new unit post specification](####Specification-for-posting-a-new-unit)
 
 ## Requirements for the metadata storage system
 
