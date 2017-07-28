@@ -50,13 +50,131 @@ This means that the metadata storage must be able to store a variety of metadata
 
 COROLLARY: the metadata storage should be able to store technical metadata about assets in digital collections. This technical metadata is currently being stored in asset storage, but there is a strong argument to be made that doing this "muddies the water" between asset and metadata. Asset ought to be strictly defined as a byte stream representing an intellectual unit or some portion of an intellectual unit. By storing technical metadata, which by definition is not a byte stream representing a whole or some port of an intellectual unit but rather information about the byte stream the asset storage is being forced to perform a task that is a violation of its primary function.
 
-## interfaces for ldr metadata storage
+## Contracts for available endpoints
+
+1. /
+1. /collections
+1. /units
+1. /collections/[collection identifier]
+1. /units/[unit identifier]
+1. /units/[unit identifier/extensions
+1. /units/[unit identifier]/extensions/[extension identifier]
+
+## Contracts for GET request responses from the ldr metadata storage
+
+Every valid GET request to the ldr metadata is GUARANTEED to receive an XML response. This XML response will have the following information
+
+- the request that the ldr metadata storage received
+- the date and time in ISO-8601 that the ldr metadata storage received that request WILL be the request timestamp from the timezone of the requestor
+- the date and time in ISO-8601 that the ldr metadata storage sent the response from the timezone of the ldr metadata storage
+- the type of response returned WILL be either aggregate or atomic
+- the response in the form of the answer to the question asked by the request
+- the response will be items if the response type is aggregate
+- the response will be metadata  if the response type is atomic
+- items will contain an item for each result that is part of the answer to the question being asked
+- the value of an item WILL ALWAYS be a uri complete-able by the ldr metadata storage
+- metadata will contain dublin core metadata
+- metadata will have an implicit namespace
+  - ```http://example.org/myapp/```
+- metadata will have 3 explicit namespaces
+  - ```http://www.w3.org/2001/XMLSchema-instance```
+  - ```http://purl.org/dc/elements/1.1/```
+  - ```http://purl.org/dc/terms/```
+- metadata WILL contain a dc:title
+- metadata MAY contain a dc:date
+- metadata MAY contain a dc:relation
+- metadata WILL contain AT LEAST one dc:identifier
+- dc:identifier WILL have an attribute xsi:type
+- the attribute xsi:type on dc:identifier WILL either have have dcterms:URI OR dcterms:URL
+
+See the example below for further guidance on what to expect from a GET request to the ldr metadata storage
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<metadata_store_output>
+    <request>/collections/campub</request>
+    <requestReceivedTimeStamp>2017-07-28T14:02:12-06:00</requestReceivedTimeStamp>
+    <responseSentTimeStamp>2017-07-28T14:02:17+07:00</responseSentTimeStamp>
+    <responseType>aggregate</responseType>
+    <response>
+        <items>
+            <item>/unit/mvol-0001-0002-0003</item>
+            <item>/unit/mvol-0001-0002-0004</item>
+            <item>/unit/mvol-0001-0002-0005</item>
+            <item>/unit/mvol-0002-0001-0001</item>
+            <item>/unit/mvol-0002-0001-0002</item>
+            <item>/unit/mvol-0004-1918-0204</item>
+        </item>
+    </response>
+</metadata_store_output>
+```
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<metadata_store_output>
+    <request>/units/mvol-0001-0002-0004/core</request>
+    <requestReceivedTimeStamp>2017-07T12:02:44-06:00</requestReceivedTimeStamp>
+    <responseSentTimeStamp>2017-07-28T12:02:58+03:00</responseSentTimeStamp>
+    <responseType>atomic</responseType>
+    <response>
+        <data>
+            <metadata
+                xmlns="http://example.org/myapp/"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:dc="http://purl.org/dc/elements/1.1/"
+                xmlns:dcterms="http://purl.org/dc/terms/">
+                <dc:title>Cap and Gown volume 2, issue 4</dc:title>
+                <dc:date>1900-02-01</dc:date>
+                <dc:creator>University of Chicago</dc:creator>
+                <dc:identifier xsi:type="dcterms:URI">/mvol-0001-0002-0004_0001</dc:identifier>
+                <dc:identifier xsi:type="dcterms:URI">/mvol-0001-0002-0004_0002</dc:identifier>
+                <dc:identifier xsi:type="dcterms:URI">/mvol-0001-0002-0004_0003</dc:identifier>
+                <dc:identifier xsi:type="dcterms:URI">/mvol-0001-0002-0004_0004</dc:identifier>
+            <metadata>
+        </data>
+    </response>
+</metadata_store_output>
+```
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<metadata_store_output>
+    <request>/collections/campub</request>
+    <requestReceivedTimeStamp>2017-07T12:02:44-06:00</requestReceivedTimeStamp>
+    <responseSentTimeStamp>2017-07-28T12:02:58+03:00</responseSentTimeStamp>
+    <responseType>atomic</responseType>
+    <response>
+        <data>
+            <metadata
+                xmlns="http://example.org/myapp/"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:dc="http://purl.org/dc/elements/1.1/"
+                xmlns:dcterms="http://purl.org/dc/terms/">
+                <dc:title>Campus Publications Digital Collection</dc:title>
+                <dc:title>campub</dc:title>
+                <dc:identifier xsi:type="dcterms:URI">/collections/campub</dc:identifier>
+            <metadata>
+        </data>
+    </response>
+</metadata_store_output>
+```
+
+## Descriptions of endpoints
 
 ### /
 
 communication protocol: Web
 
 communication method: GET
+
+The ldr metadata storage offers a root endpoint that provides the major contexts for metadata storage. The two contets in-scope for this project are
+
+- collections which are groups of intellectual units typically related as part of a work unit comissioned by the library
+- units are individual intellectual units that can be discovered by a title, a creator and collections that they have been grouped in prior to arriving in the ldr. Units have assets which are byte streams representing the whole or some portion of the unit and can be retrieved for the purpose of viewing by a client
+
+There is some discussion about adding a third context, technical_metadata.
+
+- technical_metadata is information about the assets that represent a particular intellectual unit. This information may include but is not limited to width and height pixel dimensions of an image byte stream or duration of a video file or size in disk storage required by a particular byte stream.
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -111,7 +229,7 @@ The ldr metadata storage also offers a POST method on the collections endpoint i
     1. The element metadata is a compound element that contains the following
         - ONLY two instances of the element dc:title
             - The value of the first instance is a string containing multiple words composed of alphabetic or numeric characters. This is the formal title of the collection.
-            - The value of teh second instance MUST be a single  word composed exclusively of alphabetic characters. This is the unique identifier for the collection.
+            - The value of the second instance MUST be a single  word composed exclusively of alphabetic characters. This is the unique identifier for the collection.
         - ONLY  one instance of the element dc:description
             - The value  of the element dc:description  is multiple complete sentences.
             - GUIDELINE: In order to ensure easy display on a variety of screen sizes for hardware it is advised to keep to a limit of at most 4 sentences.
@@ -210,6 +328,8 @@ The ldr metadata storage also offers a POST method on the units endpoint in orde
         - The value of the element name MUST be a single word that uniquely identifies the extension metadata in the context of the input
     1. The element data is a compound element that contains the root element of whatever extension metadata is being added in addition to the core metadata
 
+See examples below for further guidance about how to construct POST new intellectual unit data to ldr metadata storage
+
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <input>
@@ -289,7 +409,7 @@ communication protocol: Web
 
 communication methods: GET
 
-This endpoint MUST return all available contexts for the intellectual unit identified. All intellectual units have the following contexts.
+This endpoint is GUARANTEED to return all available contexts for the intellectual unit identified. All intellectual units have the following contexts.
 
 - core (MANDATORY)
 - extensions (OPTIONAL)
@@ -315,7 +435,9 @@ communication methods: GET
 
 error conditions: no core (metadata) resource available
 
-This endpoint must return the core (metadata) resource for the intellectual unit identified. This is required in order to provide cross-collection browsing functionality of all intellectual units in the ldr metadata storage to frontend interfaces. The core (metadata) MUST include an identifier of type dcterms:URL for every asset for this intellectual unit. The ldr metadata storage MAY include an identifier of type dcterms:URI if this intellectual unit is part of a library digital collection. If there is an  identifier of type dcterms:URI, then the consuming client MUST be able to retrieve the project-specific explanation of the relationships between assets for the intellectual unit identified. If there is no identifier of type dcterms:URI than the consuming client MUST contain the business logic for defining the relationships between the assets itself.
+This endpoint GUARANTEES to return the core metadata resource for the intellectual unit identified. 
+
+This endpoint MUST return the core (metadata) resource for the intellectual unit identified. This is required in order to provide cross-collection browsing functionality of all intellectual units in the ldr metadata storage to frontend interfaces. The core (metadata) MUST include an identifier of type dcterms:URL for every asset for this intellectual unit. The ldr metadata storage MAY include an identifier of type dcterms:URI if this intellectual unit is part of a library digital collection. If there is an  identifier of type dcterms:URI, then the consuming client MUST be able to retrieve the project-specific explanation of the relationships between assets for the intellectual unit identified. If there is no identifier of type dcterms:URI than the consuming client MUST contain the business logic for defining the relationships between the assets itself.
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
