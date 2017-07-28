@@ -93,16 +93,15 @@ The ldr metadata storage also offers a POST method on the collections endpoint i
 
 - collection name is unique to the ldr metadata storage
 - post data obeys the defined specification
-
-1. POST data is well-formed XML in UTF-8 encoding
-1. the root element of the XML document is "metadata_store_input" with no namespace
-1. the second element in the XML document beneath the root is "core" with no namespace. There can be only one instance of this element.
-1. The third element in the XML document is metadata with an implicit namespace of http://example.org/myapp. There can be only one instance of this element.
-1. The metadata element has the follow explicit namespaces xmlns:dc="http://purl.org/dc/elements/1.1/", xmlns:dcterms="http://purl.org/dc/terms/" and xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance".
-1. The metadata element is a compound element that contains the following
-    - the first instance of an element dc:title that contains a string containing multiple words. This is the formal title of the collection.
-    - the second instance  an element dc:title that contains a single word. This is the unique identifier for the collection.
-    - one instance of an element dc:description that contains multiple complete sentences. However, it is advised that you keep number of sentences to at most 4 unless there is a compelling need. This is the description of the collection, particulary focusing on how this collection is significant to the library.
+    1. POST data is well-formed XML in UTF-8 encoding
+    1. the root element of the XML document is "metadata_store_input" with no namespace
+    1. the second element in the XML document beneath the root is "core" with no namespace. There can be only one instance of this element.
+    1. The third element in the XML document is metadata with an implicit namespace of http://example.org/myapp. There can be only one instance of this element.
+    1. The metadata element has the follow explicit namespaces xmlns:dc="http://purl.org/dc/elements/1.1/", xmlns:dcterms="http://purl.org/dc/terms/" and xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance".
+    1. The metadata element is a compound element that contains the following
+        - the first instance of an element dc:title that contains a string containing multiple words. This is the formal title of the collection.
+        - the second instance  an element dc:title that contains a single word. This is the unique identifier for the collection.
+        - one instance of an element dc:description that contains multiple complete sentences. However, it is advised that you keep number of sentences to at most 4 unless there is a compelling need. This is the description of the collection, particulary focusing on how this collection is significant to the library.
 
 This is an example to use for a complete understanding. Do not copy this example, since it is strictly a sample exercise and should not be considered canonical data.
 
