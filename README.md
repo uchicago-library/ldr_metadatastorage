@@ -166,21 +166,20 @@ Every POST submission to the ldr metadata storage MUST be well-formed XML and be
 - Where a collection identifier is submitted it MUST not exist in the ldr metadata storage before submission occurs
 - Where a unit identifier is submitted it MUST not exist in the ldr metadata storage before submission occurs
 - The root element MUST be input
-- There is ONLY one instance of the element requestSentTimeStamp
+- There MUST be ONLY one instance of the element requestSentTimeStamp
 - The value of requestSentTimeStamp MUST be valid ISO-8601
 - There MUST be an element request
 - The value of request MUST be the URI being requested
-- There is ONLY one instance of the element metadata beneath input
-- The root element is input.
-- There is ONLY one instance of the element core beneath the root element.
-- There is only one instance of the element metadata beneath the element core
-- The element metadata has an implicit namespace
+- There MUST be ONLY one instance of the element metadata beneath input
+- There MUST be ONLY one instance of the element core beneath input
+- There MUST be only one instance of the element metadata beneath the element core
+- The element metadata MUST have one implicit namespace
   - ```http://example.org/myapp```
-- The element metadata has the following explicit namespaces
-  - ```xmlns:dc="http://purl.org/dc/elements/1.1/"```
-  - ```xmlns:dcterms="http://purl.org/dc/terms/"```
-  - ```xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"```
-- The element metadata is a compound element
+- The element metadata MUST have the following explicit namespaces
+  - ```http://purl.org/dc/elements/1.1/```
+  - ```http://purl.org/dc/terms/```
+  - ```http://www.w3.org/2001/XMLSchema-instance```
+- The element metadata MUST be a compound element
 - There MUST be AT LEAST one instance of element dc:title beneath metadata
 - There MAY be a requirement for a second instance of dc:title
 - If there is a requirement for a second instance of dc:title than the value of that instance MUST be a single word comprised ONLY of alphabetic characters
