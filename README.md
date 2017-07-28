@@ -50,7 +50,7 @@ This means that the metadata storage must be able to store a variety of metadata
 
 COROLLARY: the metadata storage should be able to store technical metadata about assets in digital collections. This technical metadata is currently being stored in asset storage, but there is a strong argument to be made that doing this "muddies the water" between asset and metadata. Asset ought to be strictly defined as a byte stream representing an intellectual unit or some portion of an intellectual unit. By storing technical metadata, which by definition is not a byte stream representing a whole or some port of an intellectual unit but rather information about the byte stream the asset storage is being forced to perform a task that is a violation of its primary function.
 
-## Contracts for available endpoints
+## Contract for available endpoints
 
 1. /
 1. /collections
@@ -60,9 +60,9 @@ COROLLARY: the metadata storage should be able to store technical metadata about
 1. /units/[unit identifier/extensions
 1. /units/[unit identifier]/extensions/[extension identifier]
 
-## Contracts for GET request responses from the ldr metadata storage
+## Contract for GET request responses from the ldr metadata storage
 
-Every valid GET request to the ldr metadata is GUARANTEED to receive an XML response. This XML response will have the following information
+Every valid GET request to the ldr metadata is GUARANTEED to receive a well-formed XML response. This XML response will have the following information
 
 - the request that the ldr metadata storage received
 - the date and time in ISO-8601 that the ldr metadata storage received that request WILL be the request timestamp from the timezone of the requestor
@@ -159,6 +159,150 @@ See the example below for further guidance on what to expect from a GET request 
 </metadata_store_output>
 ```
 
+## Contract for POST submissions to the ldr metadata storage
+
+Every POST submission to the ldr metadata storage MUST be well-formed XML and be UTF-8 encoded. In addition, the information being submitted MUST conform to specific formatting requirements as will be defined for each piece of information that requirements are relevant.
+
+- Where a collection identifier is submitted it MUST not exist in the ldr metadata storage before submission occurs
+- Where a unit identifier is submitted it MUST not exist in the ldr metadata storage before submission occurs
+- The root element MUST be input
+- There is ONLY one instance of the element requestSentTimeStamp
+- The value of requestSentTimeStamp MUST be valid ISO-8601
+- There MUST be an element request
+- The value of request MUST be the URI being requested
+- There is ONLY one instance of the element metadata beneath input
+- The root element is input.
+- There is ONLY one instance of the element core beneath the root element.
+- There is only one instance of the element metadata beneath the element core
+- The element metadata has an implicit namespace
+  - ```http://example.org/myapp```
+- The element metadata has the following explicit namespaces
+  - ```xmlns:dc="http://purl.org/dc/elements/1.1/"```
+  - ```xmlns:dcterms="http://purl.org/dc/terms/"```
+  - ```xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"```
+- The element metadata is a compound element
+- There MUST be AT LEAST one instance of element dc:title beneath metadata
+- There MAY be a requirement for a second instance of dc:title
+- If there is a requirement for a second instance of dc:title than the value of that instance MUST be a single word comprised ONLY of alphabetic characters
+- There MAY be a requirement for a MANDATORY instance of dc:date beneath metadata
+- If there is a requirement of an instance of dc:date than the value of that instance MUST be valid ISO-8601
+- There may be a requirement that there MUST be AT LEAST one instance of dc:relation beneath metadata
+- If there is a requirement for AT LEAST one instance of dc:relation than each instance MUST have an attribute xsi:type which MUST have a value of dcterms:URI
+- If there is a requirement for AT LEAST one instance of dc:relation than each instance MUST have a value that is resolvable over HTTP to a resource in ldr metadata storage
+- There MAY be a requirement for ONLY one instance of dc:description beneath metadata
+- If there is a requirement for ONLY one instance of dc:description than the value of that instance MUST be text
+  - GUIDELINE: In order to ensure easy display on a variety of screen sizes for hardware it is advised to keep to a limit of at most 4 sentences.
+- There MUST be AT LEAST one instance of dc:identifer beneath metadata
+- dc:identifier MUST have an attribute xsi:type which MUST have a value of either a.) dcterms:URI or b.) dcterms:URL
+- dc:identifier MUST have a value that is resolvable over HTTP to an asset
+- There MAY be a requirement there MUST be ONLY one instance of extensions beneath input
+- If there is a requirement that MUST be ONLY one instance of extensions than there MUST be AT LEAST one instance of extension beneath extensions
+- If there is a requirement for AT LEAST one instance of extension than there MUST be ONLY one instance of type beneath extension
+- If there is a requirement for ONLY one instance type than the value of that instance MUST be xml
+- If there is a requirement for AT LEAST one instance of extension than there MUST be ONLY one instance of name beneath extension
+- If there is a requirement for an instance of name than the value of name MUST be an a single word consisting exclusively of alphabetic characters
+- If there is a requirement for AT LEAST one instance of extension than there MUST be ONLY one instance of data element beneath extension
+- If there is a requirement for ONLY one instance of data than there a root element of some extension metadata beneath that instance
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<input>
+    <request>/collections/campub</request>
+    <requestSentTimeStamp>2017-07-02T11:14:55-06:00<requestSentTimeStamp>
+    <core>
+        <metadata
+        xmlns="http://example.org/myapp/"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:dc="http://purl.org/dc/elements/1.1/"
+        xmlns:dcterms="http://purl.org/dc/terms/">
+            <dc:title>[a long form and formal title of the collection e.g. Richard G. Maynard Papers. Digital Collection]</dc:title>
+            <dc:title>[a short form one-word title of the collection that can be used as the identifier for the collection e.g. maynard]</dc:title>
+            <dc:description>[1-4 sentences describing how this collection is significant to the library]</dc:description>
+        </metadata>
+    </core>
+</input>
+```
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<input>
+    <request>/unit/remote-collection-book1</request>
+    <requestSentTimeStamp>2017-07-02T11:14:55-06:00<requestSentTimeStamp>
+    <core>
+        <metadata
+        xmlns="http://example.org/myapp/"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:dc="http://purl.org/dc/elements/1.1/"
+        xmlns:dcterms="http://purl.org/dc/terms/">
+            <dc:title>This is a title</dc:title>
+            <dc:creator>Doe, John</dc:title>
+            <dc:date>1980-02-16</dc:date>
+            <dc:identifier xsi:type="dcterms:URL">http://wwww.example.com/book1.pdf</dc:identifer>
+            <dc:relation xsi:type="URI">/collections/campub</dc:relation>
+        </metadata>
+    </core>
+</input>
+```
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<input>
+    <request>/unit/mvol-0001-0002-0004</request>
+    <requestSentTimeStamp>2017-07-02T11:14:55-06:00<requestSentTimeStamp>
+    <core>
+        <metadata
+        xmlns="http://example.org/myapp/"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:dc="http://purl.org/dc/elements/1.1/"
+        xmlns:dcterms="http://purl.org/dc/terms/">
+            <dc:title>This is a title</dc:title>
+            <dc:creator>John Doe</dc:title>
+            <dc:date>1980-02-16</dc:date>
+            <dc:identifier xsi:type="dcterms:URI">/mvol-0001-0002-0004</dc:identifier>
+            <dc:relation xsi:type="dcterms:URI">/collections/campub</dc:relation>
+        </metadata>
+    </core>
+</input>
+```
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<input>
+    <request>/unit/mvol-0001-0002-0004</request>
+    <requestSentTimeStamp>2017-07-02T11:14:55-06:00<requestSentTimeStamp>
+    <core>
+        <metadata
+        xmlns="http://example.org/myapp/"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:dc="http://purl.org/dc/elements/1.1/"
+        xmlns:dcterms="http://purl.org/dc/terms/">
+            <dc:title>This is a title</dc:title>
+            <dc:creator>John Doe</dc:title>
+            <dc:date>1980-02-16</dc:date>
+            <dc:identifier xsi:type="dcterms:URI">/mvol-0001-0002-0004</dc:identifier>
+            <dc:relation xsi:type="dcterms:URI">/collections/campub</dc:relation>
+        </metadata>
+    </core>
+    <extensions>
+        <extension>
+            <type>xml</type>
+            <name>VRACore</name>
+            <data>
+                <!-- insert VRACore metadata record here -->
+            </data>
+        </extension>
+        <extension>
+            <type>xml</type>
+            <name>alto</name>
+            <data>
+                <!-- insert alto metadata record here -->
+            </data>
+        </extension>
+    </extensions>
+</input>
+```
+
+
 ## Descriptions of endpoints
 
 ### /
@@ -176,19 +320,6 @@ There is some discussion about adding a third context, technical_metadata.
 
 - technical_metadata is information about the assets that represent a particular intellectual unit. This information may include but is not limited to width and height pixel dimensions of an image byte stream or duration of a video file or size in disk storage required by a particular byte stream.
 
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<metadata_store_output>
-    <request>/</request>
-    <response>
-        <available_contexts>
-            <available_contexts>/collections</available_contexts>
-            <available_contexts>/units</available_contexts>
-        </available_contexts>
-    </response>
-</metadata_store_output>
-```
-
 ### /collections
 
 communication protocols: Web
@@ -196,19 +327,6 @@ communication protocols: Web
 communication methods: GET, POST
 
 The ldr metadata storage offers a GET method on the collections endpoint in order to retrieve a list of all collections in the metadata storage. The ldr metadata storage guarantees that a GET request from this endpoint will give the consuming client an up-to-date list of collections available in the ldr metadata storage.
-
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<metadata_store_output>
-    <request>/collections</request>
-    <response>
-        <available_collections>
-            <available_collection>/collections/[collection one identifier]</available_collection>
-            <available_collection>/collections/[collection two identifier]</available_collection>
-        </available_collections>
-    </response>
-</metadata_store_output>
-```
 
 #### Specification for posting a new collection
 
@@ -234,43 +352,12 @@ The ldr metadata storage also offers a POST method on the collections endpoint i
             - The value  of the element dc:description  is multiple complete sentences.
             - GUIDELINE: In order to ensure easy display on a variety of screen sizes for hardware it is advised to keep to a limit of at most 4 sentences.
 
-This is an example to use for a complete understanding. Do not copy this example, since it is strictly a sample exercise and should not be considered canonical data.
-
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<input>
-    <core>
-        <metadata
-        xmlns="http://example.org/myapp/"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns:dc="http://purl.org/dc/elements/1.1/"
-        xmlns:dcterms="http://purl.org/dc/terms/">
-            <dc:title>[a long form and formal title of the collection e.g. Richard G. Maynard Papers. Digital Collection]</dc:title>
-            <dc:title>[a short form one-word title of the collection that can be used as the identifier for the collection e.g. maynard]</dc:title>
-            <dc:description>[1-4 sentences describing how this collection is significant to the library]</dc:description>
-        </metadata>
-    </core>
-</input>
-```
 
 ### /collections/[collection identifier]
 
 communication protocols: Web
 
 communication methods: GET
-
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<metadata_store_output>
-    <request>/collections[collection identifier]</request>
-    <response>
-        <available_intellectual_units>
-            <available_intellectual_unit>/unit/[intellectual unit identifier one]/</available_intellectual_unit>
-            <available_intellectual_unit>/unit/[intellectual unit identifer two]</available_intellectual_unit>
-        </available_intellectual_units>
-    </response>
-</metadata_store_output>
-```
 
 ### /units
 
@@ -279,19 +366,6 @@ communication protocol: Web
 communication methods: GET, POST
 
 The ldr metadata storage offers a GET method on the units endpoint in order to retrieve a list of the intellectual units in the system. The ldr metadata storage guarantees that a request to this endpoint will provide an up-to-date list of all intellectual units in the system.
-
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<metadata_store_output>
-    <request>/collections[collection identifier]</request>
-    <response>
-        <available_intellectual_units>
-            <available_intellectual_unit>/unit/[intellectual unit identifier one]/</available_intellectual_unit>
-            <available_intellectual_unit>/unit/[intellectual unit identifer two]</available_intellectual_unit>
-        </available_intellectual_units>
-    </response>
-</metadata_store_output>
-```
 
 #### Specification for posting a new unit
 
@@ -330,78 +404,6 @@ The ldr metadata storage also offers a POST method on the units endpoint in orde
 
 See examples below for further guidance about how to construct POST new intellectual unit data to ldr metadata storage
 
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<input>
-    <core>
-        <metadata
-        xmlns="http://example.org/myapp/"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns:dc="http://purl.org/dc/elements/1.1/"
-        xmlns:dcterms="http://purl.org/dc/terms/">
-            <dc:title>This is a title</dc:title>
-            <dc:creator>Doe, John</dc:title>
-            <dc:date>1980-02-16</dc:date>
-            <dc:identifier xsi:type="dcterms:URL">http://wwww.example.com/book1.pdf</dc:identifer>
-            <dc:relation xsi:type="URI">/collections/campub</dc:relation>
-        </metadata>
-    </core>
-</input>
-```
-
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<input>
-    <core>
-        <metadata
-        xmlns="http://example.org/myapp/"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns:dc="http://purl.org/dc/elements/1.1/"
-        xmlns:dcterms="http://purl.org/dc/terms/">
-            <dc:title>This is a title</dc:title>
-            <dc:creator>John Doe</dc:title>
-            <dc:date>1980-02-16</dc:date>
-            <dc:identifier xsi:type="dcterms:URI">/mvol-0001-0002-0004</dc:identifier>
-            <dc:relation xsi:type="dcterms:URI">/collections/campub</dc:relation>
-        </metadata>
-    </core>
-</input>
-```
-
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<input>
-    <core>
-        <metadata
-        xmlns="http://example.org/myapp/"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns:dc="http://purl.org/dc/elements/1.1/"
-        xmlns:dcterms="http://purl.org/dc/terms/">
-            <dc:title>This is a title</dc:title>
-            <dc:creator>John Doe</dc:title>
-            <dc:date>1980-02-16</dc:date>
-            <dc:identifier xsi:type="dcterms:URI">/mvol-0001-0002-0004</dc:identifier>
-            <dc:relation xsi:type="dcterms:URI">/collections/campub</dc:relation>
-        </metadata>
-    </core>
-    <extensions>
-        <extension>
-            <type>xml</type>
-            <name>VRACore</name>
-            <data>
-                <!-- insert VRACore metadata record here -->
-            </data>
-        </extension>
-        <extension>
-            <type>xml</type>
-            <name>alto</name>
-            <data>
-                <!-- insert alto metadata record here -->
-            </data>
-        </extension>
-    </extensions>
-</input>
-```
 
 ### /units/[intellectual unit identifier]
 
@@ -413,19 +415,6 @@ This endpoint is GUARANTEED to return all available contexts for the intellectua
 
 - core (MANDATORY)
 - extensions (OPTIONAL)
-
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<metadata_store_output>
-    <request>/[identifier]</request>
-    <response>
-        <available_contexts>
-            <available_context>/[identifier]/core</avaiable_context>
-            <available_context>/[identifier]/extensions</avaiable_context>
-        </available_contexts>
-    </response>
-</metadata_store_output>
-```
 
 ### /units/[intellectual unit identifier]/core
 
@@ -439,30 +428,6 @@ This endpoint GUARANTEES to return the core metadata resource for the intellectu
 
 This endpoint MUST return the core (metadata) resource for the intellectual unit identified. This is required in order to provide cross-collection browsing functionality of all intellectual units in the ldr metadata storage to frontend interfaces. The core (metadata) MUST include an identifier of type dcterms:URL for every asset for this intellectual unit. The ldr metadata storage MAY include an identifier of type dcterms:URI if this intellectual unit is part of a library digital collection. If there is an  identifier of type dcterms:URI, then the consuming client MUST be able to retrieve the project-specific explanation of the relationships between assets for the intellectual unit identified. If there is no identifier of type dcterms:URI than the consuming client MUST contain the business logic for defining the relationships between the assets itself.
 
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<metadata_store_output>
-    <request>/[identifier]/core</request>
-
-    <response>
-        <metadata
-        xmlns="http://example.org/myapp/"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://example.org/myapp/ http://example.org/myapp/schema.xsd"
-        xmlns:dc="http://purl.org/dc/elements/1.1/"
-        xmlns:dcterms="http://purl.org/dc/terms/">
-            <dc:title>This is a title</dc:title>
-            <dc:creator>John Doe</dc:title>
-            <dc:date>1980-02-16</dc:date>
-            <dc:identifier xsi:type="dcterms:URI">/[intellectual unit identifier]</dc:identifier>
-            <dc:identifier xsi:type="dcterms:URL">[http scheme]://[asset storage host]/[asset identifier]</dc:identifier>
-            <dc:relation type="dcterms:URL">/[http scheme]://[ldr metadata storage host]/collections/[collection identifier]</dc:relation>
-            <dc:relation type="dcterms:URL">[http scheme]://[ldr metadata storage host]/collections/ldr</dc:relation>
-        </metadata>
-    </response>
-</metadata_store_output>
-```
-
 ### /units/[intellectual unit identifier]/extensions
 
 communication protocol: Web
@@ -473,18 +438,6 @@ error conditions: no extensions available
 
 This endpoint MUST return a list of all extensions available for a particular intellectual unit. The ldr metadata storage system DOES NOT makes any guarantee about providing contexts for extension metadata since there is no theoretical limit on the diversity of extension metadata schemes that might be available for a particular resource. The ldr metadata storage only guarantees that it will store all extensions that are added to the system and provide the ability for clients interfaces to retrieve them. The client interfaces MUST have the business logic to know what to do with the extension metadata.
 
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<metadata_store_output>
-    <request>/[identifier]/extensions</request>
-    <response>
-        <extension>/[identifier]/extensions/vracore</extension>
-        <extension>/[identifier]/extensions/mods</extension>
-        <extension>/[identifier]/extensions/ocr</extension>
-    </response>
-</metadata_store_output>
-```
-
 ### /units/[intellectual unit identifier]/extensions/[extension metadata]
 
 communication protocol: Web
@@ -494,15 +447,3 @@ communication methods: GET
 error conditions: extension requested does not exist
 
 This endpoint MUST return the extension that is specified for the intellectual unit identified.
-
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<metadata_store_output>
-    <request>/[identifier]/extensions/vracore</request>
-    <response>
-        <extension>
-            <!-- VRACore metadata here -->
-        </extension>
-    </response>
-</metadata_store_output>
-```
