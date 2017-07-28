@@ -3,6 +3,7 @@
 ## Glossary of terms
 
 - intellectual unit is a set of assets that comprise a complete work (whether a piece of art, a photograph, a book, or some other output) created by an individual or group of individuals
+- unit is an abbreviation of intellectual unit
 - asset is a byte stream representing an intellectual unit whether in-whole or in-part
 - (metadata) resource is a representation of description about an intellectual unit
 - endpoint is a particular context available to a (metadata) resource that will provide some functionality
@@ -11,6 +12,11 @@
 - core (metadata) is the REQUIRED descriptive fields: a.) 1 title field, b.) 1 creator field, c.) 1 date field, d.) 1 or more identifier identifier fields, e.) 1 or more relation fields
 - extension (metadata) is an OPTIONAL descriptive metadata resource for an intellectual unit
 - client is a a program running on a server that is requesting a resource. This client may be acting on behalf of a biological being.
+
+## Shortcuts
+
+- [new collection post specification](#Specification-for-posting-a-new-collection)
+- [new unit post specification])(#Specification-for-posting-a-new-unit)
 
 ## Requirements for the metadata storage system
 
@@ -54,6 +60,7 @@ COROLLARY: the metadata storage should be able to store technical metadata about
 ### /
 
 communication protocol: Web
+
 communication method: GET
 
 ```xml
@@ -72,6 +79,7 @@ communication method: GET
 ### /collections
 
 communication protocols: Web
+
 communication methods: GET, POST
 
 The ldr metadata storage offers a GET method on the collections endpoint in order to retrieve a list of all collections in the metadata storage. The ldr metadata storage guarantees that a GET request from this endpoint will give the consuming client an up-to-date list of collections available in the ldr metadata storage.
@@ -88,6 +96,8 @@ The ldr metadata storage offers a GET method on the collections endpoint in orde
     </response>
 </metadata_store_output>
 ```
+
+#### Specification for posting a new collection
 
 The ldr metadata storage also offers a POST method on the collections endpoint in order to allow clients to add new collections to the metadata storage. The ldr metadata storage guarantees that a POST request from this endpoint will add the inputted collection to the ldr metadata storage so long as the input obeys the following rules
 
@@ -125,6 +135,7 @@ This is an example to use for a complete understanding. Do not copy this example
 ### /collections/[collection identifier]
 
 communication protocols: Web
+
 communication methods: GET
 
 ```xml
@@ -143,6 +154,7 @@ communication methods: GET
 ### /units
 
 communication protocol: Web
+
 communication methods: GET, POST
 
 The ldr metadata storage offers a GET method on the units endpoint in order to retrieve a list of the intellectual units in the system. The ldr metadata storage guarantees that a request to this endpoint will provide an up-to-date list of all intellectual units in the system.
@@ -159,6 +171,8 @@ The ldr metadata storage offers a GET method on the units endpoint in order to r
     </response>
 </metadata_store_output>
 ```
+
+#### Specification for posting a new unit
 
 The ldr metadata storage also offers a POST method on the units endpoint in order to add a new intellectual unit to the system. The ldr metadata storage guarantees that a POST request to this endpoint will add the inputted intellectual unit to the system as long as the input obeys the following rules
 
@@ -239,6 +253,7 @@ The ldr metadata storage also offers a POST method on the units endpoint in orde
 ### /units/[intellectual unit identifier]
 
 communication protocol: Web
+
 communication methods: GET
 
 This endpoint MUST return all available contexts for the intellectual unit identified. All intellectual units have the following contexts.
@@ -262,7 +277,9 @@ This endpoint MUST return all available contexts for the intellectual unit ident
 ### /units/[intellectual unit identifier]/core
 
 communication protocol: Web
+
 communication methods: GET
+
 error conditions: no core (metadata) resource available
 
 This endpoint must return the core (metadata) resource for the intellectual unit identified. This is required in order to provide cross-collection browsing functionality of all intellectual units in the ldr metadata storage to frontend interfaces. The core (metadata) MUST include an identifier of type dcterms:URL for every asset for this intellectual unit. The ldr metadata storage MAY include an identifier of type dcterms:URI if this intellectual unit is part of a library digital collection. If there is an  identifier of type dcterms:URI, then the consuming client MUST be able to retrieve the project-specific explanation of the relationships between assets for the intellectual unit identified. If there is no identifier of type dcterms:URI than the consuming client MUST contain the business logic for defining the relationships between the assets itself.
@@ -294,7 +311,9 @@ This endpoint must return the core (metadata) resource for the intellectual unit
 ### /units/[intellectual unit identifier]/extensions
 
 communication protocol: Web
+
 communication methods: GET
+
 error conditions: no extensions available
 
 This endpoint MUST return a list of all extensions available for a particular intellectual unit. The ldr metadata storage system DOES NOT makes any guarantee about providing contexts for extension metadata since there is no theoretical limit on the diversity of extension metadata schemes that might be available for a particular resource. The ldr metadata storage only guarantees that it will store all extensions that are added to the system and provide the ability for clients interfaces to retrieve them. The client interfaces MUST have the business logic to know what to do with the extension metadata.
@@ -314,7 +333,9 @@ This endpoint MUST return a list of all extensions available for a particular in
 ### /units/[intellectual unit identifier]/extensions/[extension metadata]
 
 communication protocol: Web
+
 communication methods: GET
+
 error conditions: extension requested does not exist
 
 This endpoint MUST return the extension that is specified for the intellectual unit identified.
