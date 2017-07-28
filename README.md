@@ -1,5 +1,7 @@
 # Introduction
 
+## Background
+
 Metadata storage must be able to answer the following questions about an intellectual unit
 
 1. What is the collection that this unit belongs to use as the main access point for the user
