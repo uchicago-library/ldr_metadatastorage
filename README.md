@@ -15,8 +15,8 @@
 
 ## Shortcuts
 
-- [new collection post specification](####Specification-for-posting-a-new-collection)
-- [new unit post specification](####Specification-for-posting-a-new-unit)
+- [new collection post specification](#specification-for-posting-a-new-collection)
+- [new unit post specification](#specification-for-posting-a-new-unit)
 
 ## Requirements for the metadata storage system
 
@@ -97,7 +97,7 @@ The ldr metadata storage offers a GET method on the collections endpoint in orde
 </metadata_store_output>
 ```
 
-#### Specification for posting a new collection
+[Specification for posting a new collection](#specification-for-posting-a-new-collection)
 
 The ldr metadata storage also offers a POST method on the collections endpoint in order to allow clients to add new collections to the metadata storage. The ldr metadata storage guarantees that a POST request from this endpoint will add the inputted collection to the ldr metadata storage so long as the input obeys the following rules
 
@@ -172,7 +172,7 @@ The ldr metadata storage offers a GET method on the units endpoint in order to r
 </metadata_store_output>
 ```
 
-#### Specification for posting a new unit
+[Specification for posting a new unit](#specification-for-posting-a-new-unit)
 
 The ldr metadata storage also offers a POST method on the units endpoint in order to add a new intellectual unit to the system. The ldr metadata storage guarantees that a POST request to this endpoint will add the inputted intellectual unit to the system as long as the input obeys the following rules
 
