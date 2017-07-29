@@ -2,16 +2,18 @@
 
 ## Glossary of terms
 
-- intellectual unit is a set of assets that comprise a complete work (whether a piece of art, a photograph, a book, or some other output) created by an individual or group of individuals
+- intellectual unit is a set of assets that comprise a complete work (whether a piece of art, a photograph, a book, or some other output) created by an individual or group of individuals. They can be discovered by defined access points in descriptive metadata.
 - unit is an abbreviation of intellectual unit
 - asset is a byte stream representing an intellectual unit whether in-whole or in-part
 - (metadata) resource is a representation of description about an intellectual unit
 - endpoint is a particular context available to a (metadata) resource that will provide some functionality
 - functionality is either a.) the answer to a particular question about a particular resource or b.) some action or set of actions that transforms the resource identified into something new for the client to consume
 - field is a particular piece of metadata. ex. title is a field
-- core (metadata) is the REQUIRED descriptive fields: a.) 1 title field, b.) 1 creator field, c.) 1 date field, d.) 1 or more identifier identifier fields, e.) 1 or more relation fields
+- core (metadata) is the REQUIRED descriptive fields: a.) 1 title field, b.) 1 creator field, c.) 1 date field, d.) 1 or more identifier fields, e.) 1 or more relation fields
 - extension (metadata) is an OPTIONAL descriptive metadata resource for an intellectual unit
 - client is a a program running on a server that is requesting a resource. This client may be acting on behalf of a biological being.
+- collections which are groups of intellectual units typically related as part of a work unit commissioned by the library
+- technical_metadata is information about the assets that represent a particular intellectual unit. This information may include but is not limited to width and height pixel dimensions of an image byte stream or duration of a video file or size in disk storage required by a particular byte stream.
 
 ## Requirements for the metadata storage system
 
@@ -52,13 +54,14 @@ COROLLARY: the metadata storage should be able to store technical metadata about
 
 ## Contract for available endpoints
 
-1. /
-1. /collections
-1. /units
-1. /collections/[collection identifier]
-1. /units/[unit identifier]
-1. /units/[unit identifier/extensions
-1. /units/[unit identifier]/extensions/[extension identifier]
+1. / = returns the endpoints available at the root of the API
+1. /collections = returns a list of all collections in the ldr metadata storage
+1. /collections/[collection identifier] = returns a list of intellectual units that are part of a particular collection
+1. /units = returns a list of intellectual units in the ldr metadata storage
+1. /units/[intellectual unit identifier] = returns the endpoints available for a particular intellectual unit
+1. /units/[intellectual unit identifier]/core = returns the core (metadata) describing a particular intellectual unit
+1. /units/[intellectual unit identifier]/extensions = returns a list of extension (metadata) that are available for a particular intellectual unit
+1. /units/[intellectual unit identifier]/extensions/[extension identifier] = returns the extension (metadata) identified by extension identifier that is available for intellectual unit unit identifier
 
 ## Contract for GET request responses from the ldr metadata storage
 
@@ -91,7 +94,7 @@ See the example below for further guidance on what to expect from a GET request 
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
-<metadata_store_output>
+<output>
     <request>/collections/campub</request>
     <requestReceivedTimeStamp>2017-07-28T14:02:12-06:00</requestReceivedTimeStamp>
     <responseSentTimeStamp>2017-07-28T14:02:17+07:00</responseSentTimeStamp>
@@ -106,12 +109,12 @@ See the example below for further guidance on what to expect from a GET request 
             <item>/unit/mvol-0004-1918-0204</item>
         </item>
     </response>
-</metadata_store_output>
+</output>
 ```
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
-<metadata_store_output>
+<output>
     <request>/units/mvol-0001-0002-0004/core</request>
     <requestReceivedTimeStamp>2017-07T12:02:44-06:00</requestReceivedTimeStamp>
     <responseSentTimeStamp>2017-07-28T12:02:58+03:00</responseSentTimeStamp>
@@ -133,12 +136,12 @@ See the example below for further guidance on what to expect from a GET request 
             <metadata>
         </data>
     </response>
-</metadata_store_output>
+</output>
 ```
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
-<metadata_store_output>
+<output>
     <request>/collections/campub</request>
     <requestReceivedTimeStamp>2017-07T12:02:44-06:00</requestReceivedTimeStamp>
     <responseSentTimeStamp>2017-07-28T12:02:58+03:00</responseSentTimeStamp>
@@ -156,7 +159,7 @@ See the example below for further guidance on what to expect from a GET request 
             <metadata>
         </data>
     </response>
-</metadata_store_output>
+</output>
 ```
 
 ## Contract for POST submissions to the ldr metadata storage
@@ -202,6 +205,7 @@ Every POST submission to the ldr metadata storage MUST be well-formed XML and be
 - If there is a requirement for an instance of name than the value of name MUST be an a single word consisting exclusively of alphabetic characters
 - If there is a requirement for AT LEAST one instance of extension than there MUST be ONLY one instance of data element beneath extension
 - If there is a requirement for ONLY one instance of data than there a root element of some extension metadata beneath that instance
+- Any additional element added to the POST request that is not defined by the rules for a particular POST request will be considered a violation of the contract and cause for rejection
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -301,23 +305,15 @@ Every POST submission to the ldr metadata storage MUST be well-formed XML and be
 </input>
 ```
 
-
 ## Descriptions of endpoints
 
 ### /
 
 communication protocol: Web
 
-communication method: GET
+communication methods: GET
 
-The ldr metadata storage offers a root endpoint that provides the major contexts for metadata storage. The two contets in-scope for this project are
-
-- collections which are groups of intellectual units typically related as part of a work unit comissioned by the library
-- units are individual intellectual units that can be discovered by a title, a creator and collections that they have been grouped in prior to arriving in the ldr. Units have assets which are byte streams representing the whole or some portion of the unit and can be retrieved for the purpose of viewing by a client
-
-There is some discussion about adding a third context, technical_metadata.
-
-- technical_metadata is information about the assets that represent a particular intellectual unit. This information may include but is not limited to width and height pixel dimensions of an image byte stream or duration of a video file or size in disk storage required by a particular byte stream.
+This endpoint is GUARANTEED to return a list of contexts available from the root of the API.
 
 ### /collections
 
@@ -327,29 +323,11 @@ communication methods: GET, POST
 
 The ldr metadata storage offers a GET method on the collections endpoint in order to retrieve a list of all collections in the metadata storage. The ldr metadata storage guarantees that a GET request from this endpoint will give the consuming client an up-to-date list of collections available in the ldr metadata storage.
 
-#### Specification for posting a new collection
-
 The ldr metadata storage also offers a POST method on the collections endpoint in order to allow clients to add new collections to the metadata storage. The ldr metadata storage guarantees that a POST request from this endpoint will add the inputted collection to the ldr metadata storage so long as the input obeys the following rules
 
-- collection name is unique to the ldr metadata storage
-- post data obeys the defined specification
-    1. POST data is well-formed XML in UTF-8 encoding.
-    1. the root element is input.
-    1. There is ONLY one instance of the element core beneath the root element.
-    1. There is only one instance of the element metadata beneath the element core
-    1. The element metadata has an implicit namespace
-        - ```http://example.org/myapp```
-    1. The element metadata has the following explicit namespaces
-        - ```xmlns:dc="http://purl.org/dc/elements/1.1/"```
-        - ```xmlns:dcterms="http://purl.org/dc/terms/"```
-        - ```xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"```
-    1. The element metadata is a compound element that contains the following
-        - ONLY two instances of the element dc:title
-            - The value of the first instance is a string containing multiple words composed of alphabetic or numeric characters. This is the formal title of the collection.
-            - The value of the second instance MUST be a single  word composed exclusively of alphabetic characters. This is the unique identifier for the collection.
-        - ONLY  one instance of the element dc:description
-            - The value  of the element dc:description  is multiple complete sentences.
-            - GUIDELINE: In order to ensure easy display on a variety of screen sizes for hardware it is advised to keep to a limit of at most 4 sentences.
+- collection title and identifier do not exist in the ldr metadata storage prior to submission of the POST request
+- There MUST be ONLY two dc:title elements
+- There MUST be ONLY one dc:description element
 
 
 ### /collections/[collection identifier]
@@ -366,43 +344,14 @@ communication methods: GET, POST
 
 The ldr metadata storage offers a GET method on the units endpoint in order to retrieve a list of the intellectual units in the system. The ldr metadata storage guarantees that a request to this endpoint will provide an up-to-date list of all intellectual units in the system.
 
-#### Specification for posting a new unit
-
 The ldr metadata storage also offers a POST method on the units endpoint in order to add a new intellectual unit to the system. The ldr metadata storage guarantees that a POST request to this endpoint will add the inputted intellectual unit to the system as long as the input obeys the following rules
 
 - the intellectual unit is unique to the ldr metadata storage system
-- the input obeys the defined specification
-    1. POST data is well-formed XML in UTF-8 encoding
-    1. The root element is input
-    1. There is ONLY one instance of the element core beneath the element input
-    1. There is ONLY one instance of the element metadata beneath the element core
-    1. The element metadata has the following implicit namespace
-        - ```http://example.org/myapp```
-    1. The metadata element has the follow explicit namespaces
-        - ```xmlns:dc="http://purl.org/dc/elements/1.1/"```
-        - ```xmlns:dcterms="http://purl.org/dc/terms/"```
-        - ```xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"```
-    1. The metadata element is a compound element that contains the following
-        - ONLY one instance of an element dc:title that contains a string containing multiple words. This is the formal title of the collection.
-        - ONLY one instance of an element dc:date that contains a string conforming to ISO-8601 format. 1980, 1980-02-01 are both valid. 1980-02, 1980/02, 1980/02/?, 1980/02/??, 02/01/1980, 01/02/1980, February 02, 1980, February 2nd 1980, February 1980 are invalid values and will be rejected. Any value in this element containing alphabetic characters will be rejected. Any separate other than a hyphen will cause this input to be rejected
-        - AT LEAST one or more instances  of an element dc:creator that contains a string that is an individual who is responsible in some part for the creation of this intellectual unit. This name MUST be written as surname first followed by a comma followed by a single space followed by the given name. Where the creator's middle name is significant follow the given name with a single space then enter the middle name. In the case of honorifics or titles or Jr./Sr./II/III/IV/etc. denotations follow the last word in the given name portion of the string with a second comma followed by a single space followed by the honorific or title.
-        - AT LEAST one or more instances of an element dc:identifier
-            - this element MUST have an attribute xsi:type that can have a value dcterms:URI or dcterms:URL
-            - if the attribute xsi:type is dcterms:URI than the value of the element must be presented as the following /[asset identifier] where asset identifier is some asset located in ldr asset storage. If this URI cannot be resolved to an asset in ldr asset storage than this POST data will be rejected.
-            - if the attribute xsi:type is dcterms:URL than the value of the element must be presented as a valid and complete URL to a remote asset. If this URL does not resolve to a 200 HTTP code than this POST data will be rejected.
-        - AT LEAST one or more instances of an element dc:relation
-            - this element MUST have an attribute xsi:type with the value dcterms:URI
-            - the value of this element MUST be resolved to a collection in the ldr  metadata storage. The URI must be /collections/[collection identifier] where collection identifier is a valid identifier to a collection in ldr metadata storage. If this URI does not resolve to a collection in ldr metadata storage than this POST data will be rejected.
-    1. OPTIONALLY there is a ONLY one instance of the element extensions beneath the element input
-    1. If there an instance of the element extensions, there is AT LEAST one or more instances of the element extension
-    1. There MUST be ONLY one instance of the element type beneath the element extension.
-        - The value of the element type MUST be the string xml.
-    1. There MUST be ONLY one instance of the element name beneath the element extension.
-        - The value of the element name MUST be a single word that uniquely identifies the extension metadata in the context of the input
-    1. The element data is a compound element that contains the root element of whatever extension metadata is being added in addition to the core metadata
-
-See examples below for further guidance about how to construct POST new intellectual unit data to ldr metadata storage
-
+- There MUST be ONLY one dc:title elements
+- There MUST be AT LEAST one dc:relation element
+- There MUST be AT LEAST one dc:identifier element
+- There MUST be ONLY one dc:date element
+- There MAY be ONLY one extensions element
 
 ### /units/[intellectual unit identifier]
 
@@ -423,9 +372,7 @@ communication methods: GET
 
 error conditions: no core (metadata) resource available
 
-This endpoint GUARANTEES to return the core metadata resource for the intellectual unit identified. 
-
-This endpoint MUST return the core (metadata) resource for the intellectual unit identified. This is required in order to provide cross-collection browsing functionality of all intellectual units in the ldr metadata storage to frontend interfaces. The core (metadata) MUST include an identifier of type dcterms:URL for every asset for this intellectual unit. The ldr metadata storage MAY include an identifier of type dcterms:URI if this intellectual unit is part of a library digital collection. If there is an  identifier of type dcterms:URI, then the consuming client MUST be able to retrieve the project-specific explanation of the relationships between assets for the intellectual unit identified. If there is no identifier of type dcterms:URI than the consuming client MUST contain the business logic for defining the relationships between the assets itself.
+This endpoint is GUARANTEED to return the core metadata resource for the intellectual unit identified.
 
 ### /units/[intellectual unit identifier]/extensions
 
@@ -435,9 +382,9 @@ communication methods: GET
 
 error conditions: no extensions available
 
-This endpoint MUST return a list of all extensions available for a particular intellectual unit. The ldr metadata storage system DOES NOT makes any guarantee about providing contexts for extension metadata since there is no theoretical limit on the diversity of extension metadata schemes that might be available for a particular resource. The ldr metadata storage only guarantees that it will store all extensions that are added to the system and provide the ability for clients interfaces to retrieve them. The client interfaces MUST have the business logic to know what to do with the extension metadata.
+This endpoint is GUARANTEED to return a listing of all extension resources available for the intellectual unit identified.
 
-### /units/[intellectual unit identifier]/extensions/[extension metadata]
+### /units/[intellectual unit identifier]/extensions/[extension identifier]
 
 communication protocol: Web
 
@@ -445,4 +392,4 @@ communication methods: GET
 
 error conditions: extension requested does not exist
 
-This endpoint MUST return the extension that is specified for the intellectual unit identified.
+This endpoint is GUARANTEED to return a particular extension resource identified by extension identifier that is available to describe the intellectual unit identified by intellectual unit identified.
