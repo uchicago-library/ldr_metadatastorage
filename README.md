@@ -2,7 +2,7 @@
 
 ## Glossary of terms
 
-- intellectual unit is a set of assets that comprise a complete work (whether a piece of art, a photograph, a book, or some other output) created by an individual or group of individuals. They can be discovered by defined access points in descriptive metadata.
+- intellectual unit is a set of assets that comprise a complete work (whether a piece of art, a photograph, a book, or some other output) created by an individual or group of individuals. They can be discovered by defined access points in descriptive metadata. This is business logic and a term that is only truly meaningful to the human producers and human consumers of the content and as such defining a concrete rule set for intellectual unit generation is out-of-scope of the ldr metadata storage.
 - unit is an abbreviation of intellectual unit
 - asset is a byte stream representing an intellectual unit whether in-whole or in-part
 - (metadata) resource is a representation of description about an intellectual unit
@@ -12,7 +12,7 @@
 - core (metadata) is the REQUIRED descriptive fields: a.) 1 title field, b.) 1 creator field, c.) 1 date field, d.) 1 or more identifier fields, e.) 1 or more relation fields
 - extension (metadata) is an OPTIONAL descriptive metadata resource for an intellectual unit
 - client is a a program running on a server that is requesting a resource. This client may be acting on behalf of a biological being.
-- collections which are groups of intellectual units typically related as part of a work unit commissioned by the library
+- collection  is a group of intellectual units typically related as part of a work unit commissioned by the library or by some intellectual relationship between the units
 - technical_metadata is information about the assets that represent a particular intellectual unit. This information may include but is not limited to width and height pixel dimensions of an image byte stream or duration of a video file or size in disk storage required by a particular byte stream.
 
 ## Requirements for the metadata storage system
