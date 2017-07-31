@@ -2,35 +2,35 @@
 
 ## Glossary of terms
 
-- intellectual unit is a set of assets that comprise a complete work (whether a piece of art, a photograph, a book, or some other output) created by an individual or group of individuals. They can be discovered by defined access points in descriptive metadata. This is business logic and a term that is only truly meaningful to the human producers and human consumers of the content and as such defining a concrete rule set for intellectual unit generation is out-of-scope of the ldr metadata storage.
+- intellectual unit is a collection of intellectual units or an asset
 - unit is an abbreviation of intellectual unit
 - asset is a byte stream representing an intellectual unit whether in-whole or in-part
-- (metadata) resource is a representation of description about an intellectual unit
-- endpoint is a particular context available to a (metadata) resource that will provide some functionality
+- descriptive metadata represents one description of an intellectual unit
+- metadata is an abbrevation of descriptive metadata
+- endpoint is a particular context for metadata that will provide some functionality
 - functionality is either a.) the answer to a particular question about a particular resource or b.) some action or set of actions that transforms the resource identified into something new for the client to consume
-- field is a particular piece of metadata. ex. title is a field
-- core (metadata) is the REQUIRED descriptive fields: a.) 1 title field, b.) 1 creator field, c.) 1 date field, d.) 1 or more identifier fields, e.) 1 or more relation fields
-- extension (metadata) is an OPTIONAL descriptive metadata resource for an intellectual unit
-- client is a a program running on a server that is requesting a resource. This client may be acting on behalf of a biological being.
-- collection  is a group of intellectual units typically related as part of a work unit commissioned by the library or by some intellectual relationship between the units
-- technical_metadata is information about the assets that represent a particular intellectual unit. This information may include but is not limited to width and height pixel dimensions of an image byte stream or duration of a video file or size in disk storage required by a particular byte stream.
+- field is a particular part of metadata. ex. title is a field
+- core metadata (abbreviated "core") are the REQUIRED fields: a.) 1 title, b.) 1 creator, c.) 1 date, d.) 1 or more identifier fields, e.) 1 or more relation fields
+- extension metadata (abbreviated "extension" or "extensions") are OPTIONAL descriptive metadata for an intellectual unit
+- client is a program that is requesting metadata. A client may be acting on behalf of a biological being.
+- technical metadata is technical information about an asset. This information may include but is not limited to width and height pixel dimensions of an image byte stream or duration of a video file or size in disk storage required by a particular byte stream.
 
 ## Requirements for the metadata storage system
 
 Metadata storage must be able to answer the following questions about an intellectual unit
 
-1. What is the collection that this unit belongs to use as the main access point for the user
-1. what is the title of this unit to display as the second access point for the user
-1. what is the publication date of this unit to use as third acess point for the user
-1. Who is the creator of this unit to use as the fourth access point for the user 5. What is the identifier for this resource to be able to locate the assets associated with this unit in order to display them to the user
-1. What is the identifier of the asset whether library-controlled or remote so that the ldr metadata storage can point the user to the asset or assets that are part of this unit
+1. What collection(s) does this unit belong to? This is the primary intellectual access point.
+1. What is the title of this unit? This is a secondary access point.
+1. What is the publication date of this unit? This is a secondary acess point.
+1. Who is the creator of this unit? This a secondary access point.
+1. Where can I find a representation of this unit? This is the primary access point.
 
 There are two types of metadata that will be in the ldr metadata storage system.
 
-1. units that belong to the University of Chicago library and which all assets associated are in asset storage
-1. units that do not belong to the University of Chicago library and which assets are stored elsewhere
+1. Units that belong to the University of Chicago Library and which all assets associated are in asset storage, e.g. OwnCloud
+1. Units that do not belong to the University of Chicago Library and which assets are stored elsewhere, e.g. Luna
 
-This means that in order to provide a REQUIRED functionality, ldr metadata storage must be able to retrieve assets from either asset storage or any arbitrary outside storage accessible. It is therefore MANDATORY that all assets be available over the public Web.
+This means that in order to provide a REQUIRED functionality, ldr metadata storage must be able to retrieve assets from either asset storage or any arbitrary outside storage accessible over the Web. It is therefore MANDATORY that all publicly available assets be available over the Web.
 
 This also means the ldr metadata storage must be able to distinguish between a remote asset and a library-controlled asset.
 
@@ -40,17 +40,18 @@ The asset storage identifier should be a URI, because the ldr metadata storage m
 
 The remote storage identifier must be a valid URL to the location of the asset on the web.
 
-We have to assume that there will be a variety of descriptive metadata formats used. Since there are five known metadata formats currently being used in library digital collections.
+We have to assume that there will be a variety of descriptive metadata formats used. These are the metadata formats currently being used in library digital collections.
 
 - TEI
 - EAD
 - MODS
 - VRACore
 - OCR
+- MARC
 
-This means that the metadata storage must be able to store a variety of metadata formats that are not actionable by the metadata storage. The metadata storage must have a single schema that it can interpret in order to provide the five functions defined at the beginning of this document.
+This means that the metadata storage must be able to store a variety of metadata formats that are not actionable by the metadata storage. The metadata storage must have a single schema that it can interpret in order to provide answers to the five questions defined earlier in this document.
 
-COROLLARY: the metadata storage should be able to store technical metadata about assets in digital collections. This technical metadata is currently being stored in asset storage, but there is a strong argument to be made that doing this "muddies the water" between asset and metadata. Asset ought to be strictly defined as a byte stream representing an intellectual unit or some portion of an intellectual unit. By storing technical metadata, which by definition is not a byte stream representing a whole or some port of an intellectual unit but rather information about the byte stream the asset storage is being forced to perform a task that is a violation of its primary function.
+COROLLARY: the metadata storage should be able to store technical metadata about assets in digital collections. Technical metadata is currently being stored in asset storage, but there is a strong argument to be made that doing this "muddies the water" between asset and metadata. Asset ought to be strictly defined as a byte stream representing an intellectual unit or some portion of an intellectual unit. By storing technical metadata, which by definition is not a byte stream representing a whole or some port of an intellectual unit but rather information about the byte stream the asset storage is being forced to perform a task that is a violation of its primary function.
 
 ## Contract for available endpoints
 
