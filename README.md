@@ -56,17 +56,21 @@ COROLLARY: the metadata storage should be able to store technical metadata about
 ## Contract for available endpoints
 
 1. / = returns the endpoints available at the root of the API
-1. /collections = returns a list of all collections in the ldr metadata storage
-1. /collections/[collection identifier] = returns a list of intellectual units that are part of a particular collection
-1. /units = returns a list of intellectual units in the ldr metadata storage
-1. /units/[intellectual unit identifier] = returns the endpoints available for a particular intellectual unit
-1. /units/[intellectual unit identifier]/core = returns the core (metadata) describing a particular intellectual unit
-1. /units/[intellectual unit identifier]/extensions = returns a list of extension (metadata) that are available for a particular intellectual unit
-1. /units/[intellectual unit identifier]/extensions/[extension identifier] = returns the extension (metadata) identified by extension identifier that is available for intellectual unit unit identifier
+1. /units = returns a list of intellectual units (collections) in the ldr metadata storage
+
+
+1. /unit/[collection identifier[/collection identifier] ...] = returns a list of intellectual units that are part of a particular collection [sub-collection, etc.]
+
+/unit/[collection identifier]/[sub-collection identifier]/[sub sub collection identifier]/... goes as deeply as producer requires
+
+1. /unit/[collection identifier]/ = returns the endpoints available for a particular intellectual unit
+1. /unit/[intellectual unit identifier]/core = returns the core (metadata) describing a particular intellectual unit
+1. /unit/[intellectual unit identifier]/extensions = returns a list of extension identifiers that are available for a particular intellectual unit
+1. /unit/[intellectual unit identifier]/extensions/[extension identifier] = returns the extension metadata identified by the extension identifier that is available for a particular intellectual unit
 
 ## Contract for GET request responses from the ldr metadata storage
 
-Every valid GET request to the ldr metadata is GUARANTEED to receive a well-formed XML response. This XML response will have the following information
+Every valid GET request to the ldr metadata is GUARANTEED to receive a well-formed XML or JSON response. This XML or JSON response will have the following information
 
 - the request that the ldr metadata storage received
 - the date and time in ISO-8601 that the ldr metadata storage received that request WILL be the request timestamp from the timezone of the requestor
@@ -76,10 +80,10 @@ Every valid GET request to the ldr metadata is GUARANTEED to receive a well-form
 - the response will be items if the response type is aggregate
 - the response will be either metadata or extension if the response type is atomic
 - items will contain an item for each result that is part of the answer to the question being asked
-- the value of an item WILL ALWAYS be a uri complete-able by the ldr metadata storage
+- the value of an item WILL ALWAYS be a URI resolvable by the ldr metadata storage
 - metadata will contain dublin core metadata
 - metadata will have an implicit namespace
-  - ```http://example.org/myapp/```
+  - ```http://lib.uchicago.edu/ldr/```
 - metadata will have 3 explicit namespaces
   - ```http://www.w3.org/2001/XMLSchema-instance```
   - ```http://purl.org/dc/elements/1.1/```
@@ -165,7 +169,7 @@ See the example below for further guidance on what to expect from a GET request 
 
 ## Contract for POST submissions to the ldr metadata storage
 
-Every POST submission to the ldr metadata storage MUST be well-formed XML and be UTF-8 encoded. In addition, the information being submitted MUST conform to specific formatting requirements as will be defined for each piece of information that requirements are relevant.
+Every POST submission to the ldr metadata storage MUST be well-formed XML or JSON and be UTF-8 encoded. In addition, the information being submitted MUST conform to specific formatting requirements as will be defined for each piece of information that requirements are relevant.
 
 - Where a collection identifier is submitted it MUST not exist in the ldr metadata storage before submission occurs
 - Where a unit identifier is submitted it MUST not exist in the ldr metadata storage before submission occurs
@@ -178,15 +182,15 @@ Every POST submission to the ldr metadata storage MUST be well-formed XML and be
 - There MUST be ONLY one instance of the element core beneath input
 - There MUST be only one instance of the element metadata beneath the element core
 - The element metadata MUST have one implicit namespace
-  - ```http://example.org/myapp```
+  - ```http://lib.uchicago.edu/ldr/```
 - The element metadata MUST have the following explicit namespaces
   - ```http://purl.org/dc/elements/1.1/```
   - ```http://purl.org/dc/terms/```
   - ```http://www.w3.org/2001/XMLSchema-instance```
-- The element metadata MUST be a compound element
+- The element metadata MUST be a complex element
 - There MUST be AT LEAST one instance of element dc:title beneath metadata
 - There MAY be a requirement for a second instance of dc:title
-- If there is a requirement for a second instance of dc:title than the value of that instance MUST be a single word comprised ONLY of alphabetic characters
+- If there is a requirement for a second instance of dc:title than the value of that instance MUST be a single word comprised ONLY of alphanumeric ASCII characters
 - There MAY be a requirement for a MANDATORY instance of dc:date beneath metadata
 - If there is a requirement of an instance of dc:date than the value of that instance MUST be valid ISO-8601
 - There may be a requirement that there MUST be AT LEAST one instance of dc:relation beneath metadata
@@ -195,7 +199,7 @@ Every POST submission to the ldr metadata storage MUST be well-formed XML and be
 - There MAY be a requirement for ONLY one instance of dc:description beneath metadata
 - If there is a requirement for ONLY one instance of dc:description than the value of that instance MUST be text
   - GUIDELINE: In order to ensure easy display on a variety of screen sizes for hardware it is advised to keep to a limit of at most 4 sentences.
-- There MUST be AT LEAST one instance of dc:identifer beneath metadata
+- There MUST be AT LEAST one instance of dc:identifier beneath metadata
 - dc:identifier MUST have an attribute xsi:type which MUST have a value of either a.) dcterms:URI or b.) dcterms:URL
 - dc:identifier MUST have a value that is resolvable over HTTP to an asset
 - There MAY be a requirement there MUST be ONLY one instance of extensions beneath input
@@ -316,7 +320,7 @@ communication methods: GET
 
 This endpoint is GUARANTEED to return a list of contexts available from the root of the API.
 
-### /collections
+### /units
 
 communication protocols: Web
 
@@ -338,13 +342,15 @@ The ldr metadata storage also offers a POST method on the collections endpoint i
 - There MUST be ONLY one dc:description element
 - See Contract for POST submissions to the ldr metadata storage section for how to interpret these specific rules
 
-### /collections/[collection identifier]
+### /units/[collection identifier]
 
 communication protocols: Web
 
 communication methods: GET
 
 ### /units
+
+THIS IS DEPRECATED BY LATEST THINKING. REMOVE 
 
 communication protocol: Web
 
@@ -368,7 +374,7 @@ The ldr metadata storage also offers a POST method on the units endpoint in orde
 - There MAY be ONLY one extensions element
 - See Contract for POST submissions to the ldr metadata storage section for how to interpret these specific rules
 
-### /units/[intellectual unit identifier]
+### /unit/[intellectual unit identifier]
 
 communication protocol: Web
 
@@ -382,7 +388,7 @@ This endpoint is GUARANTEED to return all available contexts for the intellectua
 - responseType: aggregate
 - response: contains items element and inside items an item element that contains a URI resolvable to a particular endpoint available from the endpoint for this unit
 
-### /units/[intellectual unit identifier]/core
+### /unit/[intellectual unit identifier]/core
 
 communication protocol: Web
 
@@ -398,7 +404,7 @@ This endpoint is GUARANTEED to return the core metadata resource for the intelle
 - responseType: atomic
 - response: contains metadata element and inside metadata element is the core metadata for this particular intellectual unit
 
-### /units/[intellectual unit identifier]/extensions
+### /unit/[intellectual unit identifier]/extensions
 
 communication protocol: Web
 
@@ -414,7 +420,7 @@ This endpoint is GUARANTEED to return a listing of all extension resources avail
 - responseType: aggregate
 - response: contains items element and inside items an item element that contains a URI resolvable to a particular extension endpoint available for this particular intellectual unit
 
-### /units/[intellectual unit identifier]/extensions/[extension identifier]
+### /unit/[intellectual unit identifier]/extensions/[extension identifier]
 
 communication protocol: Web
 
