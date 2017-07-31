@@ -73,7 +73,7 @@ Every valid GET request to the ldr metadata is GUARANTEED to receive a well-form
 - the type of response returned WILL be either aggregate or atomic
 - the response in the form of the answer to the question asked by the request
 - the response will be items if the response type is aggregate
-- the response will be metadata  if the response type is atomic
+- the response will be either metadata or extension if the response type is atomic
 - items will contain an item for each result that is part of the answer to the question being asked
 - the value of an item WILL ALWAYS be a uri complete-able by the ldr metadata storage
 - metadata will contain dublin core metadata
@@ -323,12 +323,19 @@ communication methods: GET, POST
 
 The ldr metadata storage offers a GET method on the collections endpoint in order to retrieve a list of all collections in the metadata storage. The ldr metadata storage guarantees that a GET request from this endpoint will give the consuming client an up-to-date list of collections available in the ldr metadata storage.
 
+- request: /collections
+- requestReceivedTimeStamp: [ISO-8601 date and time]
+- responseSentTimeStamp: [ISO-8601 date and time]
+- responseType: aggregate
+- response: contains items element and inside items an item element that contains a URI resolvable to a particular collection 
+
+
 The ldr metadata storage also offers a POST method on the collections endpoint in order to allow clients to add new collections to the metadata storage. The ldr metadata storage guarantees that a POST request from this endpoint will add the inputted collection to the ldr metadata storage so long as the input obeys the following rules
 
 - collection title and identifier do not exist in the ldr metadata storage prior to submission of the POST request
 - There MUST be ONLY two dc:title elements
 - There MUST be ONLY one dc:description element
-
+- See Contract for POST submissions to the ldr metadata storage section for how to interpret these specific rules
 
 ### /collections/[collection identifier]
 
@@ -344,6 +351,12 @@ communication methods: GET, POST
 
 The ldr metadata storage offers a GET method on the units endpoint in order to retrieve a list of the intellectual units in the system. The ldr metadata storage guarantees that a request to this endpoint will provide an up-to-date list of all intellectual units in the system.
 
+- request: /units
+- requestReceivedTimeStamp: [ISO-8601 date and time]
+- responseSentTimeStamp: [ISO-8601 date and time]
+- responseType: aggregate
+- response: contains items element and inside items an item element that contains a URI resolvable to a particular intellectual unit
+
 The ldr metadata storage also offers a POST method on the units endpoint in order to add a new intellectual unit to the system. The ldr metadata storage guarantees that a POST request to this endpoint will add the inputted intellectual unit to the system as long as the input obeys the following rules
 
 - the intellectual unit is unique to the ldr metadata storage system
@@ -352,6 +365,7 @@ The ldr metadata storage also offers a POST method on the units endpoint in orde
 - There MUST be AT LEAST one dc:identifier element
 - There MUST be ONLY one dc:date element
 - There MAY be ONLY one extensions element
+- See Contract for POST submissions to the ldr metadata storage section for how to interpret these specific rules
 
 ### /units/[intellectual unit identifier]
 
@@ -361,8 +375,11 @@ communication methods: GET
 
 This endpoint is GUARANTEED to return all available contexts for the intellectual unit identified. All intellectual units have the following contexts.
 
-- core (MANDATORY)
-- extensions (OPTIONAL)
+- request: /units/[intellectual unit identifer]
+- requestReceivedTimeStamp: [ISO-8601 date and time]
+- responseSentTimeStamp: [ISO-8601 date and time]
+- responseType: aggregate
+- response: contains items element and inside items an item element that contains a URI resolvable to a particular endpoint available from the endpoint for this unit
 
 ### /units/[intellectual unit identifier]/core
 
@@ -374,6 +391,12 @@ error conditions: no core (metadata) resource available
 
 This endpoint is GUARANTEED to return the core metadata resource for the intellectual unit identified.
 
+- request: /units/[intellectual unit identifer]/core
+- requestReceivedTimeStamp: [ISO-8601 date and time]
+- responseSentTimeStamp: [ISO-8601 date and time]
+- responseType: atomic
+- response: contains metadata element and inside metadata element is the core metadata for this particular intellectual unit
+
 ### /units/[intellectual unit identifier]/extensions
 
 communication protocol: Web
@@ -384,6 +407,12 @@ error conditions: no extensions available
 
 This endpoint is GUARANTEED to return a listing of all extension resources available for the intellectual unit identified.
 
+- request: /units/[intellectual unit identifer]/extensions
+- requestReceivedTimeStamp: [ISO-8601 date and time]
+- responseSentTimeStamp: [ISO-8601 date and time]
+- responseType: aggregate
+- response: contains items element and inside items an item element that contains a URI resolvable to a particular extension endpoint available for this particular intellectual unit
+
 ### /units/[intellectual unit identifier]/extensions/[extension identifier]
 
 communication protocol: Web
@@ -393,3 +422,10 @@ communication methods: GET
 error conditions: extension requested does not exist
 
 This endpoint is GUARANTEED to return a particular extension resource identified by extension identifier that is available to describe the intellectual unit identified by intellectual unit identified.
+
+- request: /units/[intellectual unit identifer]/extensions/[extension identifer]
+- requestReceivedTimeStamp: [ISO-8601 date and time]
+- responseSentTimeStamp: [ISO-8601 date and time]
+- responseType: atomic
+- response: contains extension element and inside extension element is the extension metadata available at this extension identifier for the particular intellectual unit
+
