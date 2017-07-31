@@ -16,7 +16,7 @@ from urllib.parse import unquote
 from flask import Blueprint
 from flask_restful import Resource, Api, reqparse
 
-BLUEPRINT = Blueprint('digcollretriever', __name__)
+BLUEPRINT = Blueprint('metadatastorageapi', __name__)
 BLUEPRINT.config = {}
 API = Api(BLUEPRINT)
 
@@ -54,10 +54,9 @@ class Extension(Resource):
 
 
 API.add_resource(Root, "/")
-API.add_resource(Units, "/units")
-API.add_resource(Units, "/units/<str:collection_identifier>/")
-API.add_resource(Units, "/units")
-API.add_resource(Unit, "/unit/<str:identifier>")
-API.add_resource(UnitCore, "/unit/<str:identifier>/core")
-API.add_resource(UnitExtensions, "/units/<string:identifier>/extensions")
-API.add_resource(Extension, "/units/<string:identifier>/extensions/<str:extension_identifier>")
+API.add_resource(Units, "/units/")
+API.add_resource(Units, "/units/<string:collection_identifier>/")
+API.add_resource(Unit, "/unit/<string:identifier>/")
+API.add_resource(UnitCore, "/unit/<string:identifier>/core/")
+API.add_resource(UnitExtensions, "/units/<string:identifier>/extensions/")
+API.add_resource(Extension, "/units/<string:identifier>/extensions/<string:extension_identifier>/")

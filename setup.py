@@ -13,9 +13,10 @@ def readme():
     output = ""
     try:
         with open("README.md", "r") as read_file:
-            output =  read_file.read()
+            output = read_file.read()
     except IOError:
         output = "An API for use by the UChicago library to facilitate metadata storage."
+    return output
 
 setup(
     name='metadatastorageapi',

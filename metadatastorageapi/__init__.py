@@ -7,7 +7,7 @@ from .blueprint import BLUEPRINT
 from flask_env import MetaFlaskEnv
 
 class Configuration(metaclass=MetaFlaskEnv):
-    ENV_PREFIX='DIGCOLL_RETRIEVER_'
+    ENV_PREFIX='METADATA_STORAGE_API'
     DEBUG = False
     DEFER_CONFIG = False
 
