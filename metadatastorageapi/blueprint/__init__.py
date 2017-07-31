@@ -33,19 +33,12 @@ class Collections(Resource):
     def post(self):
         return "not implemented"
 
-
 class Units(Resource):
     def get(self, collection_identifier):
         return "not implemented"
 
-    def post(self):
-        return "not implemented"
-
 class Unit(Resource):
     def get(self, unit_identifier):
-        return "not implemented"
-
-    def post(self):
         return "not implemented"
 
 class UnitCore(Resource):
@@ -57,14 +50,13 @@ class UnitExtensions(Resource):
         return "not implemented"
 
 class Extension(Resource):
-    def get(self, unit_identiifer, extension_identifier):
+    def get(self, unit_identifier, extension_identifier):
         return "not implemented"
-
 
 API.add_resource(Root, "/")
 API.add_resource(Collections, "/units/")
-API.add_resource(Units, "/units/<string:collection_identifier>/")
+API.add_resource(Units, "/units/<path:collection_identifier>/")
 API.add_resource(Unit, "/unit/<string:unit_identifier>/")
 API.add_resource(UnitCore, "/unit/<string:unit_identifier>/core/")
-API.add_resource(UnitExtensions, "/units/<string:unit_identifier>/extensions/")
-API.add_resource(Extension, "/units/<string:unit_identifier>/extensions/<string:extension_identifier>/")
+API.add_resource(UnitExtensions, "/unit/<string:unit_identifier>/extensions/")
+API.add_resource(Extension, "/unit/<string:unit_identifier>/extensions/<string:extension_identifier>/")
