@@ -9,7 +9,7 @@ import metadatastorageapi
 
 class TestingUnitTest(unittest.TestCase):
 
-    def setupUp(self):
+    def setUp(self):
         self.app = metadatastorageapi.APP.test_client()
 
     def tearDown(self):
