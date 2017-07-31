@@ -23,36 +23,55 @@ API = Api(BLUEPRINT)
 LOG = logging.getLogger(__name__)
 
 class Root(Resource):
+    """a class to hold methods to return root-level API functionality available
+    """
     def get(self):
         return "not implemented"
 
 class Collections(Resource):
+    """a class to hold method for getting list of collections in system
+    """
     def get(self):
         return "not implemented"
 
-    def post(self):
-        return "not implemented"
-
 class Units(Resource):
+    """a class to hold methods for getting a collection or posting a new collection
+    """
     def get(self, collection_identifier):
         return "not implemented"
 
+    def post(self, collection_identifier):
+        return "not implemented"
+
 class Unit(Resource):
+    """a class to hold methods for getting a unit or posting a new unit
+    """
     def get(self, unit_identifier):
         return "not implemented"
 
+    def post(self, unit_identifier):
+        return "not implemented"
+
 class UnitCore(Resource):
+    """a class to hold method for getting core metadata for a particular unit
+    """
     def get(self, unit_identifier):
         return "not implemented"
 
 class UnitExtensions(Resource):
+    """a class to hold method for getting a list of any available extension metadata for a unit
+    """
     def get(self, unit_identifier):
         return "not implemented"
 
 class Extension(Resource):
+    """a class to hold method for getting a particular extension metadata for a particular unit
+    """
     def get(self, unit_identifier, extension_identifier):
         return "not implemented"
 
+# See spec section https://github.com/uchicago-library/ldr_metadatastorage#contract-for-available-endpoints
+# to test for completeness
 API.add_resource(Root, "/")
 API.add_resource(Collections, "/units/")
 API.add_resource(Units, "/units/<path:collection_identifier>/")
