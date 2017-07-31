@@ -7,21 +7,13 @@ from urllib.parse import quote
 import metadatastorageapi
 
 
-class MetadataStorageTest1(unittest.TestCase):
+class TestingUnitTest(unittest.TestCase):
 
-    def setUp(self):
-        self.app = metadatastorageapi.APP.test_client()
-        metadatastorageapi.blueprint.BLUEPRINT.config = {
-            "MVOL_OWNCLOUD_ROOT": join(getcwd(), "sandbox", "mock_oc_root"),
-            "MVOL_OWNCLOUD_USER": "ldr_oc_admin",
-            "MVOL_OWNCLOUD_SUBPATH": "Preservation Unit"
-        }
+    def test_TwoAndTwo(self):
+        self.assertEqual(2+2, 4) 
 
-    def tearDown(self):
-        pass
-
-    def testTwoAndTwo(self):
-        return 2 + 2 == 4
+    def test_AString(self):
+        self.assertIsInstance("foo", str)
 
 if __name__ == '__main__':
     unittest.main()
