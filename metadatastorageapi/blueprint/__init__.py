@@ -25,6 +25,14 @@ LOG = logging.getLogger(__name__)
 class Root(Resource):
     def get(self):
         return "not implemented"
+    
+class Collections(Resource):
+    def get(self):
+        return "not implemented"
+
+    def post(self):
+        return "not implemented"
+
 
 class Units(Resource):
     def get(self):
@@ -54,7 +62,7 @@ class Extension(Resource):
 
 
 API.add_resource(Root, "/")
-API.add_resource(Units, "/units/")
+API.add_resource(Collections, "/units/")
 API.add_resource(Units, "/units/<string:collection_identifier>/")
 API.add_resource(Unit, "/unit/<string:identifier>/")
 API.add_resource(UnitCore, "/unit/<string:identifier>/core/")
