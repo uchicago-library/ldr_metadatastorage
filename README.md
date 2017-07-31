@@ -1,23 +1,8 @@
 # README
 
-## Glossary of terms
+## Introduction
 
-- intellectual unit is a collection of intellectual units or a collection of assets
-- unit is an abbreviation of intellectual unit
-- asset is a byte stream representing an intellectual unit whether in-whole or in-part
-- descriptive metadata represents one description of an intellectual unit
-- metadata is an abbreviation of descriptive metadata
-- endpoint is a particular context for metadata that will provide some functionality
-- functionality is either a.) the answer to a particular question about a particular resource or b.) some action or set of actions that transforms the resource identified into something new for the client to consume
-- field is a particular part of metadata. ex. title is a field
-- core metadata (abbreviated "core") are the REQUIRED fields: a.) 1 title, b.) 1 creator, c.) 1 date, d.) 1 or more identifier fields, e.) 1 or more relation fields
-- extension metadata (abbreviated "extension" or "extensions") are OPTIONAL descriptive metadata for an intellectual unit
-- client is a program that is requesting metadata. A client may be acting on behalf of a biological being.
-- technical metadata is technical information about an asset. This information may include but is not limited to width and height pixel dimensions of an image byte stream or duration of a video file or size in disk storage required by a particular byte stream.
-
-## Requirements for the metadata storage system
-
-Metadata storage must be able to answer the following questions about an intellectual unit
+Metadata storage must be able to answer the following questions about an intellectual unit.
 
 1. What collection(s) does this unit belong to? This is the primary intellectual access point.
 1. What is the title of this unit? This is a secondary access point.
@@ -25,22 +10,14 @@ Metadata storage must be able to answer the following questions about an intelle
 1. Who is the creator of this unit? This a secondary access point.
 1. Where can I find a representation of this unit? This is the primary access point.
 
-There are two types of metadata that will be in the ldr metadata storage system.
+We have to assume that there will be AT LEAST two types of metadata in the ldr metadata storage system.
 
 1. Metadata about units that belong to the University of Chicago Library and which all assets associated are in asset storage, e.g. OwnCloud
 1. Metadata about Units that do not belong to the University of Chicago Library and which assets are stored elsewhere, e.g. Luna
 
-This means that in order to provide a REQUIRED functionality, ldr metadata storage must be able to retrieve assets from either asset storage or any arbitrary outside storage accessible over the Web. It is therefore MANDATORY that all publicly available assets be available over the Web.
+This means that in order to provide a REQUIRED functionality, ldr metadata storage must be able to retrieve assets from either asset storage or any arbitrary outside storage accessible over the Web. It is therefore MANDATORY that all publicly available assets be available over the Web. However, the system must be able to distinguish between a remote asset and a library-controlled asset in order to know where to point clients for the location of assets. In order to distinguish between the two types of assets, there must be some marker for the ldr metadata storage to use to make this distinction. One marker will lead the ldr metadata storage to locate the assets from the digcoll retriever. The other will tell it to check if the address is valid. If the address is not valid, the ldr metadata storage should notify the administrators of the ldr metadata storage as well as the person attempting to ingest material into the ldr metadata storage. Any identifier that points to an asset controlled by the library MIST be a URI, because the ldr metadata storage must know from what host to pull the assets and we must assume that this host will change over time. Any identifier that points to a remote asset must be a URL. This is how the system will be able to distinguish what is a library-controlled asset and remote asset.
 
-This also means the ldr metadata storage must be able to distinguish between a remote asset and a library-controlled asset.
-
-In order to distinguish between the two types of assets, there must be some marker for the ldr metadata storage to use to make this distinction. One marker will lead the ldr metadata storage to locate the assets from the digcoll retriever. The other will tell it to check if the address is valid. If the address is not valid, the ldr metadata storage should notify the administrators of the ldr metadata storage as well as the person attempting to ingest material into the ldr metadata storage.
-
-The asset storage identifier should be a URI, because the ldr metadata storage must know from what host to pull the assets and we must assume that this host will change over time.
-
-The remote storage identifier must be a valid URL to the location of the asset on the web.
-
-We have to assume that there will be a variety of descriptive metadata formats used. These are the metadata formats currently being used in library digital collections.
+We also have to assume that there will be a variety of descriptive metadata formats used. These are the metadata formats currently being used in library digital collections.
 
 - TEI
 - EAD
@@ -49,7 +26,7 @@ We have to assume that there will be a variety of descriptive metadata formats u
 - OCR
 - MARC
 
-This means that the metadata storage must be able to store a variety of metadata formats that are not actionable by the metadata storage. The metadata storage must have a single schema that it can interpret in order to provide answers to the five questions defined earlier in this document.
+This means that the metadata storage must be able to store a variety of metadata formats that are not actionable by the metadata storage. However, the metadata storage must have a single schema that it can interpret in order to provide answers to the five questions defined earlier in this document.
 
 COROLLARY: the metadata storage should be able to store technical metadata about assets in digital collections. Technical metadata is currently being stored in asset storage, but there is a strong argument to be made that doing this "muddies the water" between asset and metadata. Asset ought to be strictly defined as a byte stream representing an intellectual unit or some portion of an intellectual unit. By storing technical metadata, which by definition is not a byte stream representing a whole or some port of an intellectual unit but rather information about the byte stream the asset storage is being forced to perform a task that is a violation of its primary function.
 
@@ -57,10 +34,8 @@ COROLLARY: the metadata storage should be able to store technical metadata about
 
 1. / = returns the endpoints available at the root of the API
 1. /units = returns a list of intellectual units (collections) in the ldr metadata storage
-
 1. /units/[collection identifier/sub collection identifier/ sub-sub collection identifier] = returns a list of intellectual units that are part of a particular collection [sub-collection, etc.]
-
-1. /unit/[collection identifier]/ = returns the endpoints available for a particular intellectual unit
+1. /unit/[collection identifier] = returns the endpoints available for a particular intellectual unit
 1. /unit/[intellectual unit identifier]/core = returns the core (metadata) describing a particular intellectual unit
 1. /unit/[intellectual unit identifier]/extensions = returns a list of extension identifiers that are available for a particular intellectual unit
 1. /unit/[intellectual unit identifier]/extensions/[extension identifier] = returns the extension metadata identified by the extension identifier that is available for a particular intellectual unit
@@ -307,6 +282,8 @@ Every POST submission to the ldr metadata storage MUST be well-formed XML or JSO
 </input>
 ```
 
+## Requirements for the metadata storage system
+
 ## Descriptions of endpoints
 
 ### /
@@ -321,47 +298,52 @@ This endpoint is GUARANTEED to return a list of contexts available from the root
 
 communication protocols: Web
 
-communication methods: GET, POST
+communication methods: GET
 
-The ldr metadata storage offers a GET method on the collections endpoint in order to retrieve a list of all collections in the metadata storage. The ldr metadata storage guarantees that a GET request from this endpoint will give the consuming client an up-to-date list of collections available in the ldr metadata storage.
+The GET method for this endpoint is GUARANTEED to return an up-to-date list of collections.
 
-- request: /collections
+- request: /units
 - requestReceivedTimeStamp: [ISO-8601 date and time]
 - responseSentTimeStamp: [ISO-8601 date and time]
 - responseType: aggregate
-- response: contains items element and inside items an item element that contains a URI resolvable to a particular collection 
+- response: contains items element and inside items an item element that contains a URI resolvable to a particular collection
 
+### /units/[collection identifier]
 
-The ldr metadata storage also offers a POST method on the collections endpoint in order to allow clients to add new collections to the metadata storage. The ldr metadata storage guarantees that a POST request from this endpoint will add the inputted collection to the ldr metadata storage so long as the input obeys the following rules
+communication protocols: Web
+
+communication methods: GET, POST
+
+The GET method for this endpoint is GUARANTEED to return an up-to-date list of units in the collection identified.
+
+- request: /units/[collection identifier]
+- requestReceivedTimeStamp: [ISO-8601 date and time]
+- responseSentTimeStamp: [ISO-8601 date and time]
+- responseType: aggregate
+- response: contains items element and inside items an item element that contains a URI resolvable to a particular collection
+
+The POST method for this endpoint is GUARANTEED to accept and save a new collection if the POST data obeys the CONTRACT for POST data.
 
 - collection title and identifier do not exist in the ldr metadata storage prior to submission of the POST request
 - There MUST be ONLY two dc:title elements
 - There MUST be ONLY one dc:description element
 - See Contract for POST submissions to the ldr metadata storage section for how to interpret these specific rules
 
-### /units/[collection identifier]
-
-communication protocols: Web
-
-communication methods: GET
-
-### /units
-
-THIS IS DEPRECATED BY LATEST THINKING. REMOVE 
+### /unit/[intellectual unit identifier]
 
 communication protocol: Web
 
 communication methods: GET, POST
 
-The ldr metadata storage offers a GET method on the units endpoint in order to retrieve a list of the intellectual units in the system. The ldr metadata storage guarantees that a request to this endpoint will provide an up-to-date list of all intellectual units in the system.
+The GET method for this endpoint is GUARANTEED to return a list of endpoints available for the intellectual unit identified
 
-- request: /units
+- request: /units/[intellectual unit identifer]
 - requestReceivedTimeStamp: [ISO-8601 date and time]
 - responseSentTimeStamp: [ISO-8601 date and time]
-- responseType: aggregate
-- response: contains items element and inside items an item element that contains a URI resolvable to a particular intellectual unit
+- responseType: atomic
+- response: contains items element and inside items an item element that contains a URI resolvable to a particular endpoint available from the endpoint for this unit
 
-The ldr metadata storage also offers a POST method on the units endpoint in order to add a new intellectual unit to the system. The ldr metadata storage guarantees that a POST request to this endpoint will add the inputted intellectual unit to the system as long as the input obeys the following rules
+The POST method for this endpoint is GUARANTEED to accept and save a new intellectual unit if the POST data obeys the CONTRACT for POST data.
 
 - the intellectual unit is unique to the ldr metadata storage system
 - There MUST be ONLY one dc:title elements
@@ -369,21 +351,7 @@ The ldr metadata storage also offers a POST method on the units endpoint in orde
 - There MUST be AT LEAST one dc:identifier element
 - There MUST be ONLY one dc:date element
 - There MAY be ONLY one extensions element
-- See Contract for POST submissions to the ldr metadata storage section for how to interpret these specific rules
-
-### /unit/[intellectual unit identifier]
-
-communication protocol: Web
-
-communication methods: GET
-
-This endpoint is GUARANTEED to return all available contexts for the intellectual unit identified. All intellectual units have the following contexts.
-
-- request: /units/[intellectual unit identifer]
-- requestReceivedTimeStamp: [ISO-8601 date and time]
-- responseSentTimeStamp: [ISO-8601 date and time]
-- responseType: aggregate
-- response: contains items element and inside items an item element that contains a URI resolvable to a particular endpoint available from the endpoint for this unit
+- See Contract for POST submissions to the ldr metadata storage section for how to interpret these specific rules 
 
 ### /unit/[intellectual unit identifier]/core
 
@@ -391,9 +359,9 @@ communication protocol: Web
 
 communication methods: GET
 
-error conditions: no core (metadata) resource available
+error conditions: no "core" resource available
 
-This endpoint is GUARANTEED to return the core metadata resource for the intellectual unit identified.
+This endpoint is GUARANTEED to return the core metadata for the intellectual unit identified.
 
 - request: /units/[intellectual unit identifer]/core
 - requestReceivedTimeStamp: [ISO-8601 date and time]
@@ -433,3 +401,17 @@ This endpoint is GUARANTEED to return a particular extension resource identified
 - responseType: atomic
 - response: contains extension element and inside extension element is the extension metadata available at this extension identifier for the particular intellectual unit
 
+## Glossary
+
+- intellectual unit is a collection of intellectual units or a collection of assets
+- unit is an abbreviation of intellectual unit
+- asset is a byte stream representing an intellectual unit whether in-whole or in-part
+- descriptive metadata represents one description of an intellectual unit
+- metadata is an abbreviation of descriptive metadata
+- endpoint is a particular context for metadata that will provide some functionality
+- functionality is either a.) the answer to a particular question about a particular resource or b.) some action or set of actions that transforms the resource identified into something new for the client to consume
+- field is a particular part of metadata. ex. title is a field
+- core metadata (abbreviated "core") are the REQUIRED fields: a.) 1 title, b.) 1 creator, c.) 1 date, d.) 1 or more identifier fields, e.) 1 or more relation fields
+- extension metadata (abbreviated "extension" or "extensions") are OPTIONAL descriptive metadata for an intellectual unit
+- client is a program that is requesting metadata. A client may be acting on behalf of a biological being.
+- technical metadata is technical information about an asset. This information may include but is not limited to width and height pixel dimensions of an image byte stream or duration of a video file or size in disk storage required by a particular byte stream.
