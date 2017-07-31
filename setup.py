@@ -7,6 +7,7 @@ The API should be storage backend agnostic like the asset storage API so that th
 library can switch backend when it needs to.
 
 """
+from setuptools import setup
 
 def readme():
     output = ""
@@ -27,6 +28,6 @@ setup(
     packages=['metadatastorageapi'],
     include_package_data=True,
     zip_safe=False,
-    install_requires=['flask'],
+    install_requires=['flask', 'flask_env', 'flask_restful'],
 )
 

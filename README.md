@@ -2,11 +2,11 @@
 
 ## Glossary of terms
 
-- intellectual unit is a collection of intellectual units or an asset
+- intellectual unit is a collection of intellectual units or a collection of assets
 - unit is an abbreviation of intellectual unit
 - asset is a byte stream representing an intellectual unit whether in-whole or in-part
 - descriptive metadata represents one description of an intellectual unit
-- metadata is an abbrevation of descriptive metadata
+- metadata is an abbreviation of descriptive metadata
 - endpoint is a particular context for metadata that will provide some functionality
 - functionality is either a.) the answer to a particular question about a particular resource or b.) some action or set of actions that transforms the resource identified into something new for the client to consume
 - field is a particular part of metadata. ex. title is a field
@@ -27,8 +27,8 @@ Metadata storage must be able to answer the following questions about an intelle
 
 There are two types of metadata that will be in the ldr metadata storage system.
 
-1. Units that belong to the University of Chicago Library and which all assets associated are in asset storage, e.g. OwnCloud
-1. Units that do not belong to the University of Chicago Library and which assets are stored elsewhere, e.g. Luna
+1. Metadata about units that belong to the University of Chicago Library and which all assets associated are in asset storage, e.g. OwnCloud
+1. Metadata about Units that do not belong to the University of Chicago Library and which assets are stored elsewhere, e.g. Luna
 
 This means that in order to provide a REQUIRED functionality, ldr metadata storage must be able to retrieve assets from either asset storage or any arbitrary outside storage accessible over the Web. It is therefore MANDATORY that all publicly available assets be available over the Web.
 
@@ -58,10 +58,7 @@ COROLLARY: the metadata storage should be able to store technical metadata about
 1. / = returns the endpoints available at the root of the API
 1. /units = returns a list of intellectual units (collections) in the ldr metadata storage
 
-
-1. /unit/[collection identifier[/collection identifier] ...] = returns a list of intellectual units that are part of a particular collection [sub-collection, etc.]
-
-/unit/[collection identifier]/[sub-collection identifier]/[sub sub collection identifier]/... goes as deeply as producer requires
+1. /units/[collection identifier/sub collection identifier/ sub-sub collection identifier] = returns a list of intellectual units that are part of a particular collection [sub-collection, etc.]
 
 1. /unit/[collection identifier]/ = returns the endpoints available for a particular intellectual unit
 1. /unit/[intellectual unit identifier]/core = returns the core (metadata) describing a particular intellectual unit
