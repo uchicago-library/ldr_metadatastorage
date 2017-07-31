@@ -19,3 +19,9 @@ class MetadataStorageTest1(unittest.TestCase):
 
     def tearDown(self):
         pass
+
+    def testTwoAndTwo(self):
+        return 2 + 2 == 4
+
+if __name__ == '__main__':
+    unittest.main()
