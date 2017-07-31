@@ -99,7 +99,7 @@ See the example below for further guidance on what to expect from a GET request 
     <response>
         <data>
             <metadata
-                xmlns="http://example.org/myapp/"
+                xmlns="http://lib.uchicago.edu/ldr"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                 xmlns:dc="http://purl.org/dc/elements/1.1/"
                 xmlns:dcterms="http://purl.org/dc/terms/">
@@ -126,7 +126,7 @@ See the example below for further guidance on what to expect from a GET request 
     <response>
         <data>
             <metadata
-                xmlns="http://example.org/myapp/"
+                xmlns="http://lib.uchicago.edu/ldr"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                 xmlns:dc="http://purl.org/dc/elements/1.1/"
                 xmlns:dcterms="http://purl.org/dc/terms/">
@@ -191,7 +191,7 @@ Every POST submission to the ldr metadata storage MUST be well-formed XML or JSO
     <requestSentTimeStamp>2017-07-02T11:14:55-06:00<requestSentTimeStamp>
     <core>
         <metadata
-        xmlns="http://example.org/myapp/"
+        xmlns="http://lib.uchicago.edu/ldr"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns:dc="http://purl.org/dc/elements/1.1/"
         xmlns:dcterms="http://purl.org/dc/terms/">
@@ -210,7 +210,7 @@ Every POST submission to the ldr metadata storage MUST be well-formed XML or JSO
     <requestSentTimeStamp>2017-07-02T11:14:55-06:00<requestSentTimeStamp>
     <core>
         <metadata
-        xmlns="http://example.org/myapp/"
+        xmlns="http://lib.uchicago.edu/ldr"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns:dc="http://purl.org/dc/elements/1.1/"
         xmlns:dcterms="http://purl.org/dc/terms/">
@@ -231,7 +231,7 @@ Every POST submission to the ldr metadata storage MUST be well-formed XML or JSO
     <requestSentTimeStamp>2017-07-02T11:14:55-06:00<requestSentTimeStamp>
     <core>
         <metadata
-        xmlns="http://example.org/myapp/"
+        xmlns="http://lib.uchicago.edu/ldr"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns:dc="http://purl.org/dc/elements/1.1/"
         xmlns:dcterms="http://purl.org/dc/terms/">
@@ -252,7 +252,7 @@ Every POST submission to the ldr metadata storage MUST be well-formed XML or JSO
     <requestSentTimeStamp>2017-07-02T11:14:55-06:00<requestSentTimeStamp>
     <core>
         <metadata
-        xmlns="http://example.org/myapp/"
+        xmlns="http://lib.uchiago.edu/ldr"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns:dc="http://purl.org/dc/elements/1.1/"
         xmlns:dcterms="http://purl.org/dc/terms/">
