@@ -308,7 +308,7 @@ The GET method for this endpoint is GUARANTEED to return an up-to-date list of c
 - responseType: aggregate
 - response: contains items element and inside items an item element that contains a URI resolvable to a particular collection
 
-### /units/[collection identifier]
+### /units/[collection identifier/sub-collection identifier/sub-sub-collection identifier]
 
 communication protocols: Web
 
@@ -316,7 +316,7 @@ communication methods: GET, POST
 
 The GET method for this endpoint is GUARANTEED to return an up-to-date list of units in the collection identified.
 
-- request: /units/[collection identifier]
+- request: /units/[collection identifier/sub-collection identifier/sub-sub-collection identifier]
 - requestReceivedTimeStamp: [ISO-8601 date and time]
 - responseSentTimeStamp: [ISO-8601 date and time]
 - responseType: aggregate
