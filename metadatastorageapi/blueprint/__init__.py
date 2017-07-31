@@ -25,7 +25,7 @@ LOG = logging.getLogger(__name__)
 class Root(Resource):
     def get(self):
         return "not implemented"
-    
+
 class Collections(Resource):
     def get(self):
         return "not implemented"
@@ -35,36 +35,36 @@ class Collections(Resource):
 
 
 class Units(Resource):
-    def get(self):
+    def get(self, collection_identifier):
         return "not implemented"
 
     def post(self):
         return "not implemented"
 
 class Unit(Resource):
-    def get(self):
+    def get(self, unit_identifier):
         return "not implemented"
 
     def post(self):
         return "not implemented"
 
 class UnitCore(Resource):
-    def get(self):
+    def get(self, unit_identifier):
         return "not implemented"
 
 class UnitExtensions(Resource):
-    def get(self):
+    def get(self, unit_identifier):
         return "not implemented"
 
 class Extension(Resource):
-    def get(self):
+    def get(self, unit_identiifer, extension_identifier):
         return "not implemented"
 
 
 API.add_resource(Root, "/")
-API.add_resource(Collections, "/units")
+API.add_resource(Collections, "/units/")
 API.add_resource(Units, "/units/<string:collection_identifier>/")
-API.add_resource(Unit, "/unit/<string:identifier>/")
-API.add_resource(UnitCore, "/unit/<string:identifier>/core/")
-API.add_resource(UnitExtensions, "/units/<string:identifier>/extensions/")
-API.add_resource(Extension, "/units/<string:identifier>/extensions/<string:extension_identifier>/")
+API.add_resource(Unit, "/unit/<string:unit_identifier>/")
+API.add_resource(UnitCore, "/unit/<string:unit_identifier>/core/")
+API.add_resource(UnitExtensions, "/units/<string:unit_identifier>/extensions/")
+API.add_resource(Extension, "/units/<string:unit_identifier>/extensions/<string:extension_identifier>/")

@@ -23,7 +23,7 @@ class TestingUnitTest(unittest.TestCase):
         return self._response_200(get)
 
     def test_CollectionsURL(self):
-        get = self.app.get("/units")
+        get = self.app.get("/units/")
         return self._response_200(get)
 
     def test_zeroDepthCollectionURL(self):
@@ -34,16 +34,20 @@ class TestingUnitTest(unittest.TestCase):
         get = self.app.get("/units/{}/{}/".format("foo", "bar"))
         return self._response_200(get)
 
+    def test_unitURL(self):
+        get = self.app.get("unit/{}/".format("foo"))
+        return self._response_200(get)
+
     def test_coreURL(self):
-        get = self.app.get("/units/{}/core".format("foo"))
+        get = self.app.get("/unit/{}/core/".format("foo"))
         return self._response_200(get)
 
     def test_extensionsURL(self):
-        get = self.app.get("/units/{}/extensions/".format("foo"))
+        get = self.app.get("/unit/{}/extensions/".format("foo"))
         return self._response_200(get)
 
     def test_anExtensionsURL(self):
-        get = self.app.get("/units/{}/extensions/{}/".format("foo", "bar"))
+        get = self.app.get("/unit/{}/extensions/{}/".format("foo", "bar"))
 
 
 if __name__ == '__main__':
