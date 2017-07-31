@@ -62,7 +62,7 @@ class Extension(Resource):
 
 
 API.add_resource(Root, "/")
-API.add_resource(Collections, "/units/")
+API.add_resource(Collections, "/units")
 API.add_resource(Units, "/units/<string:collection_identifier>/")
 API.add_resource(Unit, "/unit/<string:identifier>/")
 API.add_resource(UnitCore, "/unit/<string:identifier>/core/")
