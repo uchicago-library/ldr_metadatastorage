@@ -83,7 +83,7 @@ Every valid GET request to the ldr metadata is GUARANTEED to receive a well-form
 - the value of an item WILL ALWAYS be a URI resolvable by the ldr metadata storage
 - metadata will contain dublin core metadata
 - metadata will have an implicit namespace
-  - ```http://lib.uchicago.edu/ldr/```
+  - ```http://lib.uchicago.edu/ldr```
 - metadata will have 3 explicit namespaces
   - ```http://www.w3.org/2001/XMLSchema-instance```
   - ```http://purl.org/dc/elements/1.1/```
@@ -182,7 +182,7 @@ Every POST submission to the ldr metadata storage MUST be well-formed XML or JSO
 - There MUST be ONLY one instance of the element core beneath input
 - There MUST be only one instance of the element metadata beneath the element core
 - The element metadata MUST have one implicit namespace
-  - ```http://lib.uchicago.edu/ldr/```
+  - ```http://lib.uchicago.edu/ldr```
 - The element metadata MUST have the following explicit namespaces
   - ```http://purl.org/dc/elements/1.1/```
   - ```http://purl.org/dc/terms/```
