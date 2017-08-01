@@ -73,9 +73,9 @@ class Extension(Resource):
 # See spec section https://github.com/uchicago-library/ldr_metadatastorage#contract-for-available-endpoints
 # to test for completeness
 API.add_resource(Root, "/")
-API.add_resource(Collections, "/units/")
-API.add_resource(Units, "/units/<path:collection_identifier>/")
-API.add_resource(Unit, "/unit/<string:unit_identifier>/")
-API.add_resource(UnitCore, "/unit/<string:unit_identifier>/core/")
-API.add_resource(UnitExtensions, "/unit/<string:unit_identifier>/extensions/")
-API.add_resource(Extension, "/unit/<string:unit_identifier>/extensions/<string:extension_identifier>/")
+API.add_resource(Collections, "/collections/")
+API.add_resource(Units, "/collections/<path:collection_identifier>/")
+API.add_resource(Unit, "/collection/<string:unit_identifier>/")
+API.add_resource(UnitCore, "/collection/<string:unit_identifier>/core/")
+API.add_resource(UnitExtensions, "/collection/<string:unit_identifier>/extensions/")
+API.add_resource(Extension, "/collection/<string:unit_identifier>/extensions/<string:extension_identifier>/")

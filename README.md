@@ -62,10 +62,13 @@ Every valid GET request to the ldr metadata is GUARANTEED to receive a well-form
 - items will contain an item for each result that is part of the answer to the question being asked
 - the value of an item WILL ALWAYS be a URI resolvable by the ldr metadata storage
 - metadata will contain dublin core metadata
-- metadata WILL contain a dc:title
+- metadata WILL contain 2 instances of dc:title
 - metadata MAY contain a dc:date
+- metadata MAY contain a dc:description
+- metadata MAY contain a dc:isPartOf
+- dc:isPatOf will have an attribute xsi:type with value dcterms:URI
 - metadata MAY contain a dc:relation
-- metadata WILL contain AT LEAST one dc:identifier
+- metadata MAY contain AT LEAST one dc:identifier
 - dc:identifier WILL have an attribute xsi:type
 - the attribute xsi:type on dc:identifier WILL either have have dcterms:URI OR dcterms:URL
 
@@ -108,10 +111,16 @@ See the example below for further guidance on what to expect from a GET request 
                 <dc:title>Cap and Gown volume 2, issue 4</dc:title>
                 <dc:date>1900-02-01</dc:date>
                 <dc:creator>University of Chicago</dc:creator>
-                <dc:identifier xsi:type="dcterms:URI">/mvol-0001-0002-0004_0001</dc:identifier>
-                <dc:identifier xsi:type="dcterms:URI">/mvol-0001-0002-0004_0002</dc:identifier>
-                <dc:identifier xsi:type="dcterms:URI">/mvol-0001-0002-0004_0003</dc:identifier>
-                <dc:identifier xsi:type="dcterms:URI">/mvol-0001-0002-0004_0004</dc:identifier>
+                <dc:title>Cap and Gown Volume 2, Issue 4</dc:title>
+                <dc:identifier>mvol-0001-0002-0004</dc:identifier>
+                <dc:isPartOf xsi:type="dcterms:URI">/collections/mvol/0001/0002</dc:identifier>
+                <dci:hasPart xsi:type=="dcterms:URL">http://digcollretriever.lib.uchicago.edu/mvol-0001-002-0004/pdf</dc:hasPart>
+                <dc:hasPart xsi:type=="dcterms:URL">http://digcollretriever.lib.uchicago.edu/mvol-0001-002-0004/metadata</dc:hasPart>
+                <dc:hasPart xsi:type=="dcterms:URL">http://digcollretriever.lib.uchicago.edu/mvol-0001-002-0004/jejocr</dc:hasPart>
+                <dc:hasPart xsi:type=="dcterms:URL">http://digcollretriever.lib.uchicago.edu/mvol-0001-002-0004_0001</dc:hasPart>
+                <dc:hasPart xsi:type=="dcterms:URL">http://digcollretriever.lib.uchicago.edu/mvol-0001-002-0004_0002</dc:hasPart>
+                <dc:hasPart xsi:type=="dcterms:URL">http://digcollretriever.lib.uchicago.edu/mvol-0001-002-0004_0003</dc:hasPart>
+                <dc:hasPart xsi:type=="dcterms:URL">http://digcollretriever.lib.uchicago.edu/mvol-0001-002-0004_0004</dc:hasPart>
             <metadata>
         </data>
     </response>
@@ -120,8 +129,28 @@ See the example below for further guidance on what to expect from a GET request 
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
+<output xmlns="http://lib.uchicago.edu/ldr"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:dc="http://purl.org/dc/elements/1.1/"
+        xmlns:dcterms="http://purl.org/dc/terms/">
+    <request>/collections/mvol</request>
+    <requestReceivedTimeStamp>2017-07T12:02:44-06:00</requestReceivedTimeStamp>
+    <responseSentTimeStamp>2017-07-28T12:02:58+03:00</responseSentTimeStamp>
+    <responseType>aggregate</responseType>
+    <response>
+        <items>
+            <item>/collection/mvol/0001</item>
+            <item>/collection/mvol/0001/0002</item>
+            <item>/collection/mvol/0001/0002/0004</item>
+        </items>
+    </response>
+</output>
+```
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
 <output>
-    <request>/collections/campub</request>
+    <request>/collection/mvol-0001/core</request>
     <requestReceivedTimeStamp>2017-07T12:02:44-06:00</requestReceivedTimeStamp>
     <responseSentTimeStamp>2017-07-28T12:02:58+03:00</responseSentTimeStamp>
     <responseType>atomic</responseType>
@@ -132,9 +161,62 @@ See the example below for further guidance on what to expect from a GET request 
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                 xmlns:dc="http://purl.org/dc/elements/1.1/"
                 xmlns:dcterms="http://purl.org/dc/terms/">
-                <dc:title>Campus Publications Digital Collection</dc:title>
-                <dc:title>campub</dc:title>
-                <dc:identifier xsi:type="dcterms:URI">/collections/campub</dc:identifier>
+                <dc:title>Cap and Gown</dc:title>
+                <dc:identifier>mvol-0001</dc:identifier>
+                <dc:isPartOf xsi:type="dcterms:URI">/collections/mvol</dc:identifier>
+            <metadata>
+        </data>
+    </response>
+</output>
+```
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<output>
+    <request>/collection/mvol-0001-0002/core</request>
+    <requestReceivedTimeStamp>2017-07T12:02:44-06:00</requestReceivedTimeStamp>
+    <responseSentTimeStamp>2017-07-28T12:02:58+03:00</responseSentTimeStamp>
+    <responseType>atomic</responseType>
+    <response>
+        <data>
+            <metadata
+                xmlns="http://lib.uchicago.edu/ldr"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:dc="http://purl.org/dc/elements/1.1/"
+                xmlns:dcterms="http://purl.org/dc/terms/">
+                <dc:title>Cap and Gown Volume 2</dc:title>
+                <dc:identifier>mvol-0001-0002</dc:identifier>
+                <dc:isPartOf xsi:type="dcterms:URI">/collections/mvol/0001</dc:identifier>
+            <metadata>
+        </data>
+    </response>
+</output>
+```
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<output>
+    <request>/collection/mvol-0002-0004/core</request>
+    <requestReceivedTimeStamp>2017-07T12:02:44-06:00</requestReceivedTimeStamp>
+    <responseSentTimeStamp>2017-07-28T12:02:58+03:00</responseSentTimeStamp>
+    <responseType>atomic</responseType>
+    <response>
+        <data>
+            <metadata
+                xmlns="http://lib.uchicago.edu/ldr"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:dc="http://purl.org/dc/elements/1.1/"
+                xmlns:dcterms="http://purl.org/dc/terms/">
+                <dc:title>Cap and Gown Volume 2, Issue 4</dc:title>
+                <dc:identifier>mvol-0001-0002-0004</dc:identifier>
+                <dc:isPartOf xsi:type="dcterms:URI">/collections/mvol/0001/0002</dc:identifier>
+                <dci:hasPart xsi:type=="dcterms:URL">http://digcollretriever.lib.uchicago.edu/mvol-0001-002-0004/pdf</dc:hasPart>
+                <dc:hasPart xsi:type=="dcterms:URL">http://digcollretriever.lib.uchicago.edu/mvol-0001-002-0004/metadata</dc:hasPart>
+                <dc:hasPart xsi:type=="dcterms:URL">http://digcollretriever.lib.uchicago.edu/mvol-0001-002-0004/jejocr</dc:hasPart>
+                <dc:hasPart xsi:type=="dcterms:URL">http://digcollretriever.lib.uchicago.edu/mvol-0001-002-0004_0001</dc:hasPart>
+                <dc:hasPart xsi:type=="dcterms:URL">http://digcollretriever.lib.uchicago.edu/mvol-0001-002-0004_0002</dc:hasPart>
+                <dc:hasPart xsi:type=="dcterms:URL">http://digcollretriever.lib.uchicago.edu/mvol-0001-002-0004_0003</dc:hasPart>
+                <dc:hasPart xsi:type=="dcterms:URL">http://digcollretriever.lib.uchicago.edu/mvol-0001-002-0004_0004</dc:hasPart>
             <metadata>
         </data>
     </response>
