@@ -5,7 +5,7 @@ import unittest
 
 import metadatastorageapi
 
-class TestingUnitTest(unittest.TestCase):
+class TestToSpecOnePointO(unittest.TestCase):
     """the api test suite
     """
     def setUp(self):
