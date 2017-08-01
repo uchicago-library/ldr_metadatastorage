@@ -30,7 +30,7 @@ We also have to assume that there will be a variety of descriptive metadata form
 
 This means that the metadata storage must be able to store a variety of metadata formats that are not actionable by the metadata storage. However, the metadata storage must have a single schema that it can interpret in order to provide answers to the five questions defined earlier in this document.
 
-COROLLARY: the metadata storage should be able to store technical metadata about assets in digital collections. Technical metadata is currently being stored in asset storage, but there is a strong argument to be made that doing this "muddies the water" between asset and metadata. Asset ought to be strictly defined as a byte stream representing an intellectual unit or some portion of an intellectual unit. By storing technical metadata, which by definition is not a byte stream representing a whole or some port of an intellectual unit but rather information about the byte stream the asset storage is being forced to perform a task that is a violation of its primary function.
+COROLLARY: the metadata storage should be able to store technical metadata about assets in digital collections. Technical metadata is currently being stored in asset storage, but there is a strong argument to be made that doing this "muddies the water" between asset and metadata. Asset ought to be strictly defined as a byte stream representing an intellectual unit or some portion of an intellectual unit. By storing technical metadata, which by definition is not a byte stream representing a whole or some part of an intellectual unit but rather information about the byte stream the asset storage is being forced to perform a task that is a violation of its primary function.
 
 ## Contract for available endpoints
 
@@ -46,6 +46,12 @@ COROLLARY: the metadata storage should be able to store technical metadata about
 
 Every valid GET request to the ldr metadata is GUARANTEED to receive a well-formed XML or JSON response. This XML or JSON response will have the following information
 
+- root element WILL be output
+- output WILL have the following namespaces
+  - ```http://lib.uchicago.edu/ldr``` which this document refers to with the shorthand ldr
+  - ```http://www.w3.org/2001/XMLSchema-instance``` which this document refers to with the shorthand xsi
+  - ```http://purl.org/dc/elements/1.1/``` which this document refers to with the shorthand dc
+  - ```http://purl.org/dc/terms/``` which this document refers to with the shorthand dcterms
 - the request that the ldr metadata storage received
 - the date and time in ISO-8601 that the ldr metadata storage received that request WILL be the request timestamp from the timezone of the requestor
 - the date and time in ISO-8601 that the ldr metadata storage sent the response from the timezone of the ldr metadata storage
@@ -56,12 +62,6 @@ Every valid GET request to the ldr metadata is GUARANTEED to receive a well-form
 - items will contain an item for each result that is part of the answer to the question being asked
 - the value of an item WILL ALWAYS be a URI resolvable by the ldr metadata storage
 - metadata will contain dublin core metadata
-- metadata will have an implicit namespace
-  - ```http://lib.uchicago.edu/ldr```
-- metadata will have 3 explicit namespaces
-  - ```http://www.w3.org/2001/XMLSchema-instance```
-  - ```http://purl.org/dc/elements/1.1/```
-  - ```http://purl.org/dc/terms/```
 - metadata WILL contain a dc:title
 - metadata MAY contain a dc:date
 - metadata MAY contain a dc:relation
@@ -148,6 +148,11 @@ Every POST submission to the ldr metadata storage MUST be well-formed XML or JSO
 - Where a collection identifier is submitted it MUST not exist in the ldr metadata storage before submission occurs
 - Where a unit identifier is submitted it MUST not exist in the ldr metadata storage before submission occurs
 - The root element MUST be input
+- The element input MUST have the following namespaces
+  - ```http://lib.uchicago.edu/ldr``` which this document refers to with the shorthand ldr
+  - ```http://www.w3.org/2001/XMLSchema-instance``` which this document refers to with the shorthand xsi
+  - ```http://purl.org/dc/elements/1.1/``` which this document refers to with the shorthand dc
+  - ```http://purl.org/dc/terms/``` which this document refers to with the shorthand dcterms
 - There MUST be ONLY one instance of the element requestSentTimeStamp
 - The value of requestSentTimeStamp MUST be valid ISO-8601
 - There MUST be an element request
@@ -155,12 +160,6 @@ Every POST submission to the ldr metadata storage MUST be well-formed XML or JSO
 - There MUST be ONLY one instance of the element metadata beneath input
 - There MUST be ONLY one instance of the element core beneath input
 - There MUST be only one instance of the element metadata beneath the element core
-- The element metadata MUST have one implicit namespace
-  - ```http://lib.uchicago.edu/ldr```
-- The element metadata MUST have the following explicit namespaces
-  - ```http://purl.org/dc/elements/1.1/```
-  - ```http://purl.org/dc/terms/```
-  - ```http://www.w3.org/2001/XMLSchema-instance```
 - The element metadata MUST be a complex element
 - There MUST be AT LEAST one instance of element dc:title beneath metadata
 - There MAY be a requirement for a second instance of dc:title

@@ -1,21 +1,51 @@
 """the module containing unit test code for the metadata storage api
 """
 
+from datetime.datetime import now
+from json import load, dumps
+from xml.etree import ElementTree
 import unittest
 
-import metadatastorageapi
-
+from metadatastorageapi import APP
+from metadatastorageapi.output import create_output_xml, create_input_xml
 class TestToSpecOnePointO(unittest.TestCase):
     """the api test suite
     """
     def setUp(self):
-        self.app = metadatastorageapi.APP.test_client()
+        self.app = APP.test_client()
 
     def tearDown(self):
         pass
 
     def _response_200(self, rv):
         self.assertEqual(rv.status_code, 200)
+
+    def _create_complex_unit_xml_input(self):
+        ElementTree.register_namespace("ldr", "http://lib.uchicago.edu/ldr")
+        ElementTree.register_namespace("dc", "http://purl.org/dc/elements/1.1/")
+        ElementTree.register_namespace("dcterms", "http://purl.org/dc/terms/")
+        ElementTree.register_namespace("xsi", "http://www.w3.org/2001/XMLSchema-instance")
+        root = ElementTree.Element("input")
+        requestSent = ElementTree.SubElement(root, "responseSentTimeStamp")
+        requestSent.text = now().iso8601()
+        core = ElementTree.SubElement(root, "core")
+        metadata = ElementTree.SubElement(core, "metadata")
+        title = ElementTree.SubElement(metadata, 'dc:title')
+        title.text = "A Simple Title"
+        date = ElementTree.SubElement(metadata, 'dc:date')
+        date.text = "1800"
+        relation_one = ElementTree.SubElement(metadata, 'dc:relation')
+        relation_one.text = "testcollection"
+        relation_two = ElementTree.SubElement(metadata, 'dc:relation')
+        relation_two.text = "secondtestcollection"
+        identifier = ElementTree.SubElement(metadata, 'dc:identifier')
+        identifier.set("xsi:type", "URL")
+        identifier.text = "https://dummyimage.com/200x300&text=test image!"
+        return root
+
+
+    def _create_json_output(self):
+        return "not implemented"
 
     def test_rootURL(self):
         """tests whether there is a root url defined in blueprint
@@ -120,7 +150,9 @@ class TestToSpecOnePointO(unittest.TestCase):
 
         this tests the GET method on the /unit/[intellectual unit identifier]/extensions/[extension identifier] endpoint
         """
-        return self.assertTrue(False)
+        get = self.app.get("/unit/test/extensions/extramdone")
+        get.data
+        return self.assertTrue()
 
 if __name__ == '__main__':
     unittest.main()
