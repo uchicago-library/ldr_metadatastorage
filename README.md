@@ -385,7 +385,7 @@ The POST request will accept a submission that includes the following
 
 The POST submission data must conform to the following
 
-- have a root field named output
+- have a root field named input
 - output will have the following namespaces
   - ```http://lib.uchicago.edu/ldr``` which this document refers to with the shorthand ldr
   - ```http://www.w3.org/2001/XMLSchema-instance``` which this document refers to with the shorthand xsi
