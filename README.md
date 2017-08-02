@@ -42,72 +42,235 @@ COROLLARY: the metadata storage should be able to store technical metadata about
 1. /collection/[collection identifier]/extensions = returns a list of extension identifiers that are available for a particular collection
 1. /collection/[collection identifier]/extensions/[extension identifier] = returns the extension metadata identified by the extension identifier that is available for a particular intellectual unit
 
-## Contract for GET request responses from the ldr metadata storage
+## About core metadata
 
-Every valid GET request to the ldr metadata is GUARANTEED to receive a well-formed XML or JSON response. This XML or JSON response will have the following information
+Core metadata are REQUIRED fields. These fields is what allows the ldr metadata storage to answer all of the questions sets out at the beginning of this document in a cross-collection manner.
 
-- root element WILL be output
-- output WILL have the following namespaces
+- dc:title MUST be present
+- dc:identifier MUST be present
+- dc:isPartof MUST be present if the collection is a subordinate to another collection
+- dc:hasPart MUST be present if the collection is a superior to another collection or  to assets
+- dc:description is OPTIONAL
+- dc:relation is OPTIONAL
+- dc:relation, dc:isPartOf and dc:hasPart MUST have attribute xsi:type
+- attribute xsi:type MUST have a value of dcterms:URI if the value of the element is a path resolvable by ldr metadata storage
+- attribute xsi:type MUST have a value of dcterms:URL if the value of the element is a path resolvable by a remote system
+
+## About extension metadata
+
+There are no requirements for extension metadata, only that when posted it is wrapped in an extensions/extension element and that the type (xml, text or json) is defined and an identifier created.
+
+## The different types of responses
+
+The consuming client must be able to distinguish between the kinds of responses that the ldr metadata storage will provide. If the response is aggregate, it means the consuming client needs to know what collections are present in a particular location in the ldr metadata storage. If the response is atomic, it means the consuming client needs to know something in particular about a particular collection or extension metadata. If the response is contextual, it means the consuming client needs to know where it can go next on its journey through the ldr metadata storage. In this way, the consuming client can navigate its way through the ldr metadata storage and be able to quickly interpret the responses based on a check for responseType to verify that the responseType is the kind of response it wants.
+
+Regardless of type, every response will have certain characteristics in common. Each one will have
+
+- it will have the following namespaces
   - ```http://lib.uchicago.edu/ldr``` which this document refers to with the shorthand ldr
   - ```http://www.w3.org/2001/XMLSchema-instance``` which this document refers to with the shorthand xsi
   - ```http://purl.org/dc/elements/1.1/``` which this document refers to with the shorthand dc
   - ```http://purl.org/dc/terms/``` which this document refers to with the shorthand dcterms
-- the request that the ldr metadata storage received
-- the date and time in ISO-8601 that the ldr metadata storage received that request WILL be the request timestamp from the timezone of the requestor
-- the date and time in ISO-8601 that the ldr metadata storage sent the response from the timezone of the ldr metadata storage
-- the type of response returned WILL be either aggregate or atomic
-- the response in the form of the answer to the question asked by the request
-- the response will be items if the response type is aggregate
-- the response will be either metadata or extension if the response type is atomic
-- items will contain an item for each result that is part of the answer to the question being asked
-- the value of an item WILL ALWAYS be a URI resolvable by the ldr metadata storage
-- metadata will contain dublin core metadata
-- metadata WILL contain 2 instances of dc:title
-- metadata MAY contain a dc:date
-- metadata MAY contain a dc:description
-- metadata MAY contain a dc:isPartOf
-- dc:isPatOf will have an attribute xsi:type with value dcterms:URI
-- metadata MAY contain a dc:relation
-- metadata MAY contain AT LEAST one dc:identifier
-- dc:identifier WILL have an attribute xsi:type
-- the attribute xsi:type on dc:identifier WILL either have have dcterms:URI OR dcterms:URL
+- a request field which will have a value of the request being asked of the system.
+- a requestReceivedTimeStamp which will have a value of the date and time that the system received the request in ISO-8601
+- a requestSentTimeStamp which will have a value of the date and time that the system completed processing the request in ISO-8601 and sent it to the consuming client
+- a responseType which will have as a value a string that is either aggregate, atomic, or contextual
+- a response body which will contain the metadata that is the answer to the request
 
-See the example below for further guidance on what to expect from a GET request to the ldr metadata storage
+### About aggregate type responses
+
+An aggregate response is one that that the consuming client can assume will present a list of collections that match the request
+
+The following endpoints are aggregate
+
+- /collections
+- /collections/[collection identifier][/sub-collection identifier]?
+- /collection/[collection identifier]/extensions
+
+The aggregate response body metadata will consist of at least one dc:hasPart with attribute xsi:type="dcterms:URI". The value of each dc:hasPart will be a URI for a collection (if any) that are direct subordinate to the collection being requested about or a URL for an asset that is directly subordinate to the collection.
+
+#### Contract for aggregate responses
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
-<output>
-    <request>/collections/campub</request>
+<output xmlns="http://lib.uchicago.edu/ldr"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:dc="http://purl.org/dc/elements/1.1/"
+        xmlns:dcterms="http://purl.org/dc/terms/">
+    <request>/collections/mvol</request>
     <requestReceivedTimeStamp>2017-07-28T14:02:12-06:00</requestReceivedTimeStamp>
     <responseSentTimeStamp>2017-07-28T14:02:17+07:00</responseSentTimeStamp>
     <responseType>aggregate</responseType>
     <response>
-        <items>
-            <item>/unit/mvol-0001-0002-0003</item>
-            <item>/unit/mvol-0001-0002-0004</item>
-            <item>/unit/mvol-0001-0002-0005</item>
-            <item>/unit/mvol-0002-0001-0001</item>
-            <item>/unit/mvol-0002-0001-0002</item>
-            <item>/unit/mvol-0004-1918-0204</item>
-        </item>
+        <metadata>
+            <dc:hasPart xsi:type="dcterms:URI">/collection/mvol/0001</dc:hasPart>
+            <dc:hasPart xsi:type="dcterms:URI">/collection/mvol/0002</dc:hasPart>
+            <dc:hasPart xsi:type="dcterms:URI">/collection/mvol/0004</dc:hasPart>
+            <dc:hasPart xsi:type="dcterms:URI">/collection/mvol/0446</dc:hasPart>
+        </metadata>
     </response>
 </output>
 ```
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
-<output>
+<output xmlns="http://lib.uchicago.edu/ldr"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:dc="http://purl.org/dc/elements/1.1/"
+        xmlns:dcterms="http://purl.org/dc/terms/">
+    <request>/collections/mvol/0001</request>
+    <requestReceivedTimeStamp>2017-07-28T14:02:12-06:00</requestReceivedTimeStamp>
+    <responseSentTimeStamp>2017-07-28T14:02:17+07:00</responseSentTimeStamp>
+    <responseType>aggregate</responseType>
+    <response>
+        <metadata>
+            <dc:hasPart xsi:type="dcterms:URI">/collection/mvol/0001/0000</dc:hasPart>
+            <dc:hasPart xsi:type="dcterms:URI">/collection/mvol/0001/0001</dc:hasPart>
+            <dc:hasPart xsi:type="dcterms:URI">/collection/mvol/0001/0002</dc:hasPart>
+            <dc:hasPart xsi:type="dcterms:URI">/collection/mvol/0001/0003</dc:hasPart>
+        </metadata>
+    </response>
+</output>
+```
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<output xmlns="http://lib.uchicago.edu/ldr"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:dc="http://purl.org/dc/elements/1.1/"
+        xmlns:dcterms="http://purl.org/dc/terms/">
+    <request>/collections/mvol/0001/0003</request>
+    <requestReceivedTimeStamp>2017-07-28T14:02:12-06:00</requestReceivedTimeStamp>
+    <responseSentTimeStamp>2017-07-28T14:02:17+07:00</responseSentTimeStamp>
+    <responseType>aggregate</responseType>
+    <response>
+        <metadata>
+            <dc:hasPart xsi:type="dcterms:URI">/collection/mvol/0001/0003/0000</dc:hasPart>
+            <dc:hasPart xsi:type="dcterms:URI">/collection/mvol/0001/0003/0001</dc:hasPart>
+            <dc:hasPart xsi:type="dcterms:URI">/collection/mvol/0001/0003/0002</dc:hasPart>
+            <dc:hasPart xsi:type="dcterms:URI">/collection/mvol/0001/0003/0003</dc:hasPart>
+        </metadata>
+    </response>
+</output>
+```
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<output xmlns="http://lib.uchicago.edu/ldr"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:dc="http://purl.org/dc/elements/1.1/"
+        xmlns:dcterms="http://purl.org/dc/terms/">
+    <request>/collections/mvol/0001/0003/0001</request>
+    <requestReceivedTimeStamp>2017-07-28T14:02:12-06:00</requestReceivedTimeStamp>
+    <responseSentTimeStamp>2017-07-28T14:02:17+07:00</responseSentTimeStamp>
+    <responseType>aggregate</responseType>
+    <response>
+        <metadata>
+            <dc:hasPart xsi:type="dcterms:URL">http://digcollretriever.lib.uchicago.edu/mvol-0001-0003-0001/pdf</dc:hasPart>
+            <dc:hasPart xsi:type="dcterms:URL">http://digcollretriever.lib.uchicago.edu/mvol-0001-0003-0001/jejocr</dc:hasPart>
+            <dc:hasPart xsi:type="dcterms:URL">http://digcollretriever.lib.uchicago.edu/mvol-0001-0003-0001_0001/jpg</dc:hasPart>
+            <dc:hasPart xsi:type="dcterms:URL">http://digcollretriever.lib.uchicago.edu/mvol-0001-0003-0001_0002/jpg</dc:hasPart>
+            <dc:hasPart xsi:type="dcterms:URL">http://digcollretriever.lib.uchicago.edu/mvol-0001-0003-0001_0003/jpg</dc:hasPart>
+            <dc:hasPart xsi:type="dcterms:URL">http://digcollretriever.lib.uchicago.edu/mvol-0001-0003-0001_0004/jpg</dc:hasPart>
+        </metadata>
+    </response>
+</output>
+```
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<output xmlns="http://lib.uchicago.edu/ldr"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:dc="http://purl.org/dc/elements/1.1/"
+        xmlns:dcterms="http://purl.org/dc/terms/">
+    <request>/collections/mvol/0001/0003/0001/extensions</request>
+    <requestReceivedTimeStamp>2017-07-28T14:02:12-06:00</requestReceivedTimeStamp>
+    <responseSentTimeStamp>2017-07-28T14:02:17+07:00</responseSentTimeStamp>
+    <responseType>aggregate</responseType>
+    <response>
+        <metadata>
+            <dc:hasPart xsi:type="dcterms:URI">/collection/mvol-0001-0003-0001/extensions/structMetadata</dc:hasPart>
+        </metadata>
+    </response>
+</output>
+```
+
+### About atomic responses
+
+An atomic response is one that the consuming client can assume will be present a single descriptive metadata
+
+The following endpoints are atomic:
+
+- /collection/[collection identifier]/core
+- /collection/[collection identifier]/extensions/[extension identifier]
+
+The atomic response body metadata will consist of the following
+
+- one dc:identifier element the value of which is the primary access point for the collection
+- one dc:title element the value of which is the primary intellectual secondary access point for the collection
+
+In addition, the atomic response body may have the following
+
+- at least one dc:hasPart which will point to either a collection or an asset which is a direct subordinate of the collection
+- at least one dc:isPartOf which will point to a collection of which the collection is directly subordinate
+- one dc:date which is a secondary intellectual access point
+- one dc:creator which is a secondary intellectual access point
+- one dc:description which which relays contextual semantic information about the collection to the biological being on whose behalf the consuming client is working
+
+#### Contract for atomic responses
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<output xmlns="http://lib.uchicago.edu/ldr"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:dc="http://purl.org/dc/elements/1.1/"
+        xmlns:dcterms="http://purl.org/dc/terms/">
+    <request>/collection/mvol-0001/core</request>
+    <requestReceivedTimeStamp>2017-07T12:02:44-06:00</requestReceivedTimeStamp>
+    <responseSentTimeStamp>2017-07-28T12:02:58+03:00</responseSentTimeStamp>
+    <responseType>atomic</responseType>
+    <response>
+        <metadata>
+            <dc:title>Cap and Gown</dc:title>
+            <dc:identifier>mvol-0001</dc:identifier>
+            <dc:isPartOf xsi:type="dcterms:URI">/collections/mvol</dc:identifier>
+        <metadata>
+    </response>
+</output>
+```
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<output xmlns="http://lib.uchicago.edu/ldr"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:dc="http://purl.org/dc/elements/1.1/"
+        xmlns:dcterms="http://purl.org/dc/terms/">
+    <request>/collection/mvol-0001-0002/core</request>
+    <requestReceivedTimeStamp>2017-07T12:02:44-06:00</requestReceivedTimeStamp>
+    <responseSentTimeStamp>2017-07-28T12:02:58+03:00</responseSentTimeStamp>
+    <responseType>atomic</responseType>
+    <response>
+         <metadata>
+            <dc:title>Cap and Gown Volume 2</dc:title>
+            <dc:identifier>mvol-0001-0002</dc:identifier>
+            <dc:isPartOf xsi:type="dcterms:URI">/collections/mvol/0001</dc:identifier>
+        <metadata>
+    </response>
+</output>
+```
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<output xmlns="http://lib.uchicago.edu/ldr"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:dc="http://purl.org/dc/elements/1.1/"
+        xmlns:dcterms="http://purl.org/dc/terms/">
     <request>/units/mvol-0001-0002-0004/core</request>
     <requestReceivedTimeStamp>2017-07T12:02:44-06:00</requestReceivedTimeStamp>
     <responseSentTimeStamp>2017-07-28T12:02:58+03:00</responseSentTimeStamp>
     <responseType>atomic</responseType>
     <response>
-        <data>
-            <metadata
-                xmlns="http://lib.uchicago.edu/ldr"
-                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xmlns:dc="http://purl.org/dc/elements/1.1/"
-                xmlns:dcterms="http://purl.org/dc/terms/">
+            <metadata>
                 <dc:title>Cap and Gown volume 2, issue 4</dc:title>
                 <dc:date>1900-02-01</dc:date>
                 <dc:creator>University of Chicago</dc:creator>
@@ -122,6 +285,65 @@ See the example below for further guidance on what to expect from a GET request 
                 <dc:hasPart xsi:type=="dcterms:URL">http://digcollretriever.lib.uchicago.edu/mvol-0001-002-0004_0003</dc:hasPart>
                 <dc:hasPart xsi:type=="dcterms:URL">http://digcollretriever.lib.uchicago.edu/mvol-0001-002-0004_0004</dc:hasPart>
             <metadata>
+    </response>
+</output>
+```
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<output xmlns="http://lib.uchicago.edu/ldr"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:dc="http://purl.org/dc/elements/1.1/"
+        xmlns:dcterms="http://purl.org/dc/terms/">
+    <request>/collection/mvol-0001-0002-0004/extensions/structuralMetadata</request>
+    <requestReceivedTimeStamp>2017-07T12:02:44-06:00</requestReceivedTimeStamp>
+    <responseSentTimeStamp>2017-07-28T12:02:58+03:00</responseSentTimeStamp>
+    <responseType>atomic</responseType>
+    <response>
+        <extension>
+            <type>text</type>
+            <name>structuralMetadata</name>
+            <data>
+                000000001
+                000000002
+                000000003   1   cover
+                000000004   2
+            </data>
+        </extension>
+    </response>
+</output>
+```
+
+### About contextual responses
+
+A contextual response is one that merely tells the client which endpoints can be discovered from the particular endpoint that the client is at. It is a form of wayfinding, as if the consuming client is on a forest trail and has reached a fork in the road.
+
+The following endpoints are contextual
+
+- /
+- /collection/[collection identifier]
+
+The contextual response body metadata will consist of the following
+
+- at least one dc:relation element the value of which is an endpoint available to the endpoint being requested
+
+#### Contract for contextual responses
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<output xmlns="http://lib.uchicago.edu/ldr"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:dc="http://purl.org/dc/elements/1.1/"
+        xmlns:dcterms="http://purl.org/dc/terms/">
+    <request>/</request>
+    <requestReceivedTimeStamp>2017-07T12:02:44-06:00</requestReceivedTimeStamp>
+    <responseSentTimeStamp>2017-07-28T12:02:58+03:00</responseSentTimeStamp>
+    <responseType>contextual</responseType>
+    <response>
+        <data>
+            <metadata>
+                <dc:relation xsi:type="dcterms:URI">/collections</dc:identifier>
+            <metadata>
         </data>
     </response>
 </output>
@@ -133,138 +355,47 @@ See the example below for further guidance on what to expect from a GET request 
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns:dc="http://purl.org/dc/elements/1.1/"
         xmlns:dcterms="http://purl.org/dc/terms/">
-    <request>/collections/mvol</request>
-    <requestReceivedTimeStamp>2017-07T12:02:44-06:00</requestReceivedTimeStamp>
-    <responseSentTimeStamp>2017-07-28T12:02:58+03:00</responseSentTimeStamp>
-    <responseType>aggregate</responseType>
-    <response>
-        <items>
-            <item>/collection/mvol/0001</item>
-            <item>/collection/mvol/0001/0002</item>
-            <item>/collection/mvol/0001/0002/0004</item>
-        </items>
-    </response>
-</output>
-```
-
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<output>
-    <request>/collection/mvol-0001/core</request>
-    <requestReceivedTimeStamp>2017-07T12:02:44-06:00</requestReceivedTimeStamp>
-    <responseSentTimeStamp>2017-07-28T12:02:58+03:00</responseSentTimeStamp>
-    <responseType>atomic</responseType>
-    <response>
-        <data>
-            <metadata
-                xmlns="http://lib.uchicago.edu/ldr"
-                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xmlns:dc="http://purl.org/dc/elements/1.1/"
-                xmlns:dcterms="http://purl.org/dc/terms/">
-                <dc:title>Cap and Gown</dc:title>
-                <dc:identifier>mvol-0001</dc:identifier>
-                <dc:isPartOf xsi:type="dcterms:URI">/collections/mvol</dc:identifier>
-            <metadata>
-        </data>
-    </response>
-</output>
-```
-
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<output>
     <request>/collection/mvol-0001-0002/core</request>
     <requestReceivedTimeStamp>2017-07T12:02:44-06:00</requestReceivedTimeStamp>
     <responseSentTimeStamp>2017-07-28T12:02:58+03:00</responseSentTimeStamp>
-    <responseType>atomic</responseType>
+    <responseType>contextual</responseType>
     <response>
         <data>
-            <metadata
-                xmlns="http://lib.uchicago.edu/ldr"
-                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xmlns:dc="http://purl.org/dc/elements/1.1/"
-                xmlns:dcterms="http://purl.org/dc/terms/">
-                <dc:title>Cap and Gown Volume 2</dc:title>
-                <dc:identifier>mvol-0001-0002</dc:identifier>
-                <dc:isPartOf xsi:type="dcterms:URI">/collections/mvol/0001</dc:identifier>
+            <metadata>
+                <dc:relation xsi:type="dcterms:URI">/collections/mvol-0001-0002/core</dc:identifier>
+                <dc:relation xsi:type="dcterms:URI">/collections/mvol-0001-0002/extensions</dc:identifier>
             <metadata>
         </data>
     </response>
 </output>
 ```
 
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<output>
-    <request>/collection/mvol-0002-0004/core</request>
-    <requestReceivedTimeStamp>2017-07T12:02:44-06:00</requestReceivedTimeStamp>
-    <responseSentTimeStamp>2017-07-28T12:02:58+03:00</responseSentTimeStamp>
-    <responseType>atomic</responseType>
-    <response>
-        <data>
-            <metadata
-                xmlns="http://lib.uchicago.edu/ldr"
-                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xmlns:dc="http://purl.org/dc/elements/1.1/"
-                xmlns:dcterms="http://purl.org/dc/terms/">
-                <dc:title>Cap and Gown Volume 2, Issue 4</dc:title>
-                <dc:identifier>mvol-0001-0002-0004</dc:identifier>
-                <dc:isPartOf xsi:type="dcterms:URI">/collections/mvol/0001/0002</dc:identifier>
-                <dci:hasPart xsi:type=="dcterms:URL">http://digcollretriever.lib.uchicago.edu/mvol-0001-002-0004/pdf</dc:hasPart>
-                <dc:hasPart xsi:type=="dcterms:URL">http://digcollretriever.lib.uchicago.edu/mvol-0001-002-0004/metadata</dc:hasPart>
-                <dc:hasPart xsi:type=="dcterms:URL">http://digcollretriever.lib.uchicago.edu/mvol-0001-002-0004/jejocr</dc:hasPart>
-                <dc:hasPart xsi:type=="dcterms:URL">http://digcollretriever.lib.uchicago.edu/mvol-0001-002-0004_0001</dc:hasPart>
-                <dc:hasPart xsi:type=="dcterms:URL">http://digcollretriever.lib.uchicago.edu/mvol-0001-002-0004_0002</dc:hasPart>
-                <dc:hasPart xsi:type=="dcterms:URL">http://digcollretriever.lib.uchicago.edu/mvol-0001-002-0004_0003</dc:hasPart>
-                <dc:hasPart xsi:type=="dcterms:URL">http://digcollretriever.lib.uchicago.edu/mvol-0001-002-0004_0004</dc:hasPart>
-            <metadata>
-        </data>
-    </response>
-</output>
-```
+## About sending POST data
 
-## Contract for POST submissions to the ldr metadata storage
+The ldr metadata storage has the functionality to allow clients to add new collections to the system.
 
-Every POST submission to the ldr metadata storage MUST be well-formed XML or JSON and be UTF-8 encoded. In addition, the information being submitted MUST conform to specific formatting requirements as will be defined for each piece of information that requirements are relevant.
+The following endpoint accepts POST data
 
-- Where a collection identifier is submitted it MUST not exist in the ldr metadata storage before submission occurs
-- The root element MUST be input
-- The element input MUST have the following namespaces
+- /collection/[collection identifier]
+
+The POST request will accept a submission that includes the following
+
+- MANDATORY core metadata
+- OPTIONAL extension metadata
+
+The POST submission data must conform to the following
+
+- have a root field named output
+- output will have the following namespaces
   - ```http://lib.uchicago.edu/ldr``` which this document refers to with the shorthand ldr
   - ```http://www.w3.org/2001/XMLSchema-instance``` which this document refers to with the shorthand xsi
   - ```http://purl.org/dc/elements/1.1/``` which this document refers to with the shorthand dc
   - ```http://purl.org/dc/terms/``` which this document refers to with the shorthand dcterms
-- There MUST be ONLY one instance of the element requestSentTimeStamp
-- The value of requestSentTimeStamp MUST be valid ISO-8601
-- There MUST be an element request
-- The value of request MUST be the URI being requested
-- There MUST be ONLY one instance of the element metadata beneath input
-- There MUST be ONLY one instance of the element core beneath input
-- There MUST be only one instance of the element metadata beneath the element core
-- The element metadata MUST be a complex element
-- There MUST be AT LEAST one instance of element dc:title beneath metadata
-- There MAY be a requirement for a second instance of dc:title
-- If there is a requirement for a second instance of dc:title than the value of that instance MUST be a single word comprised ONLY of alphanumeric ASCII characters
-- There MAY be a requirement for a MANDATORY instance of dc:date beneath metadata
-- If there is a requirement of an instance of dc:date than the value of that instance MUST be valid ISO-8601
-- There may be a requirement that there MUST be AT LEAST one instance of dc:relation beneath metadata
-- If there is a requirement for AT LEAST one instance of dc:relation than each instance MUST have an attribute xsi:type which MUST have a value of dcterms:URI
-- If there is a requirement for AT LEAST one instance of dc:relation than each instance MUST have a value that is resolvable over HTTP to a resource in ldr metadata storage
-- There MAY be a requirement for ONLY one instance of dc:description beneath metadata
-- If there is a requirement for ONLY one instance of dc:description than the value of that instance MUST be text
-  - GUIDELINE: In order to ensure easy display on a variety of screen sizes for hardware it is advised to keep to a limit of at most 4 sentences.
-- There MUST be AT LEAST one instance of dc:identifier beneath metadata
-- dc:identifier MUST have an attribute xsi:type which MUST have a value of either a.) dcterms:URI or b.) dcterms:URL
-- dc:identifier MUST have a value that is resolvable over HTTP to an asset
-- There MAY be a requirement there MUST be ONLY one instance of extensions beneath input
-- If there is a requirement that MUST be ONLY one instance of extensions than there MUST be AT LEAST one instance of extension beneath extensions
-- If there is a requirement for AT LEAST one instance of extension than there MUST be ONLY one instance of type beneath extension
-- If there is a requirement for ONLY one instance type than the value of that instance MUST be xml
-- If there is a requirement for AT LEAST one instance of extension than there MUST be ONLY one instance of name beneath extension
-- If there is a requirement for an instance of name than the value of name MUST be an a single word consisting exclusively of alphabetic characters
-- If there is a requirement for AT LEAST one instance of extension than there MUST be ONLY one instance of data element beneath extension
-- If there is a requirement for ONLY one instance of data than there a root element of some extension metadata beneath that instance
-- Any additional element added to the POST request that is not defined by the rules for a particular POST request will be considered a violation of the contract and cause for rejection
+- have a field core which contains metadata that follows the instructions for a /collection/[collection identifier]/core
+- may have a field extensions which contains at least one extension field which must have a field name, type and data
+  - type is the format of the extension metadata. It can be text, xml or json
+  - identifier is the primary access point for the extension metadata
+  - data contains the extension metadata body
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -277,9 +408,9 @@ Every POST submission to the ldr metadata storage MUST be well-formed XML or JSO
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns:dc="http://purl.org/dc/elements/1.1/"
         xmlns:dcterms="http://purl.org/dc/terms/">
-            <dc:title>[a long form and formal title of the collection e.g. Richard G. Maynard Papers. Digital Collection]</dc:title>
-            <dc:title>[a short form one-word title of the collection that can be used as the identifier for the collection e.g. maynard]</dc:title>
-            <dc:description>[1-4 sentences describing how this collection is significant to the library]</dc:description>
+            <dc:title>Campus Publications Digital Collection</dc:title>
+            <dc:identifier>campub</dc:identifier>
+            <dc:description>This is a digital collection consisting of campus publications</dc:description>
         </metadata>
     </core>
 </input>
@@ -288,7 +419,7 @@ Every POST submission to the ldr metadata storage MUST be well-formed XML or JSO
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <input>
-    <request>/unit/remote-collection-book1</request>
+    <request>/collection/remote-collection-book1</request>
     <requestSentTimeStamp>2017-07-02T11:14:55-06:00<requestSentTimeStamp>
     <core>
         <metadata
@@ -299,8 +430,8 @@ Every POST submission to the ldr metadata storage MUST be well-formed XML or JSO
             <dc:title>This is a title</dc:title>
             <dc:creator>Doe, John</dc:title>
             <dc:date>1980-02-16</dc:date>
-            <dc:identifier xsi:type="dcterms:URL">http://wwww.example.com/book1.pdf</dc:identifer>
-            <dc:relation xsi:type="URI">/collections/campub</dc:relation>
+            <dc:identifier>remote-collection-book1</dc:identifier>
+            <dc:isPartOf xsi:type="URI">/collections/remote/book1</dc:isPartOf>
         </metadata>
     </core>
 </input>
@@ -309,7 +440,7 @@ Every POST submission to the ldr metadata storage MUST be well-formed XML or JSO
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <input>
-    <request>/unit/mvol-0001-0002-0004</request>
+    <request>/collection/speculum-01204</request>
     <requestSentTimeStamp>2017-07-02T11:14:55-06:00<requestSentTimeStamp>
     <core>
         <metadata
@@ -320,8 +451,13 @@ Every POST submission to the ldr metadata storage MUST be well-formed XML or JSO
             <dc:title>This is a title</dc:title>
             <dc:creator>John Doe</dc:title>
             <dc:date>1980-02-16</dc:date>
-            <dc:identifier xsi:type="dcterms:URI">/mvol-0001-0002-0004</dc:identifier>
-            <dc:relation xsi:type="dcterms:URI">/collections/campub</dc:relation>
+            <dc:identifier>mvol-0001-0002-0004</dc:identifier>
+            <dc:isPartOf xsi:type="dcterms:URI">/collection/mvol/0001/0002/0004</dc:relation>
+            <dc:hasPart xsi:type:URL="dcterms:URL">http://digcollretriever.lib.uchicago/mvol-0001-0002-0004/pdf</dc:hasPart>
+            <dc:hasPart xsi:type:URL="dcterms:URL">http://digcollretriever.lib.uchicago/mvol-0001-0002-0004_0001/jpg</dc:hasPart>
+            <dc:hasPart xsi:type:URL="dcterms:URL">http://digcollretriever.lib.uchicago/mvol-0001-0002-0004_0002/jpg</dc:hasPart>
+            <dc:hasPart xsi:type:URL="dcterms:URL">http://digcollretriever.lib.uchicago/mvol-0001-0002-0004_0003/jpg</dc:hasPart>
+            <dc:hasPart xsi:type:URL="dcterms:URL">http://digcollretriever.lib.uchicago/mvol-0001-0002-0004_0004/jpg</dc:hasPart>
         </metadata>
     </core>
 </input>
@@ -363,8 +499,6 @@ Every POST submission to the ldr metadata storage MUST be well-formed XML or JSO
     </extensions>
 </input>
 ```
-
-## Requirements for the metadata storage system
 
 ## Descriptions of endpoints
 
