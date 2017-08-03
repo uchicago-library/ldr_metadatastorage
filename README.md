@@ -1,6 +1,6 @@
-[![Build Status](https://travis-ci.org/uchicago-library/ldr_metadatastorage.svg?branch=master)](https://travis-ci.org/uchicago-library/ldr_metadatastorage)
-
 # README
+
+[![Build Status](https://travis-ci.org/uchicago-library/ldr_metadatastorage.svg?branch=master)](https://travis-ci.org/uchicago-library/ldr_metadatastorage)
 
 ## Quickstart
 
