@@ -48,48 +48,183 @@ class TestToSpecOnePointO(unittest.TestCase):
 
     # Start of posting data tests
 
-    # def test_post_valid_non_asset_collection(self):
-    #     define_namespaces()
-    #     root = build_envelope("ldr:input")
-    #     root = build_core(root)
-    #     response = self.app.post("/collection/testOne")
-    #     return self.assertEqual(response.status_code, 200)
+    def test_post_valid_non_asset_collection(self):
+        """test successful posting endpoint /collections/[collection identifier]
 
-    # def test_post_invalid_non_asset_collection(self):
-    #     define_namespaces()
-    #     root = build_envelope("ldr:input")
-    #     root = build_core(root)
-    #     response = self.app.post("/collection/testTwo")
-    #     return self.assertEqual(response.status_code, 400)
+        a good input example that looks like this:
 
-    # def test_post_valid_asset_collection(self):
-    #     define_namespaces()
-    #     root = build_envelope("ldr:input")
-    #     root = build_core(root)
-    #     response = self.app.post("/collection/testThree")
-    #     return self.assertEqual(response.status_code, 200)
+        <input>
+            <request>/collection/testcollection/0001</request>
+            <requestSentTimeStamp>2017-08-09T14:01:01</requestSentTimeStamp>
+            <core>
+                <metadata>
+                    <dc:title>Test Collection</dc:title>
+                    <dc:identifier>testcollection-0001</dc:identifier>
+                    <dc:date>2017</dc:date>
+                    <dc:creator>Doe, John</dc:creator>
+                    <dc:isPartOf xsi:type="dcterms:URI">/collection/testcollection</dc:isPartOf>
+                </metadata>
+            </core>
+        </input>
+        """
+        define_namespaces()
+        root = build_envelope("ldr:input")
+        root = build_core(root)
+        response = self.app.post("/collection/testOne", data=ElementTree.tostring(root))
+        return self.assertEqual(response.status_code, 200)
 
-    # def test_post_valid_asset_with_extension(self):
-    #     define_namespaces()
-    #     root = build_envelope("ldr:input")
-    #     root = build_core(root)
-    #     response = self.app.post("/collection/testFive")
-    #     return self.assertEqual(response.status_code, 200)
+    def test_post_invalid_non_asset_collection(self):
+        """test failure posting endpoint /collections/[collection identifier]
 
-    # def test_post_invalid_asset_with_extension(self):
-    #     define_namespaces()
-    #     root = build_envelope("ldr:input")
-    #     root = build_core(root)
-    #     response = self.app.post("/collection/testSix")
-    #     return self.assertEqual(response.status_code, 400)
+        a bad input example that looks like this:
+
+        <input>
+            <request>/collection/testcollection/0001</request>
+            <requestSentTimeStamp>2017-08-09T14:01:01</requestSentTimeStamp>
+            <core>
+                <metadata>
+
+                    <dc:identifier>testcollection-0001</dc:identifier>
+                    <dc:date>2017</dc:date>
+                    <dc:creator>Doe, John</dc:creator>
+                    <dc:isPartOf xsi:type="dcterms:URI">/collection/testcollection</dc:isPartOf>
+                </metadata>
+            </core>
+        </input>
+        """
+        define_namespaces()
+        root = build_envelope("ldr:input")
+        root = build_core(root)
+        response = self.app.post("/collection/testTwo", data=ElementTree.tostring(root))
+        return self.assertEqual(response.status_code, 400)
+
+    def test_post_valid_asset_collection(self):
+        """test successful posting endpoint /collections/[collection identifier]
+
+        good input example that looks like this
+
+        <input>
+            <request>/collection/testcollection/0001/anassetcollection</request>
+            <responseSentTimeStamp>2017-08-09T14:13:11</responseSentTimeStamp>
+            <core>
+                <metadata>
+                    <dc:title>Test Collection</dc:title>
+                    <dc:identifier>testcollection-0001</dc:identifier>
+                    <dc:date>2017</dc:date>
+                    <dc:creator>Doe, John</dc:creator>
+                    <dc:isPartOf xsi:type="dcterms:URI">/collection/testcollection/0001</dc:isPartOf>
+                    <dc:hasPart xsi:type="dcterms:URI">https://dummyimage.com/250/ffff/000000</dc:hasPart>
+                    <dc:hasPart xsi:type="dcterms:URI">https://dummyimage.com/250/ffff/000000</dc:hasPart>
+                    <dc:hasPart xsi:type="dcterms:URI">https://dummyimage.com/250/ffff/000000</dc:hasPart>
+                </metadata>
+            </core>
+        </input>
+        """
+        define_namespaces()
+        root = build_envelope("ldr:input")
+        root = build_core(root)
+        response = self.app.post("/collection/testThree", data=ElementTree.tostring(root))
+        return self.assertEqual(response.status_code, 200)
+
+    def test_post_valid_asset_with_extension(self):
+        """test successful posting endpoint /collections/[collection identifier]
+
+        good input example that looks like this
+
+        <input>
+            <request>/collection/testcollection/0001/anassetcollection</request>
+            <responseSentTimeStamp>2017-08-09T14:13:11</responseSentTimeStamp>
+            <core>
+                <metadata>
+                    <dc:title>Test Collection</dc:title>
+                    <dc:identifier>testcollection-0001</dc:identifier>
+                    <dc:date>2017</dc:date>
+                    <dc:creator>Doe, John</dc:creator>
+                    <dc:isPartOf xsi:type="dcterms:URI">/collection/testcollection/0001</dc:isPartOf>
+                    <dc:hasPart xsi:type="dcterms:URI">https://dummyimage.com/250/ffff/000000</dc:hasPart>
+                    <dc:hasPart xsi:type="dcterms:URI">https://dummyimage.com/250/ffff/000000</dc:hasPart>
+                    <dc:hasPart xsi:type="dcterms:URI">https://dummyimage.com/250/ffff/000000</dc:hasPart>
+                </metadata>
+            </core>
+            <extensions>
+                <extension>
+                    <type>text</type>
+                    <name>test-extension</name>
+                    <data>
+                        this is a extension metadata
+                        this is a second line in extension metadata
+                    </data>
+                </extension
+            </extensions>
+        </input>
+        """
+        define_namespaces()
+        root = build_envelope("ldr:input")
+        root = build_core(root)
+        response = self.app.post("/collection/testFive", data=ElementTree.tostring(root))
+        return self.assertEqual(response.status_code, 200)
+
+    def test_post_invalid_asset_with_extension(self):
+        """test successful posting endpoint /collections/[collection identifier]
+
+        good input example that looks like this
+
+        <input>
+            <request>/collection/testcollection/0001/anassetcollection</request>
+            <responseSentTimeStamp>2017-08-09T14:13:11</responseSentTimeStamp>
+            <core>
+                <metadata>
+                    <dc:title>Test Collection</dc:title>
+                    <dc:identifier>testcollection-0001</dc:identifier>
+                    <dc:date>2017</dc:date>
+                    <dc:creator>Doe, John</dc:creator>
+                    <dc:isPartOf xsi:type="dcterms:URI">/collection/testcollection/0001</dc:isPartOf>
+                    <dc:hasPart xsi:type="dcterms:URI">https://dummyimage.com/250/ffff/000000</dc:hasPart>
+                    <dc:hasPart xsi:type="dcterms:URI">https://dummyimage.com/250/ffff/000000</dc:hasPart>
+                    <dc:hasPart xsi:type="dcterms:URI">https://dummyimage.com/250/ffff/000000</dc:hasPart>
+                </metadata>
+            </core>
+            <extensions>
+                <extension>
+                    <data>
+                        this is a extension metadata
+                        this is a second line in extension metadata
+                    </data>
+                </extension
+            </extensions>
+        </input>
+        """
+        define_namespaces()
+        root = build_envelope("ldr:input")
+        root = build_core(root)
+        response = self.app.post("/collection/testSix", data=ElementTree.tostring(root))
+        return self.assertEqual(response.status_code, 400)
 
     # End of posting data tests
 
     # Start of aggregate endpoint tests
 
     def test_get_root_collections(self):
+        """test endpoint /collections/[collection identifier]
+
+        should return output that looks like:
+
+        <output>
+            <request/>
+            <requestReceivedTimeStamp/>
+            <responseSentTimeStamp/>
+            <responseType/>
+            <response>
+                <metadata>
+                    <dc:relation xsi:type="dcterms:URI"/>
+                    <dc:relation xsi:type="dcterms:URI"/>
+                    <dc:relation xsi:type="dcterms:URI"/>
+                </metadata>
+            </response>
+        </output>
+
+        """
         response = self.app.get("/collections")
-        response = self.app.get("/collection/testOne/core")
         if self._convert_response_to_xml(response.data):
             root = self._convert_response_to_xml(response.data)
             first_checks = self._universal_output_testing(root)
@@ -99,7 +234,25 @@ class TestToSpecOnePointO(unittest.TestCase):
             return self.assertTrue(first_checks) & self.assertGreaterEqual(relations.count(), 1)
 
     def test_get_collection_list(self):
-        response = self.app.get("/collection/testOne/core")
+        """test endpoint /collections/[collection identifier]
+
+        should return output that looks like:
+
+        <output>
+            <request/>
+            <requestReceivedTimeStamp/>
+            <responseSentTimeStamp/>
+            <responseType/>
+            <response>
+                <metadata>
+                    <dc:relation xsi:type="dcterms:URI"/>
+                    <dc:relation xsi:type="dcterms:URI"/>
+                    <dc:relation xsi:type="dcterms:URI"/>
+                </metadata>
+            </response>
+        </output>
+        """
+        response = self.app.get("/collections/testOne")
         if self._convert_response_to_xml(response.data):
             root = self._convert_response_to_xml(response.data)
             first_checks = self._universal_output_testing(root)
@@ -109,7 +262,25 @@ class TestToSpecOnePointO(unittest.TestCase):
             return self.assertTrue(first_checks) & self.assertGreaterEqual(parts.count(), 1)
 
     def test_get_nested_collection_list(self):
-        response = self.app.get("/collection/testOne/core")
+        """test endpoint /collections/[collection identifier]/[sub-collection identifier]
+
+        should return output that looks like:
+
+        <output>
+            <request/>
+            <requestReceivedTimeStamp/>
+            <responseSentTimeStamp/>
+            <responseType/>
+            <response>
+                <metadata>
+                    <dc:relation xsi:type="dcterms:URI"/>
+                    <dc:relation xsi:type="dcterms:URI"/>
+                    <dc:relation xsi:type="dcterms:URI"/>
+                </metadata>
+            </response>
+        </output>
+        """
+        response = self.app.get("/collections/testTwo/TestThree")
         if self._convert_response_to_xml(response.data):
             root = self._convert_response_to_xml(response.data)
             first_checks = self._universal_output_testing(root)
@@ -121,14 +292,32 @@ class TestToSpecOnePointO(unittest.TestCase):
             return self.assertTrue(False)
 
     def test_get_extension_list(self):
-        response = self.app.get("/collection/testOne/core")
+        """test endpoint /collection/[collection identifier]/extensions
+
+        should return output that looks like:
+
+        <output>
+            <request/>
+            <requestReceivedTimeStamp/>
+            <responseSentTimeStamp/>
+            <responseType/>
+            <response>
+                <metadata>
+                    <dc:relation xsi:type="dcterms:URI"/>
+                    <dc:relation xsi:type="dcterms:URI"/>
+                    <dc:relation xsi:type="dcterms:URI"/>
+                </metadata>
+            </response>
+        </output>
+        """
+        response = self.app.get("/collection/testOne/extensions")
         if self._convert_response_to_xml(response.data):
             root = self._convert_response_to_xml(response.data)
             first_checks = self._universal_output_testing(root)
             relations = root.findall(
                 "{http://lib.uchicago.edu/ldr}response/{http://lib.uchicago.edu/lib}metadata/{http://purl.org/dc/elements/1.1/}relation"
                 )
-            return self.assertTrue(First_checks) & self.assertGreaterEqual(relations.count(), 1)
+            return self.assertTrue(first_checks) & self.assertGreaterEqual(relations.count(), 1)
         else:
             return self.assertTrue(False)
 
@@ -137,6 +326,28 @@ class TestToSpecOnePointO(unittest.TestCase):
     # Start of atomic endpoint tests
 
     def test_get_core_metadata(self):
+        """test endpoint /collection/[collection identifier]/core
+
+        should return output that looks like:
+
+        <output>
+            <request/>
+            <requestReceivedTimeStamp/>
+            <responseSentTimeStamp/>
+            <responseType/>
+            <response>
+                <metadata>
+                    <dc:title/>
+                    <dc:identifier/>
+                    <dc:creator/>
+                    <dc:date/>
+                    <dc:description/>
+                    <dc:isPartOf/>
+                    <dc:hasPartOf/>
+                </metadata>
+            </response>
+        </output>
+        """
         response = self.app.get("/collection/testOne/core")
         if self._convert_response_to_xml(response.data):
             root = self._convert_response_to_xml(response.data)
@@ -152,6 +363,26 @@ class TestToSpecOnePointO(unittest.TestCase):
             return self.assertTrue(False)
 
     def test_get_an_extension(self):
+        """test endpoint /collection/[collection identifier]/extension/structuralMetadata
+
+        should return output that looks like:
+
+        <output>
+            <request/>
+            <requestReceivedTimeStamp/>
+            <responseSentTimeStamp/>
+            <responseType/>
+            <response>
+                <extension>
+                    <type>text</type>
+                    <name>structural metadata</name>
+                    <data>
+                        <!-- CDATA here -->
+                    </data>
+                </extension>
+            </response>
+        </output>
+        """
         response = self.app.post("/collection/testFive/extensions/structuralMetadata")
         if self._convert_response_to_xml(response.data):
             root = self._convert_response_to_xml(response.data)
@@ -170,6 +401,22 @@ class TestToSpecOnePointO(unittest.TestCase):
     # Start of contextual endpoint tests
 
     def test_root_endpoint_context(self):
+        """test endpoint /
+
+        should return output that looks like:
+
+        <output>
+            <request/>
+            <requestReceivedTimeStamp/>
+            <responseSentTimeStamp/>
+            <responseType/>
+            <response>
+                <metadata>
+                    <dc:relation xsi:type="dcterms:URI">/collections</dc:relation>
+                </metadata>
+            </response>
+        </output>
+        """
         response = self.app.get("/")
         if self._convert_response_to_xml(response.data):
             root = self._convert_response_to_xml(response.data)
@@ -182,6 +429,28 @@ class TestToSpecOnePointO(unittest.TestCase):
             return self.assertTrue(False)
 
     def test_a_collection_context(self):
+        """test endpoint /collection/[collection identifier]
+
+        should return output that looks like:
+
+        <output>
+            <request/>
+            <requestReceivedTimeStamp/>
+            <responseSentTimeStamp/>
+            <responseType/>
+            <response>
+                <metadata>
+                    <dc:relation xsi:type="dcterms:URI">/collection/[collection identifier]/core</dc:relation>
+                    <dc:relation xsi:type="dcterms:URI">/collection/[collection identifier/extensions</dc:relation>
+
+                </metadata>
+            </response>
+        </output>
+
+                </metadata>
+            </response>
+        </output>
+        """
         response = self.app.get("/")
         if self._convert_response_to_xml(response.data):
             root = self._convert_response_to_xml(response.data)
