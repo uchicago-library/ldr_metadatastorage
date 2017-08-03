@@ -69,7 +69,7 @@ class Collection(Resource):
     has 2 methods: get and post that booth take one parameter
     """
     def get(self, collection_identifier):
-         """a method to return all endpoints available from a specific collection
+        """a method to return all endpoints available from a specific collection
 
         The output will be a response body that is metadata with at least one
         dc:hasPart xsi:type="dcterms:URI" or xsi:type="dcterms:URL".
@@ -78,6 +78,24 @@ class Collection(Resource):
         return {"value": "not implemented"}
 
     def post(self, collection_identifier):
+        """a method to accept post data for a new collection
+
+        The input should be a xml record with root element output and beneath 
+        a single core  element with 1 metadata beneath that and beneath that a
+        dc:title and a dc:identifier and/or dc:relation, dc:hasPart, dc:isPartOf, dc:description,
+        dc:date, dc:creator
+
+        Optionally, extensions/extension/[type, name, data] may also exist where extension is present
+        0 or more times
+
+        output will be the following
+
+        <output>
+            <metadata>
+                <dc:description>Collection [new collection identifier] saved.</dc:description>
+            </metadata>
+        </output>
+        """
         return {"value": "not implemented"}
 
 class CollectionCore(Resource):
@@ -129,5 +147,7 @@ API.add_resource(AllCollections, "/collections", methods=['GET'])
 API.add_resource(ListForCollection, "/collections/<path:collection_identifier>", methods=['GET'])
 API.add_resource(Collection, "/collection/<string:collection_identifier>", methods=['GET', 'POST'])
 API.add_resource(CollectionCore, "/collection/<string:collection_identifier>/core", methods=['GET'])
-API.add_resource(ListCollectionExtensions, "/collection/<string:collection_identifier>/extensions", methods=['GET'])
-API.add_resource(CollectionExtension, "/collection/<string:collection_identifier>/extensions/<string:extension_identifier>", methods=['GET'])
+API.add_resource(ListCollectionExtensions, "/collection/<string:collection_identifier>/extensions",
+                 methods=['GET'])
+API.add_resource(CollectionExtension, "/collection/<string:collection_identifier>/extensions/<string:extension_identifier>",
+                 methods=['GET'])
