@@ -26,7 +26,7 @@ setup(
     description=readme(),
     license = "LGPL3.0",
     long_description=readme(),
-    packages=['metadatastorageapi'],
+    packages=['metadatastorageapi', 'testlib'],
     include_package_data=True,
     zip_safe=False,
     install_requires=['flask', 'flask_env', 'flask_restful'],

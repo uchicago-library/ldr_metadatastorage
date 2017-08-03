@@ -3,17 +3,15 @@
 """
 
 from flask import Flask
-from .blueprint import BLUEPRINT
 from flask_env import MetaFlaskEnv
+
+from .blueprint import BLUEPRINT
 
 class Configuration(metaclass=MetaFlaskEnv):
     ENV_PREFIX='METADATA_STORAGE_API'
     DEBUG = False
     DEFER_CONFIG = False
 
-
 APP = Flask(__name__)
-
 APP.config.from_object(Configuration)
-
 APP.register_blueprint(BLUEPRINT)

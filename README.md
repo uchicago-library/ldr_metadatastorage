@@ -189,7 +189,7 @@ The aggregate response body metadata will consist of at least one dc:hasPart wit
     <responseType>aggregate</responseType>
     <response>
         <metadata>
-            <dc:hasPart xsi:type="dcterms:URI">/collection/mvol-0001-0003-0001/extensions/structMetadata</dc:hasPart>
+            <dc:relation xsi:type="dcterms:URI">/collection/mvol-0001-0003-0001/extensions/structMetadata</dc:hasPart>
         </metadata>
     </response>
 </output>

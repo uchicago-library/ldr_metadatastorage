@@ -1,31 +1,24 @@
 
+from datetime import datetime
 from xml.etree import ElementTree
 
-def _define_namespaces():
+def define_namespaces():
     ElementTree.register_namespace("ldr", "http://lib.uchicago.edu/ldr")
     ElementTree.register_namespace("dc", "http://purl.org/dc/elements/1.1/")
     ElementTree.register_namespace("dcterms", "http://purl.org/dc/terms/")
     ElementTree.register_namespace("xsi", "http://www.w3.org/2001/XMLSchema-instance")
 
-def _build_input_envelope():
-    root = ElementTree.Element("ldr:input")
-    requestSent = ElementTree.SubElement(root, "ldr:responseSentTimeStamp")
-    requestSent.text = now().iso8601()
+def build_envelope(outputname):
+    root = ElementTree.Element(outputname)
+    requestSent = ElementTree.SubElement(root, "ldr:requestReceivedTimeStamp")
+    responseSent = ElementTree.SubElement(root, "ldr:responseSentTimeStamp")
+    requestSent.text = datetime.now().isoformat()
+    responseSent.text = datetime.now().isoformat()
     core = ElementTree.SubElement(root, "ldr:core")
     metadata = ElementTree.SubElement(core, "ldr:metadata")
     return root
 
-def _build_output_envelope(rootname):
-    root = ElementTree.Element("ldr:output")
-    requestReceivedTimeStamp = ElementTree.SubElement(root, "ldr:requestReceivedTimeStamp")
-    requestSent.text = now().iso8601()
-    core = ElementTree.SubElement(root, "ldr:core")
-    metadata = ElementTree.SubElement(core, "ldr:metadata")
-    return root
-
-
-
-def _build_core(root):
+def build_core(root):
     metadata = root.find("{http://lib.uchicago.edu/ldr}metadata")
     title = ElementTree.SubElement(metadata, 'dc:title')
     title.text = "A Simple Title"
@@ -40,7 +33,7 @@ def _build_core(root):
     identifier.text = "https://dummyimage.com/200x300&text=test image!"
     return root
 
-def _add_an_extension(envelope, complex_element, name_string):
+def add_an_extension(envelope, complex_element, name_string):
     extensions = envelope.find("{http://lib.uchicago.edu/ldr}extensions")
     if not extensions:
         extensions = ElementTree.SubElement(envelope, "ldr:extensions")
@@ -56,23 +49,23 @@ def _add_an_extension(envelope, complex_element, name_string):
 def create_simple__unit_xml_input(self):
     """creates a basic input XML record according to spec
     """
-    _define_namespaces()
-    root  = _build_input_envelope("ldr:input")
-    root = _build_core(root)
+    define_namespaces()
+    root  = build_envelope("ldr:input")
+    root = build_core(root)
     return root
 
 def create_complex_unit_xml_input(self):
     """creates an input XML record with 1 extension metdata according to spec
     """
-    _define_namespaces()
-    root = _build_input_envelope("ldr:input")
-    root = _build_core(root)
-    root = _add_an_extension(root, ElementTree.Element("dc:identifier"), "test")
+    define_namespaces()
+    root = build_input_envelope("ldr:input")
+    root = build_core(root)
+    root = add_an_extension(root, ElementTree.Element("dc:identifier"), "test")
     return root
 
 def create_output_xml(self):
     """creates an output xml record according to spec
     """
-    _define_namespaces()
-    root = _build_output_envelope("ldr:output")
+    define_namespaces()
+    root = build_output_envelope("ldr:output")
     return root
