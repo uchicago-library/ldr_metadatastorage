@@ -29,6 +29,6 @@ setup(
     packages=['metadatastorageapi', 'testlib'],
     include_package_data=True,
     zip_safe=False,
-    install_requires=['flask', 'flask_env', 'flask_restful'],
+    install_requires=['flask', 'flask_env', 'flask_restful', 'pytest'],
 )
 

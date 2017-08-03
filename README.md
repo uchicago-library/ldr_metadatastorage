@@ -2,6 +2,45 @@
 
 # README
 
+## Quickstart
+
+### Prequesites
+
+- python3.5
+- pyvenv-3.5
+- git
+
+### Quickstart instructions
+
+- create a python 3.5 virtualenv
+- activate that virtualenv
+- git clone this repository
+- cd into the repo directory
+- run python setup.py development
+- chmod +x debug.sh
+- run ``bash ./debug.sh```. It should return the following output:
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<output xmlns="http://lib.uchicago.edu/ldr"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:dc="http://purl.org/dc/elements/1.1/"
+        xmlns:dcterms="http://purl.org/dc/terms/">
+    <request>/collection/mvol-0001-0002/core</request>
+    <requestReceivedTimeStamp>2017-07T12:02:44-06:00</requestReceivedTimeStamp>
+    <responseSentTimeStamp>2017-07-28T12:02:58+03:00</responseSentTimeStamp>
+    <responseType>contextual</responseType>
+    <response>
+        <data>
+            <metadata>
+                <dc:relation xsi:type="dcterms:URI">/collections</dc:relation>
+            <metadata>
+        </data>
+    </response>
+</output>
+```
+
+
 ## Introduction
 
 Metadata storage must be able to answer the following questions about an intellectual unit.
@@ -233,7 +272,7 @@ In addition, the atomic response body may have the following
         <metadata>
             <dc:title>Cap and Gown</dc:title>
             <dc:identifier>mvol-0001</dc:identifier>
-            <dc:isPartOf xsi:type="dcterms:URI">/collections/mvol</dc:identifier>
+            <dc:isPartOf xsi:type="dcterms:URI">/collections/mvol</dc:isPartOf>
         <metadata>
     </response>
 </output>
@@ -253,7 +292,7 @@ In addition, the atomic response body may have the following
          <metadata>
             <dc:title>Cap and Gown Volume 2</dc:title>
             <dc:identifier>mvol-0001-0002</dc:identifier>
-            <dc:isPartOf xsi:type="dcterms:URI">/collections/mvol/0001</dc:identifier>
+            <dc:isPartOf xsi:type="dcterms:URI">/collections/mvol/0001</dc:iisPartOf>
         <metadata>
     </response>
 </output>
@@ -342,7 +381,7 @@ The contextual response body metadata will consist of the following
     <response>
         <data>
             <metadata>
-                <dc:relation xsi:type="dcterms:URI">/collections</dc:identifier>
+                <dc:relation xsi:type="dcterms:URI">/collections</dc:relation>
             <metadata>
         </data>
     </response>
@@ -362,8 +401,8 @@ The contextual response body metadata will consist of the following
     <response>
         <data>
             <metadata>
-                <dc:relation xsi:type="dcterms:URI">/collections/mvol-0001-0002/core</dc:identifier>
-                <dc:relation xsi:type="dcterms:URI">/collections/mvol-0001-0002/extensions</dc:identifier>
+                <dc:relation xsi:type="dcterms:URI">/collections/mvol-0001-0002/core</dc:relation>
+                <dc:relation xsi:type="dcterms:URI">/collections/mvol-0001-0002/extensions</dc:relation>
             <metadata>
         </data>
     </response>
@@ -399,15 +438,14 @@ The POST submission data must conform to the following
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
-<input>
+<input xmlns="http://lib.uchicago.edu/ldr"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dc="http://purl.org/dc/elements/1.1/"
+       xmlns:dcterms="http://purl.org/dc/terms/">
     <request>/collections/campub</request>
     <requestSentTimeStamp>2017-07-02T11:14:55-06:00<requestSentTimeStamp>
     <core>
-        <metadata
-        xmlns="http://lib.uchicago.edu/ldr"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns:dc="http://purl.org/dc/elements/1.1/"
-        xmlns:dcterms="http://purl.org/dc/terms/">
+        <metadata>
             <dc:title>Campus Publications Digital Collection</dc:title>
             <dc:identifier>campub</dc:identifier>
             <dc:description>This is a digital collection consisting of campus publications</dc:description>
@@ -418,15 +456,14 @@ The POST submission data must conform to the following
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
-<input>
+<input xmlns="http://lib.uchicago.edu/ldr"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dc="http://purl.org/dc/elements/1.1/"
+       xmlns:dcterms="http://purl.org/dc/terms/">
     <request>/collection/remote-collection-book1</request>
     <requestSentTimeStamp>2017-07-02T11:14:55-06:00<requestSentTimeStamp>
     <core>
-        <metadata
-        xmlns="http://lib.uchicago.edu/ldr"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns:dc="http://purl.org/dc/elements/1.1/"
-        xmlns:dcterms="http://purl.org/dc/terms/">
+        <metadata>
             <dc:title>This is a title</dc:title>
             <dc:creator>Doe, John</dc:title>
             <dc:date>1980-02-16</dc:date>
@@ -439,15 +476,14 @@ The POST submission data must conform to the following
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
-<input>
+<input xmlns="http://lib.uchicago.edu/ldr"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dc="http://purl.org/dc/elements/1.1/"
+       xmlns:dcterms="http://purl.org/dc/terms/">
     <request>/collection/speculum-01204</request>
     <requestSentTimeStamp>2017-07-02T11:14:55-06:00<requestSentTimeStamp>
     <core>
-        <metadata
-        xmlns="http://lib.uchicago.edu/ldr"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns:dc="http://purl.org/dc/elements/1.1/"
-        xmlns:dcterms="http://purl.org/dc/terms/">
+        <metadata>
             <dc:title>This is a title</dc:title>
             <dc:creator>John Doe</dc:title>
             <dc:date>1980-02-16</dc:date>
@@ -465,15 +501,14 @@ The POST submission data must conform to the following
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
-<input>
+<input xmlns="http://lib.uchiago.edu/ldr"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dc="http://purl.org/dc/elements/1.1/"
+       xmlns:dcterms="http://purl.org/dc/terms/">
     <request>/unit/mvol-0001-0002-0004</request>
     <requestSentTimeStamp>2017-07-02T11:14:55-06:00<requestSentTimeStamp>
     <core>
-        <metadata
-        xmlns="http://lib.uchiago.edu/ldr"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns:dc="http://purl.org/dc/elements/1.1/"
-        xmlns:dcterms="http://purl.org/dc/terms/">
+        <metadata>
             <dc:title>This is a title</dc:title>
             <dc:creator>John Doe</dc:title>
             <dc:date>1980-02-16</dc:date>

@@ -83,7 +83,6 @@ class TestToSpecOnePointO(unittest.TestCase):
             <requestSentTimeStamp>2017-08-09T14:01:01</requestSentTimeStamp>
             <core>
                 <metadata>
-
                     <dc:identifier>testcollection-0001</dc:identifier>
                     <dc:date>2017</dc:date>
                     <dc:creator>Doe, John</dc:creator>
