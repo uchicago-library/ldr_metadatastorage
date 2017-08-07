@@ -543,6 +543,8 @@ communication protocol: Web
 
 communication methods: GET
 
+error conditions(s): None
+
 This endpoint is GUARANTEED to return a list of contexts available from the root of the API.
 
 ### /collections
@@ -551,7 +553,9 @@ communication protocols: Web
 
 communication methods: GET
 
-The GET method for this endpoint is GUARANTEED to return an up-to-date list of collections.
+error conditions(s): None
+
+This endpoint is GUARANTEED to return an up-to-date list of collections.
 
 - request: /collections
 - requestReceivedTimeStamp: [ISO-8601 date and time]
@@ -563,9 +567,11 @@ The GET method for this endpoint is GUARANTEED to return an up-to-date list of c
 
 communication protocols: Web
 
-communication methods: GET, POST
+communication methods: GET
 
-The GET method for this endpoint is GUARANTEED to return an up-to-date list of units in the collection identified.
+error condition(s): one or more collection identifiers in hierarchy does not exist
+
+The GET method for this endpoint is GUARANTEED to return an up-to-date list of collections that are subordinate to the collection identified.
 
 - request: /units/[collection identifier/sub-collection identifier/sub-sub-collection identifier]
 - requestReceivedTimeStamp: [ISO-8601 date and time]
@@ -573,18 +579,13 @@ The GET method for this endpoint is GUARANTEED to return an up-to-date list of u
 - responseType: aggregate
 - response: contains items element and inside items an item element that contains a URI resolvable to a particular collection
 
-The POST method for this endpoint is GUARANTEED to accept and save a new collection if the POST data obeys the CONTRACT for POST data.
-
-- collection title and identifier do not exist in the ldr metadata storage prior to submission of the POST request
-- There MUST be ONLY two dc:title elements
-- There MUST be ONLY one dc:description element
-- See Contract for POST submissions to the ldr metadata storage section for how to interpret these specific rules
-
 ### /collection/[collection identifier]
 
 communication protocol: Web
 
 communication methods: GET, POST
+
+error condition(s): no collection matching the identifier can be found
 
 The GET method for this endpoint is GUARANTEED to return a list of endpoints available for the collection identified
 
@@ -594,7 +595,7 @@ The GET method for this endpoint is GUARANTEED to return a list of endpoints ava
 - responseType: atomic
 - response: contains items element and inside items an item element that contains a URI resolvable to a particular endpoint available from the endpoint for this collection
 
-The POST method for this endpoint is GUARANTEED to accept and save a new collection if the POST data obeys the CONTRACT for POST data.
+The POST method for this endpoint is GUARANTEED to create a new collection if the POST data obeys the CONTRACT for POST data.
 
 - the collection is unique to the ldr metadata storage system
 - There MUST be ONLY one dc:title elements
