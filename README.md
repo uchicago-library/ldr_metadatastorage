@@ -32,7 +32,7 @@
     <responseType>contextual</responseType>
     <response>
         <data>
-            <metadata>
+            <metadation
                 <dc:relation xsi:type="dcterms:URI">/collections</dc:relation>
             <metadata>
         </data>
@@ -78,8 +78,8 @@ COROLLARY: the metadata storage should be able to store technical metadata about
 1. /collections/[collection identifier/sub collection identifier/ sub-sub collection identifier] = returns a list of collections that are part of a particular collection [sub-collection, etc.]
 1. /collection/[collection identifier] = returns the endpoints available for a particular collection
 1. /collection/[collection identifier]/core = returns the core (metadata) describing a particular intellectual unit
-1. /collection/[collection identifier]/extensions = returns a list of extension identifiers that are available for a particular collection
-1. /collection/[collection identifier]/extensions/[extension identifier] = returns the extension metadata identified by the extension identifier that is available for a particular intellectual unit
+1. /collection/[collection identifier]/proxies = returns a list of proxy identifiers that are available for a particular collection
+1. /collection/[collection identifier]/proxies/[proxy identifier] = returns the proxy metadata identified by the proxy identifier that is available for a particular intellectual unit
 
 ## About core metadata
 
@@ -95,13 +95,13 @@ Core metadata are REQUIRED fields. These fields is what allows the ldr metadata 
 - attribute xsi:type MUST have a value of dcterms:URI if the value of the element is a path resolvable by ldr metadata storage
 - attribute xsi:type MUST have a value of dcterms:URL if the value of the element is a path resolvable by a remote system
 
-## About extension metadata
+## About proxy metadata
 
-There are no requirements for extension metadata, only that when posted it is wrapped in an extensions/extension element and that the type (xml, text or json) is defined and an identifier created.
+There are no requirements for proxy metadata, only that when posted it is wrapped in an proxies/proxy element and that the type (xml, text or json) is defined and an identifier created.
 
 ## The different types of responses
 
-The consuming client must be able to distinguish between the kinds of responses that the ldr metadata storage will provide. If the response is aggregate, it means the consuming client needs to know what collections are present in a particular location in the ldr metadata storage. If the response is atomic, it means the consuming client needs to know something in particular about a particular collection or extension metadata. If the response is contextual, it means the consuming client needs to know where it can go next on its journey through the ldr metadata storage. In this way, the consuming client can navigate its way through the ldr metadata storage and be able to quickly interpret the responses based on a check for responseType to verify that the responseType is the kind of response it wants.
+The consuming client must be able to distinguish between the kinds of responses that the ldr metadata storage will provide. If the response is aggregate, it means the consuming client needs to know what collections are present in a particular location in the ldr metadata storage. If the response is atomic, it means the consuming client needs to know something in particular about a particular collection or proxy metadata. If the response is contextual, it means the consuming client needs to know where it can go next on its journey through the ldr metadata storage. In this way, the consuming client can navigate its way through the ldr metadata storage and be able to quickly interpret the responses based on a check for responseType to verify that the responseType is the kind of response it wants.
 
 Regardless of type, every response will have certain characteristics in common. Each one will have
 
@@ -124,7 +124,7 @@ The following endpoints are aggregate
 
 - /collections
 - /collections/[collection identifier][/sub-collection identifier]?
-- /collection/[collection identifier]/extensions
+- /collection/[collection identifier]/proxies
 
 The aggregate response body metadata will consist of at least one dc:hasPart with attribute xsi:type="dcterms:URI". The value of each dc:hasPart will be a URI for a collection (if any) that are direct subordinate to the collection being requested about or a URL for an asset that is directly subordinate to the collection.
 
@@ -222,13 +222,13 @@ The aggregate response body metadata will consist of at least one dc:hasPart wit
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns:dc="http://purl.org/dc/elements/1.1/"
         xmlns:dcterms="http://purl.org/dc/terms/">
-    <request>/collections/mvol/0001/0003/0001/extensions</request>
+    <request>/collections/mvol/0001/0003/0001/proxies</request>
     <requestReceivedTimeStamp>2017-07-28T14:02:12-06:00</requestReceivedTimeStamp>
     <responseSentTimeStamp>2017-07-28T14:02:17+07:00</responseSentTimeStamp>
     <responseType>aggregate</responseType>
     <response>
         <metadata>
-            <dc:relation xsi:type="dcterms:URI">/collection/mvol-0001-0003-0001/extensions/structMetadata</dc:hasPart>
+            <dc:relation xsi:type="dcterms:URI">/collection/mvol-0001-0003-0001/proxies/structMetadata</dc:hasPart>
         </metadata>
     </response>
 </output>
@@ -241,7 +241,7 @@ An atomic response is one that the consuming client can assume will be present a
 The following endpoints are atomic:
 
 - /collection/[collection identifier]/core
-- /collection/[collection identifier]/extensions/[extension identifier]
+- /collection/[collection identifier]/proxies/[proxy identifier]
 
 The atomic response body metadata will consist of the following
 
@@ -334,21 +334,17 @@ In addition, the atomic response body may have the following
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns:dc="http://purl.org/dc/elements/1.1/"
         xmlns:dcterms="http://purl.org/dc/terms/">
-    <request>/collection/mvol-0001-0002-0004/extensions/structuralMetadata</request>
+    <request>/collection/mvol-0001-0002-0004/proxies/structuralMetadata</request>
     <requestReceivedTimeStamp>2017-07T12:02:44-06:00</requestReceivedTimeStamp>
     <responseSentTimeStamp>2017-07-28T12:02:58+03:00</responseSentTimeStamp>
     <responseType>atomic</responseType>
     <response>
-        <extension>
-            <type>text</type>
-            <name>structuralMetadata</name>
+        <proxy>
+            <dc:description>this is structural metadata information about mvol-0001-002-0004M</dc:description>
             <data>
-                000000001
-                000000002
-                000000003   1   cover
-                000000004   2
+                <!-- insert base64 of struct.txt file for mvol-0001-0002-0004 -->
             </data>
-        </extension>
+        </proxy>
     </response>
 </output>
 ```
@@ -402,7 +398,7 @@ The contextual response body metadata will consist of the following
         <data>
             <metadata>
                 <dc:relation xsi:type="dcterms:URI">/collections/mvol-0001-0002/core</dc:relation>
-                <dc:relation xsi:type="dcterms:URI">/collections/mvol-0001-0002/extensions</dc:relation>
+                <dc:relation xsi:type="dcterms:URI">/collections/mvol-0001-0002/proxies</dc:relation>
             <metadata>
         </data>
     </response>
@@ -420,7 +416,7 @@ The following endpoint accepts POST data
 The POST request will accept a submission that includes the following
 
 - MANDATORY core metadata
-- OPTIONAL extension metadata
+- OPTIONAL proxy metadata
 
 The POST submission data must conform to the following
 
@@ -431,10 +427,9 @@ The POST submission data must conform to the following
   - ```http://purl.org/dc/elements/1.1/``` which this document refers to with the shorthand dc
   - ```http://purl.org/dc/terms/``` which this document refers to with the shorthand dcterms
 - have a field core which contains metadata that follows the instructions for a /collection/[collection identifier]/core
-- may have a field extensions which contains at least one extension field which must have a field name, type and data
-  - type is the format of the extension metadata. It can be text, xml or json
-  - identifier is the primary access point for the extension metadata
-  - data contains the extension metadata body
+- may have a field proxies which contains at least one proxy field which must a field data
+- field data MUST contain base64 representation of a proxy metadata
+- a proxy field may have a field dc:description
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -516,22 +511,14 @@ The POST submission data must conform to the following
             <dc:relation xsi:type="dcterms:URI">/collections/campub</dc:relation>
         </metadata>
     </core>
-    <extensions>
-        <extension>
-            <type>xml</type>
-            <name>VRACore</name>
+    <proxies>
+        <proxy>
+            <dc:description>[insert some description of how this proxy metadata is relevant to the core metadata that it is a proxy for]
             <data>
-                <!-- insert VRACore metadata record here -->
+                <!-- insert base64 content here -->
             </data>
-        </extension>
-        <extension>
-            <type>xml</type>
-            <name>alto</name>
-            <data>
-                <!-- insert alto metadata record here -->
-            </data>
-        </extension>
-    </extensions>
+        </proxy>
+    </proxies>
 </input>
 ```
 
@@ -583,7 +570,7 @@ The GET method for this endpoint is GUARANTEED to return an up-to-date list of c
 
 communication protocol: Web
 
-communication methods: GET, POST
+communication methods: GET, POST, PUT
 
 error condition(s): no collection matching the identifier can be found
 
@@ -592,7 +579,7 @@ The GET method for this endpoint is GUARANTEED to return a list of endpoints ava
 - request: /collection/[collection identifer]
 - requestReceivedTimeStamp: [ISO-8601 date and time]
 - responseSentTimeStamp: [ISO-8601 date and time]
-- responseType: atomic
+- responseType: aggregate
 - response: contains items element and inside items an item element that contains a URI resolvable to a particular endpoint available from the endpoint for this collection
 
 The POST method for this endpoint is GUARANTEED to create a new collection if the POST data obeys the CONTRACT for POST data.
@@ -602,8 +589,15 @@ The POST method for this endpoint is GUARANTEED to create a new collection if th
 - There MUST be AT LEAST one dc:relation element
 - There MUST be AT LEAST one dc:identifier element
 - There MUST be ONLY one dc:date element
-- There MAY be ONLY one extensions element
+- There MAY be ONLY one proxies element
 - See Contract for POST submissions to the ldr metadata storage section for how to interpret these specific rules
+
+The PUT method for this endpoint is is GUARANTEED to modify the record for the collection identified. The only modification allowed is to add an extension to a collection.
+
+- the collection must exist in the ldr metadata storage system
+- there MAY be a ONLY one dc:description element which describes the importance of the new proxy metadata for the collection it is being added to
+- there MUST be ONLY one ldr:data element which contains a base64 representation of the proxy metadata being added. This proxy metadata may be in any format: binary, text, json, xml, et cetera.
+- See contract for POST submissions to the ldr metadata storage section for more information
 
 ### /collection/[collection identifier]/core
 
@@ -621,37 +615,37 @@ This endpoint is GUARANTEED to return the core metadata for the collection ident
 - responseType: atomic
 - response: contains metadata element and inside metadata element is the core metadata for this particular collection
 
-### /collection/[collection identifier]/extensions
+### /collection/[collection identifier]/proxies
 
 communication protocol: Web
 
 communication methods: GET
 
-error conditions: no extensions available
+error conditions: no proxies available
 
-This endpoint is GUARANTEED to return a listing of all extension resources available for the collection identified.
+This endpoint is GUARANTEED to return a listing of all proxy resources available for the collection identified.
 
-- request: /collection/[intellectual unit identifer]/extensions
+- request: /collection/[intellectual unit identifer]/proxies
 - requestReceivedTimeStamp: [ISO-8601 date and time]
 - responseSentTimeStamp: [ISO-8601 date and time]
 - responseType: aggregate
-- response: contains items element and inside items an item element that contains a URI resolvable to a particular extension endpoint available for this particular collection
+- response: contains items element and inside items an item element that contains a URI resolvable to a particular proxy endpoint available for this particular collection
 
-### /collection/[collection identifier]/extensions/[extension identifier]
+### /collection/[collection identifier]/proxies/[proxy identifier]
 
 communication protocol: Web
 
 communication methods: GET
 
-error conditions: extension requested does not exist
+error conditions: proxy requested does not exist
 
-This endpoint is GUARANTEED to return a particular extension resource identified by extension identifier that is available to describe the collection identified by collection identifier.
+This endpoint is GUARANTEED to return a particular proxy resource identified by proxy identifier that is available to describe the collection identified by collection identifier.
 
-- request: /collection/[collection identifer]/extensions/[extension identifer]
+- request: /collection/[collection identifer]/proxies/[proxy identifer]
 - requestReceivedTimeStamp: [ISO-8601 date and time]
 - responseSentTimeStamp: [ISO-8601 date and time]
 - responseType: atomic
-- response: contains extension element and inside extension element is the extension metadata available at this extension identifier for the particular collection
+- response: contains proxy element and inside proxy element is the proxy metadata available at this proxy identifier for the particular collection
 
 ## Glossary
 
@@ -663,6 +657,6 @@ This endpoint is GUARANTEED to return a particular extension resource identified
 - functionality is either a.) the answer to a particular question about a particular resource or b.) some action or set of actions that transforms the resource identified into something new for the client to consume
 - field is a particular part of metadata. ex. title is a field
 - core metadata (abbreviated "core") are the REQUIRED fields
-- extension metadata (abbreviated "extension" or "extensions") are OPTIONAL descriptive metadata for an intellectual unit
+- proxy metadata (abbreviated "proxy" or "proxies") are OPTIONAL descriptive metadata for an intellectual unit
 - client is a program that is requesting metadata. A client may be acting on behalf of a biological being.
 - technical metadata is technical information about an asset. This information may include but is not limited to width and height pixel dimensions of an image byte stream or duration of a video file or size in disk storage required by a particular byte stream.
