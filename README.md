@@ -53,10 +53,10 @@ Metadata storage must be able to answer the following questions about an intelle
 
 We have to assume that there will be AT LEAST two types of metadata in the ldr metadata storage system.
 
-1. Metadata about collections that belong to the University of Chicago Library and which all assets associated are in asset storage, e.g. OwnCloud
-1. Metadata about collections that do not belong to the University of Chicago Library and which assets are stored elsewhere, e.g. Luna
+1. Metadata about collections that belong to the University of Chicago Library and which all byte streams associated are in asset storage, e.g. OwnCloud
+1. Metadata about collections that do not belong to the University of Chicago Library and which byte streams are stored elsewhere, e.g. Luna
 
-This means that in order to provide a REQUIRED functionality, ldr metadata storage must be able to retrieve assets from either asset storage or any arbitrary outside storage accessible over the Web. It is therefore MANDATORY that all publicly available assets be available over the Web. However, the system must be able to distinguish between a remote asset and a library-controlled asset in order to know where to point clients for the location of assets. In order to distinguish between the two types of assets, there must be some marker for the ldr metadata storage to use to make this distinction. One marker will lead the ldr metadata storage to locate the assets from the digcoll retriever. The other will tell it to check if the address is valid. If the address is not valid, the ldr metadata storage should notify the administrators of the ldr metadata storage as well as the person attempting to ingest material into the ldr metadata storage. Any identifier that points to an asset controlled by the library MIST be a URI, because the ldr metadata storage must know from what host to pull the assets and we must assume that this host will change over time. Any identifier that points to a remote asset must be a URL. This is how the system will be able to distinguish what is a library-controlled asset and remote asset.
+This means that in order to provide a REQUIRED functionality, ldr metadata storage must be able to retrieve byte streams from either asset storage or any arbitrary outside storage accessible over the Web. It is therefore MANDATORY that all publicly available byte streams be available over the Web. However, the system must be able to distinguish between a remote asset and a library-controlled asset in order to know where to point clients for the location of byte streams. In order to distinguish between the two types of byte streams, there must be some marker for the ldr metadata storage to use to make this distinction. One marker will lead the ldr metadata storage to locate the byte streams from the digcoll retriever. The other will tell it to check if the address is valid. If the address is not valid, the ldr metadata storage should notify the administrators of the ldr metadata storage as well as the person attempting to ingest material into the ldr metadata storage. Any identifier that points to an asset controlled by the library MIST be a URI, because the ldr metadata storage must know from what host to pull the byte streams and we must assume that this host will change over time. Any identifier that points to a remote asset must be a URL. This is how the system will be able to distinguish what is a library-controlled asset and remote asset.
 
 We also have to assume that there will be a variety of descriptive metadata formats used. These are the metadata formats currently being used in library digital collections.
 
@@ -69,7 +69,7 @@ We also have to assume that there will be a variety of descriptive metadata form
 
 This means that the metadata storage must be able to store a variety of metadata formats that are not actionable by the metadata storage. However, the metadata storage must have a single schema that it can interpret in order to provide answers to the five questions defined earlier in this document.
 
-COROLLARY: the metadata storage should be able to store technical metadata about assets in digital collections. Technical metadata is currently being stored in asset storage, but there is a strong argument to be made that doing this "muddies the water" between asset and metadata. Asset ought to be strictly defined as a byte stream representing an intellectual unit or some portion of an intellectual unit. By storing technical metadata, which by definition is not a byte stream representing a whole or some part of an intellectual unit but rather information about the byte stream the asset storage is being forced to perform a task that is a violation of its primary function.
+COROLLARY: the metadata storage should be able to store technical metadata about byte streams in digital collections. Technical metadata is currently being stored in asset storage, but there is a strong argument to be made that doing this "muddies the water" between asset and metadata. Asset ought to be strictly defined as a byte stream representing an intellectual unit or some portion of an intellectual unit. By storing technical metadata, which by definition is not a byte stream representing a whole or some part of an intellectual unit but rather information about the byte stream the asset storage is being forced to perform a task that is a violation of its primary function.
 
 ## Contract for available endpoints
 
@@ -88,7 +88,7 @@ Core metadata are REQUIRED fields. These fields is what allows the ldr metadata 
 - dc:title MUST be present
 - dc:identifier MUST be present
 - dc:isPartof MUST be present if the collection is a subordinate to another collection
-- dc:hasPart MUST be present if the collection is a superior to another collection or  to assets
+- dc:hasPart MUST be present if the collection is a superior to another collection or  to byte streams
 - dc:description is OPTIONAL
 - dc:relation is OPTIONAL
 - dc:relation, dc:isPartOf and dc:hasPart MUST have attribute xsi:type
@@ -649,7 +649,7 @@ This endpoint is GUARANTEED to return a particular proxy resource identified by 
 
 ## Glossary
 
-- a collection is a group of collections and/or assets
+- a collection is a group of collections and/or byte streams
 - asset is a byte stream representing an intellectual unit whether in-whole or in-part
 - descriptive metadata represents one description of a collection
 - metadata is an abbreviation of descriptive metadata
