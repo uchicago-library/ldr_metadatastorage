@@ -655,7 +655,7 @@ This endpoint is GUARANTEED to return a particular extension resource identified
 
 ## Glossary
 
-- a collection is a group of collections or a group of assets
+- a collection is a group of collections and/or assets
 - asset is a byte stream representing an intellectual unit whether in-whole or in-part
 - descriptive metadata represents one description of a collection
 - metadata is an abbreviation of descriptive metadata
