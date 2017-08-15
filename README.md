@@ -18,7 +18,8 @@
 - cd into the repo directory
 - run python setup.py development
 - chmod +x debug.sh
-- run ``bash ./debug.sh```. It should return the following output:
+- run ``bash ./debug.sh```
+- open up your browser and navigate to ```http://localhost:5000/``` or open up a shell and call ```curl http://localhost:5000/```. It should return the following output:
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
