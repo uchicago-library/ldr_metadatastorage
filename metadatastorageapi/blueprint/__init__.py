@@ -1,5 +1,5 @@
 """the blueprint routes for the API
-See spec section https://github.com/uchicago-library/ldr_metadatastorage#contract-for-available-endpoints
+See spec section https://github.com/uchicago-library/ldr_metadatastorage/wiki#contract-for-available-endpoints
 """
 
 from datetime import datetime
