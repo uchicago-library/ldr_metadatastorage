@@ -4,10 +4,9 @@
 import os
 import tempfile
 import unittest
-
-import metadatastorageapi
-from testlib.output import *
 from xml.etree import ElementTree
+from testlib.output import build_core, build_envelope, define_namespaces
+import metadatastorageapi
 
 class TestToSpecOnePointO(unittest.TestCase):
     """the api test suite
@@ -459,7 +458,7 @@ class TestToSpecOnePointO(unittest.TestCase):
                 )
             return first_checks & self.assertGreaterEqual(relations.count(), 1)
         else:
-            return self.assertTrue(False)
+            return False
 
     # End of contextual endpoint tests
 
