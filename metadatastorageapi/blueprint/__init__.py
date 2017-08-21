@@ -88,12 +88,13 @@ class AllCollections(Resource):
         be resolvable to a collection.
         """
         from metadatastorageapi import APP
-        collections = FileSystemStorage("../sandbox/collections.xml") # need to retrieve the toplevel collections from the database
+        collection = FileSystemStorage("sandbox/collections.xml").find_root()
         root, metadata = _common_response_body_building()
-        for n_value in collections:
+        parts = collection.findall("{http://purl.org/dc/elements/1.1/}hasPart")
+        for n_value in parts:
             has_part = ElementTree.SubElement(metadata, "{http://purl.org/dc/elements/1.1/}hasPart")
             has_part.set("{http://www.w3.org/2003/XMLSchema-instance}type", "{http://purl.org/dc/terms/}URI")
-            has_part.text = n_value
+            has_part.text = "/collection/" + n_value.text
         return APP.response_class(ElementTree.tostring(root), mimetype="application/xml")
 
 class ListForCollection(Resource):
@@ -109,12 +110,14 @@ class ListForCollection(Resource):
         The value of each dc:hasPart will be resolvable to a collection or an asset
         """
         from metadatastorageapi import APP
-        collections = [] # need to use collection_identifier to find core metadata for the collection and return the values of all hasParts
+        collection = FileSystemStorage("sandbox/collections.xml").find_specific_collection(collection_identifier)
         root, metadata = _common_response_body_building()
-        for n_value in collections:
+        parts = collection.findall("{http://purl.org/dc/elements/1.1/}hasPart")
+        for n_value in parts:
+            print(parts)
             has_part = ElementTree.SubElement(metadata, "{http://purl.org/dc/elements/1.1/}hasPart")
             has_part.set("{http://www.w3.org/2003/XMLSchema-instance}type", "{http://purl.org/dc/terms/}URI")
-            has_part.text = n_value
+            has_part.text = n_value.text
         return APP.response_class(ElementTree.tostring(root), mimetype="application/xml")
 
 class CollectionCore(Resource):

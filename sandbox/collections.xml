@@ -23,11 +23,14 @@
         <dc:title>Collection Two</dc:title>
         <dc:identifier>collection2</dc:identifier>
         <dc:isPartOf>ldr</dc:isPartOf>
+        <dc:hasPart>/collection/collection2-subcollection1</dc:hasPart>
+        <dc:hasPart>/collection/collection2-subcollection2</dc:hasPart>
     </collection>
     <collection>
         <dc:title>Collection Three</dc:title>
         <dc:identifier>collection3</dc:identifier>
         <dc:isPartOf>ldr</dc:isPartOf>
+        <dc:hasPart>/collection/collection3-subcollection1</dc:hasPart>
     </collection>
     <!-- end of second-level collections  -->
 
@@ -53,7 +56,7 @@
     <collection>
         <dc:title>An Item in Collection Two</dc:title>
         <dc:identifier>collection2-item1</dc:identifier>
-        <dc:date:>2000<dc:date>
+        <dc:date>2000</dc:date>
         <dc:subject>elephants</dc:subject>
         <dc:subject>tea kettle</dc:subject>
         <dc:isPartOf xsi:type="dcterms:URI">/collection/collection2</dc:isPartOf>
@@ -61,7 +64,7 @@
     </collection>
     <collection>
         <dc:title>A Test Item</dc:title>
-        <dc:creator>Doe, Jane<dc:creator>
+        <dc:creator>Doe, Jane</dc:creator>
         <dc:date>2017</dc:date>
         <dc:identifier>collection2-subbcollection1-item1</dc:identifier>
         <dc:subject>elephants</dc:subject>
@@ -72,7 +75,7 @@
     </collection>
     <collection>
         <dc:title>An Item</dc:title>
-        <dc:creator>Smith, John<dc:creator>
+        <dc:creator>Smith, John</dc:creator>
         <dc:date>2017</dc:date>
         <dc:identifier>collection2-subcollection1-item2</dc:identifier>
         <dc:subject>tea kettle</dc:subject>
