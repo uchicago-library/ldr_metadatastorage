@@ -2,58 +2,90 @@
          xmlns:dc="http://purl.org/dc/elements/1.1/"
          xmlns:dcterms="http://purl.org/dc/terms/"
          xmlns:xsi="http://www.w3.org/2003/XMLSchema-instance">
+
+    <!-- root collection -->
     <collection>
-        <dc:title>LDR Root</dc:title>
-        <dc:identifier>ldr</dc:identifier>
+        <dc:title>Library Digital Repository</dc:title>
+        <dc:identifier>root</dc:identifier>
         <dc:hasPart>collection1</dc:hasPart>
+        <dc:hasPart>collection2</dc:hasPart>
+        <dc:hasPart>collection3</dc:hasPart>
     </collection>
+    <!-- end of root collection -->
+
+    <!-- start of second-level collections  -->
     <collection>
         <dc:title>Collection One</dc:title>
         <dc:identifier>collection1</dc:identifier>
         <dc:isPartOf>ldr</dc:isPartOf>
-    </metdata>
+    </collection>
     <collection>
         <dc:title>Collection Two</dc:title>
         <dc:identifier>collection2</dc:identifier>
         <dc:isPartOf>ldr</dc:isPartOf>
-    </metdata>
-    <collection>
-        <dc:title>An Item in Collection Two</dc:title>
-        <dc:identifier>collection2-item1</dc:identifier>
-        <dc:date:>2000<dc:date>
-        <dc:isPartOf xsi:type="dcterms:URI">/collection/colleciton2</dc:isPartOf>
-        <dc:hasPart xsi:type="dcterms:URL">http://dummy-images.com/maps/dummy-375x500-WorldMap1689.jpg</dc:hasPart>
     </collection>
     <collection>
         <dc:title>Collection Three</dc:title>
         <dc:identifier>collection3</dc:identifier>
         <dc:isPartOf>ldr</dc:isPartOf>
-    </metdata>
+    </collection>
+    <!-- end of second-level collections  -->
+
+    <!-- start of third-level collections  -->
     <collection>
         <dc:title>Collection Three Sub-collection One</dc:title>
-        <dc:identifier>subcollection1</dc:identifier>
+        <dc:identifier>collection3-subcollection1</dc:identifier>
         <dc:isPartOf>/collection/collection3</dc:isPartOf>
-    </metdata>
+    </collection>
+    <collection>
+        <dc:title>Collection Two Sub-collection One</dc:title>
+        <dc:identifier>collection2-subcollection1</dc:identifier>
+        <dc:isPartOf>/collection/collection2</dc:isPartOf>
+    </collection>
+    <collection>
+        <dc:title>Collection Two Sub-collection Two</dc:title>
+        <dc:identifier>collection2-subcollection2</dc:identifier>
+        <dc:isPartOf>/collection/collection2</dc:isPartOf>
+    </collection>
+    <!-- end of third-level collections -->
+
+    <!-- start of leaf collections -->
+    <collection>
+        <dc:title>An Item in Collection Two</dc:title>
+        <dc:identifier>collection2-item1</dc:identifier>
+        <dc:date:>2000<dc:date>
+        <dc:subject>elephants</dc:subject>
+        <dc:subject>tea kettle</dc:subject>
+        <dc:isPartOf xsi:type="dcterms:URI">/collection/collection2</dc:isPartOf>
+        <dc:hasPart xsi:type="dcterms:URL">http://dummy-images.com/maps/dummy-375x500-WorldMap1689.jpg</dc:hasPart>
+    </collection>
     <collection>
         <dc:title>A Test Item</dc:title>
         <dc:creator>Doe, Jane<dc:creator>
         <dc:date>2017</dc:date>
-        <dc:identifier>collection3-subcollection1-item2</dc:identifier>
-        <dc:isPartOf>/collection/subcollection1</dc:isPartOf>
+        <dc:identifier>collection2-subbcollection1-item1</dc:identifier>
+        <dc:subject>elephants</dc:subject>
+        <dc:relation xsi:type="dcterms:URI">/collection/collection2-subcollecton1-item1-mods</dc:relation>
+        <dc:isPartOf xsi:type="dcterms:URI">/collection/collection2-subcollection1</dc:isPartOf>
         <dc:hasPart xsi:type="dcterms:URL">http://dummy-images.com/people/dummy-683x1024-WeekiWacheeSpring.jpg</dc:hasPart>
         <dc:hasPart xsi:type="dcterms:URL">http://dummy-images.com/people/dummy-454x280-Musicians.jpg</dc:hasPart>
-    </metdata>
+    </collection>
     <collection>
         <dc:title>An Item</dc:title>
-        <dc:creator>Doe, John<dc:creator>
+        <dc:creator>Smith, John<dc:creator>
         <dc:date>2017</dc:date>
-        <dc:identifier>collection3-subcollection1-item1</dc:identifier>
-        <dc:isPartOf>collection3-subcollection1</dc:isPartOf>
+        <dc:identifier>collection2-subcollection1-item2</dc:identifier>
+        <dc:subject>tea kettle</dc:subject>
+        <dc:relation xsi:type="dcterms:URI">/collection/collection2-subcollecton1-item2-marc</dc:relation>
+        <dc:isPartOf xsi:type="dcterms:URI">/collection/collection2-subcollection1</dc:isPartOf>
         <dc:hasPart xsi:type="dcterms:URL">http://dummy-images.com/abstract/dummy-375x500-Bottles.jpg</dc:hasPart>
         <dc:hasPart xsi:type="dcterms:URL">http://dummy-images.com/abstract/dummy-540x960-Utrecht.jpg</dc:hasPart>
-    </metdata>
+    </collection>
+    <!-- end of leaf collections -->
+
+    <!-- start of proxy collection -->
     <collection>
-        <dc:identifier>item1-proxy-mods</dc:identifier>
+        <dc:identifier>collection2-subcollection1-item1-mods</dc:identifier>
         <dc:description>TG9yZW0gaXBzdW0gZG9sb3Igc2l0IGFtZXQsIGNvbnNlY3RldHVyIGFkaXBpc2NpbmcgZWxpdC4gSW4gbGFjaW5pYSBzb2xsaWNpdHVkaW4gcmlzdXMgaW4gYmxhbmRp
 dC4gU3VzcGVuZGlzc2UgdWxsYW1jb3JwZXIgZGlnbmlzc2ltIGxlbywgbmVjIHBlbGxlbnRlc3F1ZSBuaXNsIHVsdHJpY2llcyBhYy4gTnVsbGEgZmFjaWxpc2kuIFNlZC
 B2ZWwgZmV1Z2lhdCBsaWd1bGEsIGEgaWFjdWxpcyBsZW8uIFF1aXNxdWUgbWFsZXN1YWRhIGF1Z3VlIGF0IHRyaXN0aXF1ZSBkYXBpYnVzLiBWZXN0aWJ1bHVtIGxvcmVt
@@ -86,4 +118,10 @@ ZlbmQgcG9ydGEsIGFudGUgcHVydXMgdm9sdXRwYXQgbWF1cmlzLCBpZCBwb3J0YSB0b3J0b3IganVzdG
 dW50IGV1IHJob25jdXMgdmVsLCBtYWxlc3VhZGEgbm9uIGxpZ3VsYS4gVmVzdGlidWx1bSBmYXVjaWJ1cyBoZW5kcmVyaXQgZGlhbSwgc2VkIGF1Y3RvciBlcmF0IHNhZ2
 l0dGlzIGFjLg==</dc:description>
     </collection>
+    <collection>
+        <dc:identifier>collection2-subcollection1-item2-marc</dc:identifier>
+        <dc:description>IyBsb3JlbSBpcHN1bQ0KDQpmaWVsZCAxOiBzbWlsZXMNCmZpZWxkIDI6IGxhdWdodGVyDQpmaWVsZCAzOiBncmlucw0KZmllbGQgNDogYmx1
+c2hpbmc=</dc:description>
+    </collection>
+    <!-- end of proxy collections -->
 </collections>
