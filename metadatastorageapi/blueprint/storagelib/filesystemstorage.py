@@ -18,3 +18,25 @@ class FileSystemStorage(object):
             if n.find("{http://purl.org/dc/elements/1.1/}identifier").text == identifier:
                 return n
         return None
+
+    def find_extension(self, collection, extension):
+        collection = self.find_specific_collection(collection)
+        if collection:
+            collections = self.data_root.findall("{http://lib.uchicago.edu/ldr}collection")
+            for n in collections:
+                if n.find("{http://purl.org/dc/elements/1.1/}identifier").text == extension:
+                    return n.find("{http://purl.org/dc/elements/1.1}description").text
+        return None
+
+    def find_collection_extensions(self, collection_id):
+        collection = self.find_specific_collection(collection_id)
+        if collection:
+            collections = self.data_root.findall("{http://lib.uchicago.edu/ldr}relation")
+            return collections
+        return None
+
+    def find_core_metadata(self, collection_id):
+        collection = self.find_specific_collection(collection_id)
+        if collection:
+            return collection
+        return None

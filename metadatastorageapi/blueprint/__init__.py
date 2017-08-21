@@ -34,6 +34,20 @@ def _common_response_body_building():
         metadata = ElementTree.SubElement(response, "{http://lib.uchicago.edu/ldr}metadata")
         return root, metadata
 
+def _extension_response_body_building():
+        root = ElementTree.Element("{http://lib.uchicago.edu/ldr}output")
+        request = ElementTree.SubElement(root, "{http://lib.uchicago.edu/ldr}request")
+        request.text = "/"
+        response_sent_timestamp = ElementTree.SubElement(root, "{http://lib.uchicago.edu/ldr}responseSentTimeStamp")
+        response_sent_timestamp.text = datetime.now().isoformat()
+        request_received_timestamp = ElementTree.SubElement(root, "{http://lib.uchicago.edu/ldr}requestReceivedTimeStamp")
+        request_received_timestamp.text = datetime.now().isoformat()
+        response_type = ElementTree.SubElement(root, "{http://lib.uchicago.edu/ldr}responseType")
+        response_type.text = "aggregate"
+        response = ElementTree.SubElement(root, "{http://lib.uchicago.edu/ldr}response")
+        extension = ElementTree.SubElement(response, "{http://lib.uchicago.edu/ldr}metadata")
+        return root, extension
+
 class Root(Resource):
     """a class to hold methods to return root-level API functionality available
 
@@ -135,8 +149,9 @@ class CollectionCore(Resource):
         and/or dc:isPartOf xsi:type="dcterms:URI"
         """
         from metadatastorageapi import APP
-        core_metadata = None # need to retrieve core metadata from database in order to insert as sub element of metadata in response
+        core_metadata = FileSystemStorage("sandbox/collections.xml").find_core_metadata(collection_identiifer)
         root, metadata = _common_response_body_building()
+        ElementTree.SubElement(root, metadata)
         return APP.response_class(ElementTree.tostring(root), mimetype="application/xml")
 
 class ListCollectionProxies(Resource):
@@ -151,12 +166,13 @@ class ListCollectionProxies(Resource):
         for each extension metadata associated with the collection identified
         """
         from metadatastorageapi import APP
-        extensions = [] # need to retrieve identifiers for all proxy metadata associated with a particular collection in order to add as relation elements in response
+
         root, metadata = _common_response_body_building()
+        extensions = FileSystemStorage("sandbox/collections.xml").find_extension_for_collection()
         for n_value in extensions:
             relation = ElementTree.SubElement(metadata, "{http://purl.org/dc/elements/1.1/}relation")
             relation.set("{http://www.w3.org/2003/XMLSchema-instance}type", "{http://purl.org/dc/terms/}URI")
-            relation.text = n_value
+            relation.text = n_value.text
         return APP.response_class(ElementTree.tostring(root), mimetype="application/xml")
 
 class CollectionProxy(Resource):
@@ -170,8 +186,11 @@ class CollectionProxy(Resource):
         The output will be a response body that is a text/base64 mimetype containing a base64 encoding of some proxy metadata
         """
         from metadatastorageapi import APP
-        extension = None # need to find extension metadata base64 identified with collection and as extension_identiifer and return it as a string
-        return APP.response_class(extension, mimetype="text/base64")
+        extension = FileSystemStorage("sandbox/collections.xml").find_extension()
+        root, metadata = _extension_response_body_building()
+        if extension:
+           metadata.text = extension
+        return APP.response_class(root, mimetype="text/base64")
 
 API.add_resource(Root, "/")
 API.add_resource(Collection, "/collection/<string:collection_identifier>", methods=['GET', 'POST'])
