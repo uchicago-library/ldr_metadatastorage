@@ -8,11 +8,12 @@ import logging
 from os import path
 from urllib.parse import unquote
 from xml.etree import ElementTree
+from sys import stderr
 from flask import Blueprint, Response, send_file
 from flask_restful import Resource, Api, reqparse
 from testlib.output import define_namespaces, build_envelope
 
-from sys import stderr
+from .storagelib.filesystemstorage import FileSystemStorage
 
 BLUEPRINT = Blueprint('metadatastorageapi', __name__)
 BLUEPRINT.config = {}
@@ -87,7 +88,7 @@ class AllCollections(Resource):
         be resolvable to a collection.
         """
         from metadatastorageapi import APP
-        collections = [] # need to retrieve the toplevel collections from the database
+        collections = FileSystemStorage("../sandbox/collections.xml") # need to retrieve the toplevel collections from the database
         root, metadata = _common_response_body_building()
         for n_value in collections:
             has_part = ElementTree.SubElement(metadata, "{http://purl.org/dc/elements/1.1/}hasPart")
