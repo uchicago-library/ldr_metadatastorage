@@ -20,7 +20,7 @@ BLUEPRINT.config = {}
 API = Api(BLUEPRINT)
 LOG = logging.getLogger(__name__)
 
-def _common_response_body_building():
+def _common_response_body_building(rtype="aggregate"):
         root = ElementTree.Element("{http://lib.uchicago.edu/ldr}output")
         request = ElementTree.SubElement(root, "{http://lib.uchicago.edu/ldr}request")
         request.text = "/"
@@ -29,7 +29,7 @@ def _common_response_body_building():
         request_received_timestamp = ElementTree.SubElement(root, "{http://lib.uchicago.edu/ldr}requestReceivedTimeStamp")
         request_received_timestamp.text = datetime.now().isoformat()
         response_type = ElementTree.SubElement(root, "{http://lib.uchicago.edu/ldr}responseType")
-        response_type.text = "aggregate"
+        response_type.text = rtype
         response = ElementTree.SubElement(root, "{http://lib.uchicago.edu/ldr}response")
         metadata = ElementTree.SubElement(response, "{http://lib.uchicago.edu/ldr}metadata")
         return root, metadata
@@ -149,9 +149,11 @@ class CollectionCore(Resource):
         and/or dc:isPartOf xsi:type="dcterms:URI"
         """
         from metadatastorageapi import APP
-        core_metadata = FileSystemStorage("sandbox/collections.xml").find_core_metadata(collection_identiifer)
-        root, metadata = _common_response_body_building()
-        ElementTree.SubElement(root, metadata)
+        core_metadata = FileSystemStorage("sandbox/collections.xml").find_core_metadata(collection_identifier)
+        root, metadata = _common_response_body_building(rtype="atomic")
+        for n in core_metadata:
+            t = ElementTree.SubElement(metadata, n.tag, n.attrib)
+            t.text = n.text
         return APP.response_class(ElementTree.tostring(root), mimetype="application/xml")
 
 class ListCollectionProxies(Resource):
@@ -168,11 +170,11 @@ class ListCollectionProxies(Resource):
         from metadatastorageapi import APP
 
         root, metadata = _common_response_body_building()
-        extensions = FileSystemStorage("sandbox/collections.xml").find_extension_for_collection()
-        for n_value in extensions:
-            relation = ElementTree.SubElement(metadata, "{http://purl.org/dc/elements/1.1/}relation")
-            relation.set("{http://www.w3.org/2003/XMLSchema-instance}type", "{http://purl.org/dc/terms/}URI")
-            relation.text = n_value.text
+        extensions = FileSystemStorage("sandbox/collections.xml").find_collection_extensions(collection_identifier)
+        if extensions:
+            for n_value in extensions:
+                rel = ElementTree.SubElement(metadata, n_value.tag, n_value.attrib)
+                rel.text = n_value.text
         return APP.response_class(ElementTree.tostring(root), mimetype="application/xml")
 
 class CollectionProxy(Resource):

@@ -1,5 +1,6 @@
 from os import path
 from xml.etree import ElementTree
+from sys import stderr
 
 class FileSystemStorage(object):
     def __init__(self, filepath):
@@ -31,12 +32,12 @@ class FileSystemStorage(object):
     def find_collection_extensions(self, collection_id):
         collection = self.find_specific_collection(collection_id)
         if collection:
-            collections = self.data_root.findall("{http://lib.uchicago.edu/ldr}relation")
-            return collections
+            return collection
         return None
 
     def find_core_metadata(self, collection_id):
         collection = self.find_specific_collection(collection_id)
+        print(collection)
         if collection:
             return collection
         return None
