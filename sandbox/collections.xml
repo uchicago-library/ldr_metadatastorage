@@ -10,6 +10,7 @@
         <dc:hasPart>collection1</dc:hasPart>
         <dc:hasPart>collection2</dc:hasPart>
         <dc:hasPart>collection3</dc:hasPart>
+        <dc:type>core</dc:type>
     </collection>
     <!-- end of root collection -->
 
@@ -18,6 +19,7 @@
         <dc:title>Collection One</dc:title>
         <dc:identifier>collection1</dc:identifier>
         <dc:isPartOf>ldr</dc:isPartOf>
+        <dc:type>core</dc:type>
     </collection>
     <collection>
         <dc:title>Collection Two</dc:title>
@@ -25,12 +27,14 @@
         <dc:isPartOf>ldr</dc:isPartOf>
         <dc:hasPart>/collection/collection2-subcollection1</dc:hasPart>
         <dc:hasPart>/collection/collection2-subcollection2</dc:hasPart>
+        <dc:type>core</dc:type>
     </collection>
     <collection>
         <dc:title>Collection Three</dc:title>
         <dc:identifier>collection3</dc:identifier>
         <dc:isPartOf>ldr</dc:isPartOf>
         <dc:hasPart>/collection/collection3-subcollection1</dc:hasPart>
+        <dc:type>core</dc:type>
     </collection>
     <!-- end of second-level collections  -->
 
@@ -39,16 +43,19 @@
         <dc:title>Collection Three Sub-collection One</dc:title>
         <dc:identifier>collection3-subcollection1</dc:identifier>
         <dc:isPartOf>/collection/collection3</dc:isPartOf>
+        <dc:type>core</dc:type>
     </collection>
     <collection>
         <dc:title>Collection Two Sub-collection One</dc:title>
         <dc:identifier>collection2-subcollection1</dc:identifier>
         <dc:isPartOf>/collection/collection2</dc:isPartOf>
+        <dc:type>core</dc:type>
     </collection>
     <collection>
         <dc:title>Collection Two Sub-collection Two</dc:title>
         <dc:identifier>collection2-subcollection2</dc:identifier>
         <dc:isPartOf>/collection/collection2</dc:isPartOf>
+        <dc:type>core</dc:type>
     </collection>
     <!-- end of third-level collections -->
 
@@ -61,6 +68,7 @@
         <dc:subject>tea kettle</dc:subject>
         <dc:isPartOf xsi:type="dcterms:URI">/collection/collection2</dc:isPartOf>
         <dc:hasPart xsi:type="dcterms:URL">http://dummy-images.com/maps/dummy-375x500-WorldMap1689.jpg</dc:hasPart>
+        <dc:type>core</dc:type>
     </collection>
     <collection>
         <dc:title>A Test Item</dc:title>
@@ -72,6 +80,7 @@
         <dc:isPartOf xsi:type="dcterms:URI">/collection/collection2-subcollection1</dc:isPartOf>
         <dc:hasPart xsi:type="dcterms:URL">http://dummy-images.com/people/dummy-683x1024-WeekiWacheeSpring.jpg</dc:hasPart>
         <dc:hasPart xsi:type="dcterms:URL">http://dummy-images.com/people/dummy-454x280-Musicians.jpg</dc:hasPart>
+        <dc:type>core</dc:type>
     </collection>
     <collection>
         <dc:title>An Item</dc:title>
@@ -83,6 +92,7 @@
         <dc:isPartOf xsi:type="dcterms:URI">/collection/collection2-subcollection1</dc:isPartOf>
         <dc:hasPart xsi:type="dcterms:URL">http://dummy-images.com/abstract/dummy-375x500-Bottles.jpg</dc:hasPart>
         <dc:hasPart xsi:type="dcterms:URL">http://dummy-images.com/abstract/dummy-540x960-Utrecht.jpg</dc:hasPart>
+        <dc:type>core</dc:type>
     </collection>
     <!-- end of leaf collections -->
 
@@ -120,11 +130,13 @@ bSBuZXF1ZSwgYWxpcXVhbSBzYWdpdHRpcyBmYXVjaWJ1cyBldCwgY29uZGltZW50dW0gZXQgbG9yZW0u
 ZlbmQgcG9ydGEsIGFudGUgcHVydXMgdm9sdXRwYXQgbWF1cmlzLCBpZCBwb3J0YSB0b3J0b3IganVzdG8gc2l0IGFtZXQgbmliaC4gTmFtIHNlbSByaXN1cywgdGluY2lk
 dW50IGV1IHJob25jdXMgdmVsLCBtYWxlc3VhZGEgbm9uIGxpZ3VsYS4gVmVzdGlidWx1bSBmYXVjaWJ1cyBoZW5kcmVyaXQgZGlhbSwgc2VkIGF1Y3RvciBlcmF0IHNhZ2
 l0dGlzIGFjLg==</dc:description>
+        <dc:type>proxy</dc:type>
     </collection>
     <collection>
         <dc:identifier>collection2-subcollection1-item2-marc</dc:identifier>
         <dc:description>IyBsb3JlbSBpcHN1bQ0KDQpmaWVsZCAxOiBzbWlsZXMNCmZpZWxkIDI6IGxhdWdodGVyDQpmaWVsZCAzOiBncmlucw0KZmllbGQgNDogYmx1
 c2hpbmc=</dc:description>
+        <dc:type>proxy</dc:type>
     </collection>
     <!-- end of proxy collections -->
 </collections>
