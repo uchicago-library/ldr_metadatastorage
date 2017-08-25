@@ -61,7 +61,6 @@ class Root(Resource):
         """
         from metadatastorageapi import APP
         root, metadata = _common_response_body_building()
-        stderr.write(str(root))
         relation = ElementTree.SubElement(metadata, "{http://purl.org/dc/elements/1.1/}relation")
         relation.set("{http://purl.org/dc/terms/}type", "{http://purl.org/dc/terms/}URI")
         relation.text = "/collections"
@@ -102,13 +101,12 @@ class AllCollections(Resource):
         be resolvable to a collection.
         """
         from metadatastorageapi import APP
-        collection = FileSystemStorage("sandbox/collections.xml").find_root()
+        collections = FileSystemStorage("sandbox/collections.xml").find_root()
         root, metadata = _common_response_body_building()
-        parts = collection.findall("{http://purl.org/dc/elements/1.1/}hasPart")
-        for n_value in parts:
+        for n_value in collections:
             has_part = ElementTree.SubElement(metadata, "{http://purl.org/dc/elements/1.1/}hasPart")
-            has_part.set("{http://www.w3.org/2003/XMLSchema-instance}type", "{http://purl.org/dc/terms/}URI")
-            has_part.text = "/collection/" + n_value.text
+            has_part.set("{http://www.w3.org/2003/XMLSchema-instance}type", "dcterms:URI")
+            has_part.text = "/collection/" + n_value
         return APP.response_class(ElementTree.tostring(root), mimetype="application/xml")
 
 class ListForCollection(Resource):
@@ -124,14 +122,12 @@ class ListForCollection(Resource):
         The value of each dc:hasPart will be resolvable to a collection or an asset
         """
         from metadatastorageapi import APP
-        collection = FileSystemStorage("sandbox/collections.xml").find_specific_collection(collection_identifier)
+        collections = FileSystemStorage("sandbox/collections.xml").find_specific_collection(collection_identifier)
         root, metadata = _common_response_body_building()
-        parts = collection.findall("{http://purl.org/dc/elements/1.1/}hasPart")
-        for n_value in parts:
-            print(parts)
+        for n_value in collections:
             has_part = ElementTree.SubElement(metadata, "{http://purl.org/dc/elements/1.1/}hasPart")
             has_part.set("{http://www.w3.org/2003/XMLSchema-instance}type", "{http://purl.org/dc/terms/}URI")
-            has_part.text = n_value.text
+            has_part.text = n_value
         return APP.response_class(ElementTree.tostring(root), mimetype="application/xml")
 
 class CollectionCore(Resource):
@@ -152,8 +148,13 @@ class CollectionCore(Resource):
         core_metadata = FileSystemStorage("sandbox/collections.xml").find_core_metadata(collection_identifier)
         root, metadata = _common_response_body_building(rtype="atomic")
         for n in core_metadata:
-            t = ElementTree.SubElement(metadata, n.tag, n.attrib)
-            t.text = n.text
+            new = ElementTree.SubElement(metadata, n)
+            val = core_metadata[n]['value']
+            if 'http' in val:
+                new.set("type", "URL")
+            elif val[0] == "/":
+                new.set("type", "URI")
+            new.text = core_metadata[n]['value']
         return APP.response_class(ElementTree.tostring(root), mimetype="application/xml")
 
 class ListCollectionProxies(Resource):
@@ -171,10 +172,10 @@ class ListCollectionProxies(Resource):
 
         root, metadata = _common_response_body_building()
         extensions = FileSystemStorage("sandbox/collections.xml").find_collection_extensions(collection_identifier)
-        if extensions:
-            for n_value in extensions:
-                rel = ElementTree.SubElement(metadata, n_value.tag, n_value.attrib)
-                rel.text = n_value.text
+        for n_value in extensions:
+            rel = ElementTree.SubElement(metadata, "{http://purl.org/dc/elements/1.1/}relation")
+            rel.set("type", "URI")
+            rel.text = n_value
         return APP.response_class(ElementTree.tostring(root), mimetype="application/xml")
 
 class CollectionProxy(Resource):
@@ -188,11 +189,8 @@ class CollectionProxy(Resource):
         The output will be a response body that is a text/base64 mimetype containing a base64 encoding of some proxy metadata
         """
         from metadatastorageapi import APP
-        extension = FileSystemStorage("sandbox/collections.xml").find_extension()
-        root, metadata = _extension_response_body_building()
-        if extension:
-           metadata.text = extension
-        return APP.response_class(root, mimetype="text/base64")
+        extension = FileSystemStorage("sandbox/collections.xml").find_extension(extension_identifier)
+        return APP.response_class(extension.encode("utf-8"), mimetype="text/plain;base64")
 
 API.add_resource(Root, "/")
 API.add_resource(Collection, "/collection/<string:collection_identifier>", methods=['GET', 'POST'])
@@ -202,5 +200,5 @@ API.add_resource(CollectionCore, "/collection/<string:collection_identifier>/cor
 API.add_resource(ListCollectionProxies, "/collection/<string:collection_identifier>/proxies",
                  methods=['GET'])
 API.add_resource(CollectionProxy,
-                 "/collection/<string:collection_identifier>/proxy/<string:extension_identifier>",
+                 "/collection/<string:collection_identifier>/proxies/<string:extension_identifier>",
                  methods=['GET'])

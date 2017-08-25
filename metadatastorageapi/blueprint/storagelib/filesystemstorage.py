@@ -7,37 +7,48 @@ class FileSystemStorage(object):
         self.filepath = path.abspath(filepath)
         self.data_root = ElementTree.parse(self.filepath).getroot()
 
+    def _match_collection(self, collection="root"):
+        collections = [x for x in self.data_root.findall("{http://lib.uchicago.edu/ldr}collection") if x.find("{http://purl.org/dc/elements/1.1/}identifier").text == collection]
+        if len(collections) == 1:
+            return collections[0]
+        return None
+
+    def _find_subcollections(self, collection):
+        sub_collections = [x for x in collection.findall("{http://purl.org/dc/elements/1.1/}hasPart")]
+        output = []
+        for x in sub_collections:
+            output.append(x.text)
+        return output
+
+    def _get_list_of_extensions(self, collection_id):
+        match = self._match_collection(collection=collection_id)
+        output = []
+        extensions = [x for x in match.findall("{http://purl.org/dc/elements/1.1/}relation")]
+        output = []
+        for ext in extensions:
+            output.append(ext.text)
+        return output
+
     def find_root(self):
-        collections = self.data_root.findall("{http://lib.uchicago.edu/ldr}collection")
-        for n in collections:
-            if n.find("{http://purl.org/dc/elements/1.1/}identifier").text == 'root':
-                return n
+        match = self._match_collection()
+        return self._find_subcollections(match)
 
     def find_specific_collection(self, identifier):
-        collections = self.data_root.findall("{http://lib.uchicago.edu/ldr}collection")
-        for n in collections:
-            if n.find("{http://purl.org/dc/elements/1.1/}identifier").text == identifier:
-                return n
-        return None
+        match = self._match_collection(collection=identifier)
+        return self._find_subcollections(match)
 
-    def find_extension(self, collection, extension):
-        collection = self.find_specific_collection(collection)
-        if collection:
-            collections = self.data_root.findall("{http://lib.uchicago.edu/ldr}collection")
-            for n in collections:
-                if n.find("{http://purl.org/dc/elements/1.1/}identifier").text == extension:
-                    return n.find("{http://purl.org/dc/elements/1.1}description").text
-        return None
+    def find_extension(self, extension):
+        collection = self._match_collection(collection=extension)
+        return collection.find("{http://purl.org/dc/elements/1.1/}description").text
 
     def find_collection_extensions(self, collection_id):
-        collection = self.find_specific_collection(collection_id)
-        if collection:
-            return collection
-        return None
+        return self._get_list_of_extensions(collection_id)
 
     def find_core_metadata(self, collection_id):
-        collection = self.find_specific_collection(collection_id)
-        print(collection)
-        if collection:
-            return collection
-        return None
+        collection = self._match_collection(collection=collection_id)
+        output = {}
+        for element in collection:
+            tag_name = element.tag
+            value = element.text
+            output[tag_name] = {'value':value}
+        return output
