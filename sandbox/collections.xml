@@ -27,6 +27,7 @@
         <dc:isPartOf>ldr</dc:isPartOf>
         <dc:hasPart>/collection/collection2-subcollection1</dc:hasPart>
         <dc:hasPart>/collection/collection2-subcollection2</dc:hasPart>
+        <dc:hasPart>/collection/collection2-item1</dc:hasPart>
         <dc:type>core</dc:type>
     </collection>
     <collection>
@@ -49,6 +50,8 @@
         <dc:title>Collection Two Sub-collection One</dc:title>
         <dc:identifier>collection2-subcollection1</dc:identifier>
         <dc:isPartOf>/collection/collection2</dc:isPartOf>
+        <dc:hasPart>/collection/collection2-subcollection1-item1</dc:hasPart>
+        <dc:hasPart>/collection/collection2-subcollection1-item2</dc:hasPart>
         <dc:type>core</dc:type>
     </collection>
     <collection>

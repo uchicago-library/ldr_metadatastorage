@@ -126,7 +126,7 @@ class ListForCollection(Resource):
         root, metadata = _common_response_body_building()
         for n_value in collections:
             has_part = ElementTree.SubElement(metadata, "{http://purl.org/dc/elements/1.1/}hasPart")
-            has_part.set("{http://www.w3.org/2003/XMLSchema-instance}type", "{http://purl.org/dc/terms/}URI")
+            has_part.set("type", "URI")
             has_part.text = n_value
         return APP.response_class(ElementTree.tostring(root), mimetype="application/xml")
 

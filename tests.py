@@ -1,10 +1,12 @@
 """the module containing unit test code for the metadata storage api
 """
 
+from base64 import b64decode
 import os
 import tempfile
 import unittest
 from xml.etree import ElementTree
+from sys import stderr
 from testlib.output import build_core, build_envelope, define_namespaces
 import metadatastorageapi
 
@@ -30,175 +32,39 @@ class TestToSpecOnePointO(unittest.TestCase):
         except ElementTree.ParseError:
             return None
 
+    def _test_for_right_num(self, find_els, right_num):
+        if find_els:
+            return len(find_els) == right_num
+
+    def _comp_for_truthy(self, a_list):
+        out = True
+        for n in a_list:
+            out &= n
+        return out
+
     def _universal_output_testing(self, resp):
-        resp_root = ElementTree.parse(resp.data).getroot()
+        resp_root = resp
         req = resp_root.findall("{http://lib.uchicago.edu/ldr}request")
-        response_sent_time = resp_root.findall("{http://lib.uchicago.edu/ldr}responseSentTimeStamp")
-        request_received_time_stamp = resp_root.findall("{http://lib.uchicago.edu/ldr}requestReceivedTimeStamp")
-        response_type = resp_root.findall("{http://lib.uchicago.edu/ldr}responseType")
-        response = resp_root.findall("{http://lib.uchicago.edu/ldr}response")
-        metadata = response[0].findall("{http://lib.uchicago.edu/ldr}metadata")
-        check = self.assertEqual(req.count(), 1) & self.assertEqual(response_sent_time.count(), 1) &\
-                self.assertEqual(request_received_time_stamp.count(), 1) & self.assertEqual(response_type.count(), 1) &\
-                self.assertEqual(response.count(), 1) & self.assertEqual(metadata.count(), 1)
-        return check
+        s_time = resp_root.findall("{http://lib.uchicago.edu/ldr}responseSentTimeStamp")
+        r_time = resp_root.findall("{http://lib.uchicago.edu/ldr}requestReceivedTimeStamp")
+        r_type = resp_root.findall("{http://lib.uchicago.edu/ldr}responseType")
+        resp = resp_root.findall("{http://lib.uchicago.edu/ldr}response")
+        mdata = resp[0].findall("{http://lib.uchicago.edu/ldr}metadata")
+        out = self._comp_for_truthy([self._test_for_right_num(x, 1)
+                                     for x in [req, s_time, r_time, r_type, mdata]])
+        return out
+
+    def _opening_check(self, resp):
+        if resp.get_data():
+            data = self._convert_response_to_xml(resp.get_data())
+            first_checks = self._universal_output_testing(data)
+            return (first_checks, data)
+        else:
+            return (False, None)
 
     # End of private methods
 
     # Start of posting data tests
-
-    def test_post_valid_non_asset_collection(self):
-        """test successful posting endpoint /collections/[collection identifier]
-
-        a good input example that looks like this:
-
-        <input>
-            <request>/collection/testcollection/0001</request>
-            <requestSentTimeStamp>2017-08-09T14:01:01</requestSentTimeStamp>
-            <core>
-                <metadata>
-                    <dc:title>Test Collection</dc:title>
-                    <dc:identifier>testcollection-0001</dc:identifier>
-                    <dc:date>2017</dc:date>
-                    <dc:creator>Doe, John</dc:creator>
-                    <dc:isPartOf xsi:type="dcterms:URI">/collection/testcollection</dc:isPartOf>
-                </metadata>
-            </core>
-        </input>
-        """
-        define_namespaces()
-        root = build_envelope("ldr:input")
-        root = build_core(root)
-        response = self.app.post("/collection/testOne", data=ElementTree.tostring(root))
-        return self.assertEqual(response.status_code, 200)
-
-    def test_post_invalid_non_asset_collection(self):
-        """test failure posting endpoint /collections/[collection identifier]
-
-        a bad input example that looks like this:
-
-        <input>
-            <request>/collection/testcollection/0001</request>
-            <requestSentTimeStamp>2017-08-09T14:01:01</requestSentTimeStamp>
-            <core>
-                <metadata>
-                    <dc:identifier>testcollection-0001</dc:identifier>
-                    <dc:date>2017</dc:date>
-                    <dc:creator>Doe, John</dc:creator>
-                    <dc:isPartOf xsi:type="dcterms:URI">/collection/testcollection</dc:isPartOf>
-                </metadata>
-            </core>
-        </input>
-        """
-        define_namespaces()
-        root = build_envelope("ldr:input")
-        root = build_core(root)
-        response = self.app.post("/collection/testTwo", data=ElementTree.tostring(root))
-        return self.assertEqual(response.status_code, 400)
-
-    def test_post_valid_asset_collection(self):
-        """test successful posting endpoint /collections/[collection identifier]
-
-        good input example that looks like this
-
-        <input>
-            <request>/collection/testcollection/0001/anassetcollection</request>
-            <responseSentTimeStamp>2017-08-09T14:13:11</responseSentTimeStamp>
-            <core>
-                <metadata>
-                    <dc:title>Test Collection</dc:title>
-                    <dc:identifier>testcollection-0001</dc:identifier>
-                    <dc:date>2017</dc:date>
-                    <dc:creator>Doe, John</dc:creator>
-                    <dc:isPartOf xsi:type="dcterms:URI">/collection/testcollection/0001</dc:isPartOf>
-                    <dc:hasPart xsi:type="dcterms:URI">https://dummyimage.com/250/ffff/000000</dc:hasPart>
-                    <dc:hasPart xsi:type="dcterms:URI">https://dummyimage.com/250/ffff/000000</dc:hasPart>
-                    <dc:hasPart xsi:type="dcterms:URI">https://dummyimage.com/250/ffff/000000</dc:hasPart>
-                </metadata>
-            </core>
-        </input>
-        """
-        define_namespaces()
-        root = build_envelope("ldr:input")
-        root = build_core(root)
-        response = self.app.post("/collection/testThree", data=ElementTree.tostring(root))
-        return self.assertEqual(response.status_code, 200)
-
-    def test_post_valid_asset_with_extension(self):
-        """test successful posting endpoint /collections/[collection identifier]
-
-        good input example that looks like this
-
-        <input>
-            <request>/collection/testcollection/0001/anassetcollection</request>
-            <responseSentTimeStamp>2017-08-09T14:13:11</responseSentTimeStamp>
-            <core>
-                <metadata>
-                    <dc:title>Test Collection</dc:title>
-                    <dc:identifier>testcollection-0001</dc:identifier>
-                    <dc:date>2017</dc:date>
-                    <dc:creator>Doe, John</dc:creator>
-                    <dc:isPartOf xsi:type="dcterms:URI">/collection/testcollection/0001</dc:isPartOf>
-                    <dc:hasPart xsi:type="dcterms:URI">https://dummyimage.com/250/ffff/000000</dc:hasPart>
-                    <dc:hasPart xsi:type="dcterms:URI">https://dummyimage.com/250/ffff/000000</dc:hasPart>
-                    <dc:hasPart xsi:type="dcterms:URI">https://dummyimage.com/250/ffff/000000</dc:hasPart>
-                </metadata>
-            </core>
-            <extensions>
-                <extension>
-                    <type>text</type>
-                    <name>test-extension</name>
-                    <data>
-                        this is a extension metadata
-                        this is a second line in extension metadata
-                    </data>
-                </extension
-            </extensions>
-        </input>
-        """
-        define_namespaces()
-        root = build_envelope("ldr:input")
-        root = build_core(root)
-        response = self.app.post("/collection/testFive", data=ElementTree.tostring(root))
-        return self.assertEqual(response.status_code, 200)
-
-    def test_post_invalid_asset_with_extension(self):
-        """test successful posting endpoint /collections/[collection identifier]
-
-        good input example that looks like this
-
-        <input>
-            <request>/collection/testcollection/0001/anassetcollection</request>
-            <responseSentTimeStamp>2017-08-09T14:13:11</responseSentTimeStamp>
-            <core>
-                <metadata>
-                    <dc:title>Test Collection</dc:title>
-                    <dc:identifier>testcollection-0001</dc:identifier>
-                    <dc:date>2017</dc:date>
-                    <dc:creator>Doe, John</dc:creator>
-                    <dc:isPartOf xsi:type="dcterms:URI">/collection/testcollection/0001</dc:isPartOf>
-                    <dc:hasPart xsi:type="dcterms:URI">https://dummyimage.com/250/ffff/000000</dc:hasPart>
-                    <dc:hasPart xsi:type="dcterms:URI">https://dummyimage.com/250/ffff/000000</dc:hasPart>
-                    <dc:hasPart xsi:type="dcterms:URI">https://dummyimage.com/250/ffff/000000</dc:hasPart>
-                </metadata>
-            </core>
-            <extensions>
-                <extension>
-                    <data>
-                        this is a extension metadata
-                        this is a second line in extension metadata
-                    </data>
-                </extension
-            </extensions>
-        </input>
-        """
-        define_namespaces()
-        root = build_envelope("ldr:input")
-        root = build_core(root)
-        response = self.app.post("/collection/testSix", data=ElementTree.tostring(root))
-        return self.assertEqual(response.status_code, 400)
-
-    # End of posting data tests
 
     # Start of aggregate endpoint tests
 
@@ -222,16 +88,24 @@ class TestToSpecOnePointO(unittest.TestCase):
         </output>
 
         """
-        response = self.app.get("/collections")
-        if self._convert_response_to_xml(response.data):
-            root = self._convert_response_to_xml(response.data)
-            first_checks = self._universal_output_testing(root)
-            relations = root.findall(
-                "{http://lib.uchicago.edu/ldr}response/{http://lib.uchicago.edu/lib}metadata/{http://purl.org/dc/elements/1.1/}relation"
-                )
-            return self.assertTrue(first_checks) & self.assertGreaterEqual(relations.count(), 1)
+        response = self.app.get("/")
+        answer = self._opening_check(response)
+        if answer[1]:
+            root = answer[1]
+            rels = [x.tag for x in root.find(
+                "{http://lib.uchicago.edu/ldr}response" +
+                "/{http://lib.uchicago.edu/ldr}metadata"
+            )]
+            check = answer[0]
+            rels = ([x for x in rels if x == "{http://purl.org/dc/elements/1.1/}relation"])
+            check &= len(rels) == 1
+        else:
+            # this means th]at the response didn't get picked up for some reason
+            stderr.write("cannot open response for /.\n")
+            return self.assertTrue(check)
+        return self.assertTrue(check)
 
-    def test_get_collection_list(self):
+    def test_get_root_list_collections(self):
         """test endpoint /collections/[collection identifier]
 
         should return output that looks like:
@@ -250,14 +124,22 @@ class TestToSpecOnePointO(unittest.TestCase):
             </response>
         </output>
         """
-        response = self.app.get("/collections/testOne")
-        if self._convert_response_to_xml(response.data):
-            root = self._convert_response_to_xml(response.data)
-            first_checks = self._universal_output_testing(root)
-            parts = root.findall(
-                "{http://lib.uchicago.edu/ldr}response/{http://lib.uchicago.edu/lib}metadata/{http://purl.org/dc/elements/1.1/}hasPart"
-                )
-            return self.assertTrue(first_checks) & self.assertGreaterEqual(parts.count(), 1)
+        response = self.app.get("/collections")
+        answer = self._opening_check(response)
+        if answer[1]:
+            root = answer[1]
+            parts = root.find(
+                "{http://lib.uchicago.edu/ldr}response/" +
+                "{http://lib.uchicago.edu/ldr}metadata"
+            )
+            parts = [x for x in parts if x.tag == "{http://purl.org/dc/elements/1.1/}hasPart"]
+            check = answer[0]
+            print(parts)
+            check &= len(parts) >= 1
+            print(check)
+        else:
+            check = answer[0]
+        return self.assertTrue(check)
 
     def test_get_nested_collection_list(self):
         """test endpoint /collections/[collection identifier]/[sub-collection identifier]
@@ -278,19 +160,26 @@ class TestToSpecOnePointO(unittest.TestCase):
             </response>
         </output>
         """
-        response = self.app.get("/collections/testTwo/TestThree")
-        if self._convert_response_to_xml(response.data):
-            root = self._convert_response_to_xml(response.data)
-            first_checks = self._universal_output_testing(root)
-            isPartOf = root.findall(
-                "{http://lib.uchicago.edu/ldr}response/{http://lib.uchicago.edu/lib}metadata/{http://purl.org/dc/elements/1.1/}isPartOf"
-                )
-            return self.assertTrue(first_checks) & self.assertGreaterEqual(isPartOf.count(), 1)
+        response = self.app.get("/collections/collection2")
+        answer = self._opening_check(response)
+        if answer[1]:
+            root = answer[1]
+            parts = root.find(
+                    "{http://lib.uchicago.edu/ldr}response/" +
+                    "{http://lib.uchicago.edu/ldr}metadata"
+            )
+            print(parts)
+            parts = [x for x in parts if x.tag == "{http://purl.org/dc/elements/1.1/}hasPart"]
+            print(parts)
+            check = answer[0]
+            check &= len(parts) >= 1
+            print(check)
         else:
-            return self.assertTrue(False)
+            check = answer[0]
+        return self.assertTrue(check)
 
-    def test_get_extension_list(self):
-        """test endpoint /collection/[collection identifier]/extensions
+    def test_get_double_nested_collection_list(self):
+        """test endpoint /collections/[collection identifier]/[sub-collection identifier]
 
         should return output that looks like:
 
@@ -308,20 +197,24 @@ class TestToSpecOnePointO(unittest.TestCase):
             </response>
         </output>
         """
-        response = self.app.get("/collection/testOne/extensions")
-        if self._convert_response_to_xml(response.data):
-            root = self._convert_response_to_xml(response.data)
-            first_checks = self._universal_output_testing(root)
-            relations = root.findall(
-                "{http://lib.uchicago.edu/ldr}response/{http://lib.uchicago.edu/lib}metadata/{http://purl.org/dc/elements/1.1/}relation"
-                )
-            return self.assertTrue(first_checks) & self.assertGreaterEqual(relations.count(), 1)
+        response = self.app.get("/collections/collection2-subcollection1")
+        answer = self._opening_check(response)
+        if answer[1]:
+            root = answer[1]
+            parts = root.find(
+                    "{http://lib.uchicago.edu/ldr}response/" +
+                    "{http://lib.uchicago.edu/ldr}metadata"
+            )
+            print(parts)
+            print(ElementTree.tostring(root))
+            parts = [x for x in parts]
+            print(parts)
+            check = answer[0]
+            check &= len(parts) >= 1
+            print(check)
         else:
-            return self.assertTrue(False)
-
-    # End of aggregate endpoint tests
-
-    # Start of atomic endpoint tests
+            check = answer[0]
+        return self.assertTrue(check)
 
     def test_get_core_metadata(self):
         """test endpoint /collection/[collection identifier]/core
@@ -346,121 +239,76 @@ class TestToSpecOnePointO(unittest.TestCase):
             </response>
         </output>
         """
-        response = self.app.get("/collection/testOne/core")
-        if self._convert_response_to_xml(response.data):
-            root = self._convert_response_to_xml(response.data)
-            first_checks = self._universal_output_testing(root)
-            title = True if root.findall(
-                "{http://lib.uchicago.edu/ldr}response/{http://lib.uchicago.edu/ldr}metadata/{http://purl.org/dc/elements/1.1/}title"
-                ).count() == 1 else False
-            identifier = True if root.findall(
-                "{http://lib.uchicago.edu/ldr}response/{http://lib.uchicago.edu/ldr}metadata/{http://purl.org/dc/elements/1.1/}date"
-                ).count() == 1 else False
-            return self.assertTrue(first_checks) & self.assertTrue(title) & self.assertTrue(identifier)
+        response = self.app.get("/collection/collection2-subcollection1/core")
+        answer = self._opening_check(response)
+        if answer[1]:
+            root = answer[1]
+            metadata = root.find(
+                        "{http://lib.uchicago.edu/ldr}response/" +
+                        "{http://lib.uchicago.edu/ldr}metadata"
+            )
+            identifier = [x for x in metadata if x.tag == "{http://purl.org/dc/elements/1.1/}identifier"]
+            title =  [x for x in metadata if x.tag == "{http://purl.org/dc/elements/1.1/}title"]
+            check = answer[0]
+            check &= len(identifier) >= 1
+            check &= len(title) >= 1
         else:
-            return self.assertTrue(False)
+            check = answer[1]
+        return self.assertTrue(check)
+        #     identifier = True if root.findall(
+        #         "{http://lib.uchicago.edu/ldr}response/{http://lib.uchicago.edu/ldr}metadata/{http://purl.org/dc/elements/1.1/}date"
+        #         ).count() == 1 else False
+        #     return self.assertTrue(first_checks) & self.assertTrue(title) & self.assertTrue(identifier)
+        # else:
+        #     return self.assertTrue(False)
+
+    def test_get_extension_list(self):
+        """test endpoint /collection/[collection identifier]/extensions
+
+        should return output that looks like:
+
+        <output>
+            <request/>
+            <requestReceivedTimeStamp/>
+            <responseSentTimeStamp/>
+            <responseType/>
+            <response>
+                <metadata>
+                    <dc:relation xsi:type="dcterms:URI"/>
+                    <dc:relation xsi:type="dcterms:URI"/>
+                    <dc:relation xsi:type="dcterms:URI"/>
+                </metadata>
+            </response>
+        </output>
+        """
+        response = self.app.get("/collection/collection2-subcollection1-item1/proxies")
+        answer = self._opening_check(response)
+        if answer[1]:
+            root = answer[1]
+            metadata = root.find(
+                        "{http://lib.uchicago.edu/ldr}response/" +
+                        "{http://lib.uchicago.edu/ldr}metadata"
+            )
+            rels = [x for x in metadata if x.tag == "{http://purl.org/dc/elements/1.1/}relation"]
+            check = answer[0]
+            check &= len(rels) >= 1
+        else:
+            check = answer[0]
+        return self.assertTrue(check)
 
     def test_get_an_extension(self):
-        """test endpoint /collection/[collection identifier]/extension/structuralMetadata
-
-        should return output that looks like:
-
-        <output>
-            <request/>
-            <requestReceivedTimeStamp/>
-            <responseSentTimeStamp/>
-            <responseType/>
-            <response>
-                <extension>
-                    <type>text</type>
-                    <name>structural metadata</name>
-                    <data>
-                        <!-- CDATA here -->
-                    </data>
-                </extension>
-            </response>
-        </output>
-        """
-        response = self.app.post("/collection/testFive/extensions/structuralMetadata")
-        if self._convert_response_to_xml(response.data):
-            root = self._convert_response_to_xml(response.data)
-            first_checks = self._universal_output_testing(root)
-            extension = root.findall("{http://lib.uchicago.edu/ldr}response/{http://lib.uchicago.edu/ldr}extension")
-            ext_type = extension.find("{http://lib.uchicago.edu/ldr}type")
-            ext_type_valid = True if ext_type.text in ['text','json','xml'] else False
-            ext_name = True if extension.find("{http://lib.uchicago.edu/ldr}name") else False
-            data = True if extension.find("{http://lib.uchicago.edu/ldr}data") else False
-            return first_checks & self.assertTrue(ext_type_valid) & self.assertTrue(ext_name) & self.assertTrue(data)
+        response = self.app.get("/collection/collection2-subcollection1-item1/proxies/collection2-subcollection1-item1-mods")
+        if response.status_code:
+            data = response.get_data()
+            check = True
+            try:
+                b64decode(data)
+                check &= True
+            except ValueError:
+                check &= False
         else:
-            return self.assertTrue(False)
-
-    # End of atomic endpoint tests
-
-    # Start of contextual endpoint tests
-
-    def test_root_endpoint_context(self):
-        """test endpoint /
-
-        should return output that looks like:
-
-        <output>
-            <request/>
-            <requestReceivedTimeStamp/>
-            <responseSentTimeStamp/>
-            <responseType/>
-            <response>
-                <metadata>
-                    <dc:relation xsi:type="dcterms:URI">/collections</dc:relation>
-                </metadata>
-            </response>
-        </output>
-        """
-        response = self.app.get("/")
-        if self._convert_response_to_xml(response.data):
-            root = self._convert_response_to_xml(response.data)
-            first_checks = self._universal_output_testing(root)
-            relations = root.findall(
-                "{http://lib.uchicago.edu/ldr}response/{http://lib.uchicago.edu/lib}metadata/{http://purl.org/dc/elements/1.1/}relation"
-                )
-            return first_checks & self.assertGreaterEqual(relations.count(), 1)
-        else:
-            return self.assertTrue(False)
-
-    def test_a_collection_context(self):
-        """test endpoint /collection/[collection identifier]
-
-        should return output that looks like:
-
-        <output>
-            <request/>
-            <requestReceivedTimeStamp/>
-            <responseSentTimeStamp/>
-            <responseType/>
-            <response>
-                <metadata>
-                    <dc:relation xsi:type="dcterms:URI">/collection/[collection identifier]/core</dc:relation>
-                    <dc:relation xsi:type="dcterms:URI">/collection/[collection identifier/extensions</dc:relation>
-
-                </metadata>
-            </response>
-        </output>
-
-                </metadata>
-            </response>
-        </output>
-        """
-        response = self.app.get("/")
-        if self._convert_response_to_xml(response.data):
-            root = self._convert_response_to_xml(response.data)
-            first_checks = self._universal_output_testing(root)
-            relations = root.findall(
-                "{http://lib.uchicago.edu/ldr}response/{http://lib.uchicago.edu/lib}metadata/{http://purl.org/dc/elements/1.1/}relation"
-                )
-            return first_checks & self.assertGreaterEqual(relations.count(), 1)
-        else:
-            return False
-
-    # End of contextual endpoint tests
+            check = False
+        return self.assertTrue(check)
 
 if __name__ == '__main__':
     unittest.main()

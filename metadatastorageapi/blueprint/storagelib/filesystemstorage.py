@@ -1,6 +1,6 @@
 from os import path
-from xml.etree import ElementTree
 from sys import stderr
+from xml.etree import ElementTree
 
 class FileSystemStorage(object):
     def __init__(self, filepath):
