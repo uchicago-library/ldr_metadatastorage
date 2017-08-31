@@ -1,0 +1,184 @@
+@prefix dc: <http://purl.org/dc/elements/1.1/>.
+@prefix dcterms: <http://purl.org/dc/terms/>.
+@prefix edm: <http://www.europeana.eu/schemas/edm/>.
+@prefix ore: <http://www.openarchives.org/ore/terms/>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@base <http://repository.lib.uchicago.edu/>.
+
+### To validate: rapper -r -i turtle -c collections.ttl  
+### To produce RDF/XML: rapper -r -i turtle collections.ttl > collections.rdf.xml (independent triples) OR 
+###                     rapper -r -i turtle collections.ttl -o rdfxml > collections.rdf.xml (all triples within a root element)
+
+### Note: Use a controlled vocablulary for dc:type. See
+### http://dublincore.org/documents/dcmi-type-vocabulary/#H7 .
+
+
+## root collection
+
+<uri/for/collection>
+    dc:title "Library Digital Repository";
+    dc:identifier "ldr";
+    dc:hasPart <uri/for/collection1>;
+    dc:hasPart <uri/for/collection2>;
+    dc:hasPart <uri/for/collection3>;
+    dc:type "Collection"; # was "core". These should be drawn from a controlled type vocabulary list. Look at 
+a edm:ProvidedCHO.
+
+<uri/for/collection/aggregation>
+    dcterms:created "[YYYY]-[MM]-[DD]T[HH]:[MM]:[SS]"^^xsd:dateTime; # dcterms:created is machine-generated
+    dcterms:modified "[YYYY]-[MM]-[DD]T[HH]:[MM]:[SS]"^^xsd:dateTime; # dcterms:modified is machine-generated
+    edm:aggregatedCHO <uri/for/collection>;
+    edm:dataProvider "University of Chicago Library";
+    edm:dataProvider "University of Chicago Library";
+    edm:isShownAt <http://repository.lib.uchicago.edu/uri/for/collection3/subcollection1/>;
+    edm:object <uri/for/collection2/subcollection1/logo.jpg>;
+    edm:provider "University of Chicago Library";
+    edm:rights <http://creativecommons.org/licenses/by-nc/4.0/>;
+a ore:Aggregation.
+
+<uri/for/collection2/subcollection2>
+    dc:title "Collection Two Sub-collection Two";
+    dc:identifier "collection2/subcollection2";
+    dc:isPartOf <uri/for/collection2>;
+    dc:hasPart <uri/for/collection2/subcollection2/item1>;
+    dc:hasPart <uri/for/collection2/subcollection2/item2>;
+    dc:type "Collection";
+    edm:type "Collection";
+a edm:ProvidedCHO.
+
+<uri/for/collection2/subcollection2/aggregation>
+    dcterms:created "[YYYY]-[MM]-[DD]T[HH]:[MM]:[SS]"^^xsd:dateTime; # dcterms:created is machine-generated
+    dcterms:modified "[YYYY]-[MM]-[DD]T[HH]:[MM]:[SS]"^^xsd:dateTime; # dcterms:modified is machine-generated
+    edm:aggregatedCHO <uri/for/collection2/subcollection2>;
+    edm:dataProvider "University of Chicago Library";
+    edm:isShownAt <http://repository.lib.uchicago.edu/uri/for/collection2/subcollection2/>;
+    edm:object <uri/for/collection2/subcollection1/logo.jpg>;
+    edm:provider "University of Chicago Library";
+    edm:rights <http://creativecommons.org/licenses/by-nc/4.0/>;
+a ore:Aggregation.
+
+<uri/for/collection2/subcollection2>
+    dc:title "Collection Two Sub-collection Two";
+    dc:identifier "collection2/subcollection2";
+    dc:isPartOf <uri/for/collection2>;
+    dc:type "Collection";
+    edm:type "Collection";
+a edm:ProvidedCHO.
+
+<uri/for/collection2/subcollection2/aggregation>
+    dcterms:created "[YYYY]-[MM]-[DD]T[HH]:[MM]:[SS]"^^xsd:dateTime; # dcterms:created is machine-generated
+    dcterms:modified "[YYYY]-[MM]-[DD]T[HH]:[MM]:[SS]"^^xsd:dateTime; # dcterms:modified is machine-generated
+    edm:aggregatedCHO <uri/for/collection2/subcollection2>;
+    edm:dataProvider "University of Chicago Library";
+    edm:isShownAt <http://repository.lib.uchicago.edu/uri/for/collection2/subcollection2/>;
+    edm:object <uri/for/collection2/subcollection2/logo.jpg>;
+    edm:provider "University of Chicago Library";
+    edm:rights <http://creativecommons.org/licenses/by-nc/4.0/>;
+a ore:Aggregation.
+
+## end of third-level collections
+
+## start of leaf collections
+
+<persistent/URL/for/http://dummy-images.com/maps/dummy-375x500-WorldMap1689.jpg>
+    dc:title "An Item in Collection Two";
+    dc:identifier "collection2/item1";
+    dc:date "2000"^^xsd:dateTime;
+    dc:subject "elephants";
+    dc:subject "tea kettle";
+    dc:isPartOf <uri/for/collection/collection2>;
+    dc:type "Image"; 
+    edm:type "Image"; 
+a edm:ProvidedCHO.
+
+<persistent/URL/for/http://dummy-images.com/maps/dummy-375x500-WorldMap1689.jpg/aggregation>
+    dcterms:created "[YYYY]-[MM]-[DD]T[HH]:[MM]:[SS]"^^xsd:dateTime; # dcterms:created is machine-generated
+    dcterms:modified "[YYYY]-[MM]-[DD]T[HH]:[MM]:[SS]"^^xsd:dateTime; # dcterms:modified is machine-generated
+    edm:aggregatedCHO <uri/for/collection2/item1>;
+    edm:dataProvider "University of Chicago Library";
+    edm:isShownBy <persistent/URL/for/http://dummy-images.com/maps/dummy-375x500-WorldMap1689.jpg>;
+    ## SCALE THE FOLLOWING DOWN SUITABLY FOR A THUMBNAIL
+    edm:object <persistent/URL/for/http://dummy-images.com/maps/dummy-375x500-WorldMap1689[dynamicallyScaled].jpg>; 
+    edm:provider "University of Chicago Library";
+    edm:rights <http://creativecommons.org/licenses/by-nc/4.0/>;
+a ore:Aggregation.
+
+# THIS CAN'T BE AN ITEM: IT HAS TWO PARTS. IN EAD/SEPIADES TERMS, at most it can be a folder.
+# 
+# <uri/for/collection2/subcollection1/item1>
+#     dc:title "A Test Item";
+#     dc:creator "Doe, Jane";
+#     dc:date "2017"^^xsd:dateTime;
+#     dc:identifier "collection2/subcollection1/item1";
+#     dc:subject "elephants";
+#     dc:isPartOf <uri/for/collection/collection2/subcollection1>;
+#     dc:hasPart <http://dummy-images.com/people/dummy-683x1024-WeekiWacheeSpring.jpg>;
+#     dc:hasPart <http://dummy-images.com/people/dummy-454x280-Musicians.jpg>;
+#     dc:type ""; # Pick a type from http://dublincore.org/documents/dcmi-type-vocabulary/#H7 and capitalizeit between the quotation marks
+#     edm:type ""; # Duplicate the above here.
+# a edm:ProvidedCHO.
+
+# THIS CAN'T BE AN ITEM: IT HAS TWO PARTS. IN EAD/SEPIADES TERMS, at most it can be a folder.
+# 
+# <uri/for/collection2/subcollection1/item2>
+#     dc:title "An Item";
+#     dc:creator "Smith, John";
+#     dc:date "2017"^^xsd:dateTime;
+#     dc:identifier "collection2/subcollection1/item2";
+#     dc:subject "tea kettle";
+#     dc:isPartOf <uri/for/collection/collection2/subcollection1>;
+#     dc:hasPart <http://dummy-images.com/abstract/dummy-375x500-Bottles.jpg>;
+#     dc:hasPart <http://dummy-images.com/abstract/dummy-540x960-Utrecht.jpg>;
+#     dc:type "Image"; # Pick a type from http://dublincore.org/documents/dcmi-type-vocabulary/#H7 and capitalizeit between the quotation marks
+#     edm:type "Image"; # Duplicate the above here.
+# a edm:ProvidedCHO.
+# ## end of leaf collections
+
+## start of proxies for collections
+<uri/for/collection2/subcollection1/item1/proxy>
+    dc:identifier "collection2/subcollection1/item1/proxy"; 
+    dc:description """TG9yZW0gaXBzdW0gZG9sb3Igc2l0IGFtZXQsIGNvbnNlY3RldHVyIGFkaXBpc2NpbmcgZWxpdC4gSW4gbGFjaW5pYSBzb2xsaWNpdHVkaW4gcmlzdXMgaW4gYmxhbmRp
+dC4gU3VzcGVuZGlzc2UgdWxsYW1jb3JwZXIgZGlnbmlzc2ltIGxlbywgbmVjIHBlbGxlbnRlc3F1ZSBuaXNsIHVsdHJpY2llcyBhYy4gTnVsbGEgZmFjaWxpc2kuIFNlZC
+B2ZWwgZmV1Z2lhdCBsaWd1bGEsIGEgaWFjdWxpcyBsZW8uIFF1aXNxdWUgbWFsZXN1YWRhIGF1Z3VlIGF0IHRyaXN0aXF1ZSBkYXBpYnVzLiBWZXN0aWJ1bHVtIGxvcmVt
+IGR1aSwgaW50ZXJkdW0gbmVjIHNjZWxlcmlzcXVlIHNpdCBhbWV0LCBzYWdpdHRpcyBpZCBuaXNsLiBNb3JiaSBvcm5hcmUgdWx0cmljaWVzIHRyaXN0aXF1ZS4gTnVuYy
+Bub24gZGlnbmlzc2ltIG9yY2ksIG5vbiBlZ2VzdGFzIGRpYW0uIEV0aWFtIGVnZXQgZG9sb3IgcHJldGl1bSwgdGluY2lkdW50IG1hdXJpcyBhLCBkYXBpYnVzIHR1cnBp
+cy4gUGVsbGVudGVzcXVlIG1vbGVzdGllIG9yY2kgbGFjaW5pYSBsb3JlbSBwcmV0aXVtIGFsaXF1ZXQuIFN1c3BlbmRpc3NlIGRpZ25pc3NpbSBuaWJoIHZlbCBhdWd1ZS
+B0aW5jaWR1bnQsIHZlbCBmaW5pYnVzIGRvbG9yIHZ1bHB1dGF0ZS4NCg0KU2VkIHRpbmNpZHVudCBzYXBpZW4gbmVjIGxhb3JlZXQgdmVuZW5hdGlzLiBGdXNjZSBlZ2V0
+IGVyb3MgaWQgbWkgc2VtcGVyIGFjY3Vtc2FuLiBQcmFlc2VudCBhIGxpYmVybyBmZXJtZW50dW0gc2VtIHRlbXB1cyBsdWN0dXMuIEV0aWFtIGF0IHZlaGljdWxhIGFyY3
+UuIE51bGxhbSB1dCBwdXJ1cyBpbiBpcHN1bSBjb25ndWUgYWxpcXVhbS4gU3VzcGVuZGlzc2UgYW50ZSBhbnRlLCB1bHRyaWNpZXMgbm9uIHRvcnRvciBhdCwgZGljdHVt
+IHNhZ2l0dGlzIGVsaXQuIFN1c3BlbmRpc3NlIG1vbGVzdGllIHRlbGx1cyBpbiBvcmNpIHRyaXN0aXF1ZSBhbGlxdWFtLiBQcm9pbiByaXN1cyBsYWN1cywgZXVpc21vZC
+BzYWdpdHRpcyBlbmltIHNlZCwgcGxhY2VyYXQgdHJpc3RpcXVlIGZlbGlzLg0KDQpTZWQgcGhhcmV0cmEgY29udmFsbGlzIHBvcnRhLiBVdCBjb21tb2RvIGlkIGxpZ3Vs
+YSBpZCBjb25zZXF1YXQuIFBlbGxlbnRlc3F1ZSBub24gbmlzbCBsdWN0dXMgdHVycGlzIHVsbGFtY29ycGVyIGlhY3VsaXMuIENyYXMgcGhhcmV0cmEgaWFjdWxpcyBsb3
+JlbSBldSBhbGlxdWV0LiBBZW5lYW4gZXUgcmlzdXMgZXJhdC4gQWxpcXVhbSB2ZXN0aWJ1bHVtIGxlY3R1cyBzZWQgaGVuZHJlcml0IHZlc3RpYnVsdW0uIFNlZCBlbGVt
+ZW50dW0gYWNjdW1zYW4gdmVzdGlidWx1bS4gUGhhc2VsbHVzIHNpdCBhbWV0IHZpdmVycmEgZG9sb3IuIER1aXMgYWMgbGFjdXMgZXUgbG9yZW0gZWxlbWVudHVtIGZhdW
+NpYnVzLiBEb25lYyBpZCBleCBtb2xsaXMgYW50ZSBtb2xlc3RpZSB0aW5jaWR1bnQuIEFsaXF1YW0gZXJhdCB2b2x1dHBhdC4gTnVsbGFtIG9yY2kgbGliZXJvLCBzdXNj
+aXBpdCBxdWlzIGNvbnNlY3RldHVyIGluLCBlZmZpY2l0dXIgbW9sZXN0aWUgZmVsaXMuIEN1cmFiaXR1ciBpZCBwdXJ1cyB2ZWxpdC4NCg0KU2VkIHNpdCBhbWV0IHJob2
+5jdXMgdXJuYSwgdXQgc2FnaXR0aXMgbnVuYy4gRXRpYW0gc2l0IGFtZXQgbG9yZW0gdmVoaWN1bGEsIGRpZ25pc3NpbSBvZGlvIHV0LCBwZWxsZW50ZXNxdWUgdG9ydG9y
+LiBJbnRlZ2VyIGxvYm9ydGlzIHF1aXMgYXJjdSB1dCBwb3J0dGl0b3IuIENyYXMgZmV1Z2lhdCBvcm5hcmUgbG9yZW0sIHZpdGFlIHBvc3VlcmUgdXJuYSBmYWNpbGlzaX
+MgZXUuIE51bGxhbSBtb2xlc3RpZSB2YXJpdXMgY29udmFsbGlzLiBBZW5lYW4gdGVtcHVzIG5pc2wgZXQgaXBzdW0gZXVpc21vZCwgdmVsIHBvcnR0aXRvciBwdXJ1cyBz
+dXNjaXBpdC4gUHJhZXNlbnQgbWFsZXN1YWRhIG9ybmFyZSBibGFuZGl0LiBBZW5lYW4gcXVpcyBwb3J0dGl0b3IgYW50ZSwgc2VkIHBvc3VlcmUgbWF1cmlzLiBEb25lYy
+Bub24gbWFnbmEgc2l0IGFtZXQgZGlhbSBlbGVtZW50dW0gbG9ib3J0aXMuIFByYWVzZW50IGVnZXQgbWFnbmEgZ3JhdmlkYSwgY29uc2VxdWF0IGxpZ3VsYSBhdCwgYXVj
+dG9yIHR1cnBpcy4gUGhhc2VsbHVzIHRlbXBvciBvcm5hcmUgZmluaWJ1cy4gVmVzdGlidWx1bSB1dCBlbGVtZW50dW0gZXJvcy4gRnVzY2UgZWdlc3RhcyBxdWlzIGxpZ3
+VsYSBxdWlzIHBsYWNlcmF0LiBDdXJhYml0dXIgc2l0IGFtZXQgb2RpbyBpbiBuaXNsIGNvbmRpbWVudHVtIGludGVyZHVtLiBEdWlzIGV1aXNtb2QgYWxpcXVldCBuZXF1
+ZSB1dCBzY2VsZXJpc3F1ZS4NCg0KRXRpYW0gdHJpc3RpcXVlIHBoYXJldHJhIGhlbmRyZXJpdC4gTWFlY2VuYXMgdGVtcG9yLCBzZW0gcXVpcyBwb3J0dGl0b3IgZGFwaW
+J1cywgbG9yZW0gdG9ydG9yIGF1Y3RvciBsYWN1cywgc2l0IGFtZXQgdmVuZW5hdGlzIGp1c3RvIHNlbSBhIHJpc3VzLiBTdXNwZW5kaXNzZSB2aXRhZSBtYWxlc3VhZGEg
+bWV0dXMsIHZlbCBzY2VsZXJpc3F1ZSBlc3QuIEN1cmFiaXR1ciBzZWQgZmVsaXMgc2FwaWVuLiBBbGlxdWFtIHBvc3VlcmUsIG5pYmggYSB2dWxwdXRhdGUgaGVuZHJlcm
+l0LCBtZXR1cyBvZGlvIG1hbGVzdWFkYSBuaXNsLCB0cmlzdGlxdWUgZmFjaWxpc2lzIGVzdCBpcHN1bSBldCB2ZWxpdC4gRXRpYW0gYWMgZXN0IHF1YW0uIER1aXMgZGlh
+bSBuZXF1ZSwgYWxpcXVhbSBzYWdpdHRpcyBmYXVjaWJ1cyBldCwgY29uZGltZW50dW0gZXQgbG9yZW0uIFBoYXNlbGx1cyB2ZXN0aWJ1bHVtLCBkb2xvciBzZWQgZWxlaW
+ZlbmQgcG9ydGEsIGFudGUgcHVydXMgdm9sdXRwYXQgbWF1cmlzLCBpZCBwb3J0YSB0b3J0b3IganVzdG8gc2l0IGFtZXQgbmliaC4gTmFtIHNlbSByaXN1cywgdGluY2lk
+dW50IGV1IHJob25jdXMgdmVsLCBtYWxlc3VhZGEgbm9uIGxpZ3VsYS4gVmVzdGlidWx1bSBmYXVjaWJ1cyBoZW5kcmVyaXQgZGlhbSwgc2VkIGF1Y3RvciBlcmF0IHNhZ2
+l0dGlzIGFjLg=="""; # NOTICE THE """ around this because it breaks across lines!
+ore:proxyFor <uri/for/collection2/subcollection1/item1>;
+ore:proxyIn <uri/for/collection2/subcollection1/item1/aggregation>;
+a ore:Proxy. # omit dc:type for these
+
+<uri/for/collection2/subcollection1/item2/proxy>
+    dc:identifier "collection2/subcollection1/item2/proxy";
+    dc:description """IyBsb3JlbSBpcHN1bQ0KDQpmaWVsZCAxOiBzbWlsZXMNCmZpZWxkIDI6IGxhdWdodGVyDQpmaWVsZCAzOiBncmlucw0KZmllbGQgNDogYmx1
+c2hpbmc=""";  # NOTICE THE """ around this because it breaks across lines!
+ore:proxyFor <uri/for/collection2/subcollection1/item2>;
+ore:proxyIn <uri/for/collection2/subcollection1/item2/aggregation>;
+a ore:Proxy. # omit dc:type for these
+## end of proxies for collections
