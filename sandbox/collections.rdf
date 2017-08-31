@@ -1,210 +1,225 @@
 <?xml version="1.0" encoding="utf-8"?>
 <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:edm="http://www.europeana.eu/schemas/edm/" xmlns:ore="http://www.openarchives.org/ore/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:xsd="http://www.w3.org/2001/XMLSchema#">
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/uri/for/collection">
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/ldr">
     <dc:title>Library Digital Repository</dc:title>
   </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/uri/for/collection">
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/ldr">
     <dc:identifier>ldr</dc:identifier>
   </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/uri/for/collection">
-    <dc:hasPart rdf:resource="http://repository.lib.uchicago.edu/uri/for/collection1"/>
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/ldr">
+    <dc:hasPart rdf:resource="http://metadatastorage.lib.uchicago.edu/collection/collection1"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/uri/for/collection">
-    <dc:hasPart rdf:resource="http://repository.lib.uchicago.edu/uri/for/collection2"/>
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/ldr">
+    <dc:hasPart rdf:resource="http://metadatastorage.lib.uchicago.edu/collecton/collection2"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/uri/for/collection">
-    <dc:hasPart rdf:resource="http://repository.lib.uchicago.edu/uri/for/collection3"/>
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/ldr">
+    <dc:hasPart rdf:resource="http://metadatastorage.lib.uchicago.edu/collection/collection3"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/uri/for/collection">
-    <dc:type>Collection</dc:type>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/uri/for/collection">
-    <rdf:type rdf:resource="http://www.europeana.eu/schemas/edm/ProvidedCHO"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/uri/for/collection/aggregation">
-    <dcterms:created rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">[YYYY]-[MM]-[DD]T[HH]:[MM]:[SS]</dcterms:created>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/uri/for/collection/aggregation">
-    <dcterms:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">[YYYY]-[MM]-[DD]T[HH]:[MM]:[SS]</dcterms:modified>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/uri/for/collection/aggregation">
-    <edm:aggregatedCHO rdf:resource="http://repository.lib.uchicago.edu/uri/for/collection"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/uri/for/collection/aggregation">
-    <edm:dataProvider>University of Chicago Library</edm:dataProvider>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/uri/for/collection/aggregation">
-    <edm:dataProvider>University of Chicago Library</edm:dataProvider>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/uri/for/collection/aggregation">
-    <edm:isShownAt rdf:resource="http://repository.lib.uchicago.edu/uri/for/collection3/subcollection1/"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/uri/for/collection/aggregation">
-    <edm:object rdf:resource="http://repository.lib.uchicago.edu/uri/for/collection2/subcollection1/logo.jpg"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/uri/for/collection/aggregation">
-    <edm:provider>University of Chicago Library</edm:provider>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/uri/for/collection/aggregation">
-    <edm:rights rdf:resource="http://creativecommons.org/licenses/by-nc/4.0/"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/uri/for/collection/aggregation">
-    <rdf:type rdf:resource="http://www.openarchives.org/ore/terms/Aggregation"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/uri/for/collection2/subcollection2">
-    <dc:title>Collection Two Sub-collection Two</dc:title>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/uri/for/collection2/subcollection2">
-    <dc:identifier>collection2/subcollection2</dc:identifier>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/uri/for/collection2/subcollection2">
-    <dc:isPartOf rdf:resource="http://repository.lib.uchicago.edu/uri/for/collection2"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/uri/for/collection2/subcollection2">
-    <dc:hasPart rdf:resource="http://repository.lib.uchicago.edu/uri/for/collection2/subcollection2/item1"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/uri/for/collection2/subcollection2">
-    <dc:hasPart rdf:resource="http://repository.lib.uchicago.edu/uri/for/collection2/subcollection2/item2"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/uri/for/collection2/subcollection2">
-    <dc:type>Collection</dc:type>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/uri/for/collection2/subcollection2">
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/ldr">
     <edm:type>Collection</edm:type>
   </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/uri/for/collection2/subcollection2">
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/ldr">
     <rdf:type rdf:resource="http://www.europeana.eu/schemas/edm/ProvidedCHO"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/uri/for/collection2/subcollection2/aggregation">
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/ldr/aggregation">
     <dcterms:created rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">[YYYY]-[MM]-[DD]T[HH]:[MM]:[SS]</dcterms:created>
   </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/uri/for/collection2/subcollection2/aggregation">
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/ldr/aggregation">
     <dcterms:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">[YYYY]-[MM]-[DD]T[HH]:[MM]:[SS]</dcterms:modified>
   </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/uri/for/collection2/subcollection2/aggregation">
-    <edm:aggregatedCHO rdf:resource="http://repository.lib.uchicago.edu/uri/for/collection2/subcollection2"/>
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/ldr/aggregation">
+    <edm:aggregatedCHO rdf:resource="http://metadatastorage.lib.uchicago.edu/collection/ldr"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/uri/for/collection2/subcollection2/aggregation">
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/ldr/aggregation">
     <edm:dataProvider>University of Chicago Library</edm:dataProvider>
   </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/uri/for/collection2/subcollection2/aggregation">
-    <edm:isShownAt rdf:resource="http://repository.lib.uchicago.edu/uri/for/collection2/subcollection2/"/>
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/ldr/aggregation">
+    <edm:isShownAt rdf:resource="http://metadatastorage.lib.uchicago.edu/collection/ldr"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/uri/for/collection2/subcollection2/aggregation">
-    <edm:object rdf:resource="http://repository.lib.uchicago.edu/uri/for/collection2/subcollection1/logo.jpg"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/uri/for/collection2/subcollection2/aggregation">
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/ldr/aggregation">
     <edm:provider>University of Chicago Library</edm:provider>
   </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/uri/for/collection2/subcollection2/aggregation">
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/ldr/aggregation">
     <edm:rights rdf:resource="http://creativecommons.org/licenses/by-nc/4.0/"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/uri/for/collection2/subcollection2/aggregation">
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/ldr/aggregation">
     <rdf:type rdf:resource="http://www.openarchives.org/ore/terms/Aggregation"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/uri/for/collection2/subcollection2">
-    <dc:title>Collection Two Sub-collection Two</dc:title>
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/collection2-subcollection1">
+    <dc:title>Collection Two Sub-collection One</dc:title>
   </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/uri/for/collection2/subcollection2">
-    <dc:identifier>collection2/subcollection2</dc:identifier>
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/collection2-subcollection1">
+    <dc:identifier>collection2-subcollection1</dc:identifier>
   </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/uri/for/collection2/subcollection2">
-    <dc:isPartOf rdf:resource="http://repository.lib.uchicago.edu/uri/for/collection2"/>
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/collection2-subcollection1">
+    <dc:isPartOf rdf:resource="http://metadatastorage.lib.uchicago.edu/collection-collection1"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/uri/for/collection2/subcollection2">
-    <dc:type>Collection</dc:type>
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/collection2-subcollection1">
+    <dc:hasPart rdf:resource="http://metadatastorage.lib.uchicago.edu/collection/collection2-subcollection1-item1"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/uri/for/collection2/subcollection2">
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/collection2-subcollection1">
+    <dc:hasPart rdf:resource="http://metadatastorage.lib.uchicago.edu/collection/collection2-subcollection1-item2"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/collection2-subcollection1">
     <edm:type>Collection</edm:type>
   </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/uri/for/collection2/subcollection2">
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/collection2-subcollection1">
     <rdf:type rdf:resource="http://www.europeana.eu/schemas/edm/ProvidedCHO"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/uri/for/collection2/subcollection2/aggregation">
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/collection2-subcollection1/aggregation">
     <dcterms:created rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">[YYYY]-[MM]-[DD]T[HH]:[MM]:[SS]</dcterms:created>
   </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/uri/for/collection2/subcollection2/aggregation">
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/collection2-subcollection1/aggregation">
     <dcterms:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">[YYYY]-[MM]-[DD]T[HH]:[MM]:[SS]</dcterms:modified>
   </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/uri/for/collection2/subcollection2/aggregation">
-    <edm:aggregatedCHO rdf:resource="http://repository.lib.uchicago.edu/uri/for/collection2/subcollection2"/>
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/collection2-subcollection1/aggregation">
+    <edm:aggregatedCHO rdf:resource="http://metadatastorage.lib.uchicago.edu/collection/collection2-subcollection1"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/uri/for/collection2/subcollection2/aggregation">
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/collection2-subcollection1/aggregation">
     <edm:dataProvider>University of Chicago Library</edm:dataProvider>
   </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/uri/for/collection2/subcollection2/aggregation">
-    <edm:isShownAt rdf:resource="http://repository.lib.uchicago.edu/uri/for/collection2/subcollection2/"/>
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/collection2-subcollection1/aggregation">
+    <edm:isShownAt rdf:resource="http://metadatastorage.lib.uchicago.edu/collection/collection2-subcollection1"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/uri/for/collection2/subcollection2/aggregation">
-    <edm:object rdf:resource="http://repository.lib.uchicago.edu/uri/for/collection2/subcollection2/logo.jpg"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/uri/for/collection2/subcollection2/aggregation">
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/collection2-subcollection1/aggregation">
     <edm:provider>University of Chicago Library</edm:provider>
   </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/uri/for/collection2/subcollection2/aggregation">
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/collection2-subcollection1/aggregation">
     <edm:rights rdf:resource="http://creativecommons.org/licenses/by-nc/4.0/"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/uri/for/collection2/subcollection2/aggregation">
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/collection2-subcollection1/aggregation">
     <rdf:type rdf:resource="http://www.openarchives.org/ore/terms/Aggregation"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/persistent/URL/for/http://dummy-images.com/maps/dummy-375x500-WorldMap1689.jpg">
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/collection2-subcollection1">
+    <dc:title>Collection Two Sub-collection Two</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/collection2-subcollection1">
+    <dc:identifier>collection2-subcollection2</dc:identifier>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/collection2-subcollection1">
+    <dc:isPartOf rdf:resource="http://metadatastorage.lib.uchicago.edu/collection/collection2"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/collection2-subcollection1">
+    <edm:type>Collection</edm:type>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/collection2-subcollection1">
+    <rdf:type rdf:resource="http://www.europeana.eu/schemas/edm/ProvidedCHO"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/collection2-subcollection2/aggregation">
+    <dcterms:created rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">[YYYY]-[MM]-[DD]T[HH]:[MM]:[SS]</dcterms:created>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/collection2-subcollection2/aggregation">
+    <dcterms:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">[YYYY]-[MM]-[DD]T[HH]:[MM]:[SS]</dcterms:modified>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/collection2-subcollection2/aggregation">
+    <edm:aggregatedCHO rdf:resource="http://metadatastorage.lib.uchicago.edu/collection/collection2-subcollection2"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/collection2-subcollection2/aggregation">
+    <edm:dataProvider>University of Chicago Library</edm:dataProvider>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/collection2-subcollection2/aggregation">
+    <edm:isShownAt rdf:resource="http://metadatastorage.lib.uchicago.edu/collection/collection2-subcollection2"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/collection2-subcollection2/aggregation">
+    <edm:provider>University of Chicago Library</edm:provider>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/collection2-subcollection2/aggregation">
+    <edm:rights rdf:resource="http://creativecommons.org/licenses/by-nc/4.0/"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/collection2-subcollection2/aggregation">
+    <rdf:type rdf:resource="http://www.openarchives.org/ore/terms/Aggregation"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/collection2-item1">
     <dc:title>An Item in Collection Two</dc:title>
   </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/persistent/URL/for/http://dummy-images.com/maps/dummy-375x500-WorldMap1689.jpg">
-    <dc:identifier>collection2/item1</dc:identifier>
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/collection2-item1">
+    <dc:identifier>collection2-item1</dc:identifier>
   </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/persistent/URL/for/http://dummy-images.com/maps/dummy-375x500-WorldMap1689.jpg">
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/collection2-item1">
     <dc:date rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2000</dc:date>
   </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/persistent/URL/for/http://dummy-images.com/maps/dummy-375x500-WorldMap1689.jpg">
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/collection2-item1">
     <dc:subject>elephants</dc:subject>
   </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/persistent/URL/for/http://dummy-images.com/maps/dummy-375x500-WorldMap1689.jpg">
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/collection2-item1">
     <dc:subject>tea kettle</dc:subject>
   </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/persistent/URL/for/http://dummy-images.com/maps/dummy-375x500-WorldMap1689.jpg">
-    <dc:isPartOf rdf:resource="http://repository.lib.uchicago.edu/uri/for/collection/collection2"/>
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/collection2-item1">
+    <dc:isPartOf rdf:resource="http://metadatastorage.lib.uchicago.edu/collection/collection2"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/persistent/URL/for/http://dummy-images.com/maps/dummy-375x500-WorldMap1689.jpg">
-    <dc:type>Image</dc:type>
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/collection2-item1">
+    <dc:hasPart rdf:resource="http://dummy-images.com/maps/dummy-375x500-WorldMap1689.jpg"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/persistent/URL/for/http://dummy-images.com/maps/dummy-375x500-WorldMap1689.jpg">
-    <edm:type>Image</edm:type>
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/collection2-item1">
+    <edm:type>Collection</edm:type>
   </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/persistent/URL/for/http://dummy-images.com/maps/dummy-375x500-WorldMap1689.jpg">
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/collection2-item1">
     <rdf:type rdf:resource="http://www.europeana.eu/schemas/edm/ProvidedCHO"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/persistent/URL/for/http://dummy-images.com/maps/dummy-375x500-WorldMap1689.jpg/aggregation">
-    <dcterms:created rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">[YYYY]-[MM]-[DD]T[HH]:[MM]:[SS]</dcterms:created>
+  <rdf:Description rdf:about="metadatstorage:collection/collection2-subcollection1-item1">
+    <dc:title>A Test Item</dc:title>
   </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/persistent/URL/for/http://dummy-images.com/maps/dummy-375x500-WorldMap1689.jpg/aggregation">
-    <dcterms:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">[YYYY]-[MM]-[DD]T[HH]:[MM]:[SS]</dcterms:modified>
+  <rdf:Description rdf:about="metadatstorage:collection/collection2-subcollection1-item1">
+    <dc:creator>Doe, Jane</dc:creator>
   </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/persistent/URL/for/http://dummy-images.com/maps/dummy-375x500-WorldMap1689.jpg/aggregation">
-    <edm:aggregatedCHO rdf:resource="http://repository.lib.uchicago.edu/uri/for/collection2/item1"/>
+  <rdf:Description rdf:about="metadatstorage:collection/collection2-subcollection1-item1">
+    <dc:date rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2017</dc:date>
   </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/persistent/URL/for/http://dummy-images.com/maps/dummy-375x500-WorldMap1689.jpg/aggregation">
-    <edm:dataProvider>University of Chicago Library</edm:dataProvider>
+  <rdf:Description rdf:about="metadatstorage:collection/collection2-subcollection1-item1">
+    <dc:identifier>collection2-subcollection1-item1</dc:identifier>
   </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/persistent/URL/for/http://dummy-images.com/maps/dummy-375x500-WorldMap1689.jpg/aggregation">
-    <edm:isShownBy rdf:resource="http://repository.lib.uchicago.edu/persistent/URL/for/http://dummy-images.com/maps/dummy-375x500-WorldMap1689.jpg"/>
+  <rdf:Description rdf:about="metadatstorage:collection/collection2-subcollection1-item1">
+    <dc:subject>elephants</dc:subject>
   </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/persistent/URL/for/http://dummy-images.com/maps/dummy-375x500-WorldMap1689.jpg/aggregation">
-    <edm:object rdf:resource="http://repository.lib.uchicago.edu/persistent/URL/for/http://dummy-images.com/maps/dummy-375x500-WorldMap1689[dynamicallyScaled].jpg"/>
+  <rdf:Description rdf:about="metadatstorage:collection/collection2-subcollection1-item1">
+    <dc:isPartOf rdf:resource="metadatstorage:collection/collection2-subcollection1"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/persistent/URL/for/http://dummy-images.com/maps/dummy-375x500-WorldMap1689.jpg/aggregation">
-    <edm:provider>University of Chicago Library</edm:provider>
+  <rdf:Description rdf:about="metadatstorage:collection/collection2-subcollection1-item1">
+    <dc:hasPart rdf:resource="http://dummy-images.com/maps/dummy-683x1024-WeekiWacheeSpring.jpg"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/persistent/URL/for/http://dummy-images.com/maps/dummy-375x500-WorldMap1689.jpg/aggregation">
-    <edm:rights rdf:resource="http://creativecommons.org/licenses/by-nc/4.0/"/>
+  <rdf:Description rdf:about="metadatstorage:collection/collection2-subcollection1-item1">
+    <dc:hasPart rdf:resource="http://dummy-images.com/maps/dummy-454x280-Musicians.jpg"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/persistent/URL/for/http://dummy-images.com/maps/dummy-375x500-WorldMap1689.jpg/aggregation">
-    <rdf:type rdf:resource="http://www.openarchives.org/ore/terms/Aggregation"/>
+  <rdf:Description rdf:about="metadatstorage:collection/collection2-subcollection1-item1">
+    <edm:type>Collection</edm:type>
   </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/uri/for/collection2/subcollection1/item1/proxy">
-    <dc:identifier>collection2/subcollection1/item1/proxy</dc:identifier>
+  <rdf:Description rdf:about="metadatstorage:collection/collection2-subcollection1-item1">
+    <rdf:type rdf:resource="http://www.europeana.eu/schemas/edm/ProvidedCHO"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/uri/for/collection2/subcollection1/item1/proxy">
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/collection2-subcollection1-item2">
+    <dc:title>An Item</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/collection2-subcollection1-item2">
+    <dc:creator>Smith, John</dc:creator>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/collection2-subcollection1-item2">
+    <dc:date rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2017</dc:date>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/collection2-subcollection1-item2">
+    <dc:identifier>collection2-subcollection1-item2</dc:identifier>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/collection2-subcollection1-item2">
+    <dc:subject>tea kettle</dc:subject>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/collection2-subcollection1-item2">
+    <dc:isPartOf rdf:resource="http://metadatastorage.lib.uchicago.edu/collection/collection2-subcollection1"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/collection2-subcollection1-item2">
+    <dc:hasPart rdf:resource="http://dummy-images.com/abstract/dummy-375x500-Bottles.jpg"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/collection2-subcollection1-item2">
+    <dc:hasPart rdf:resource="http://dummy-images.com/abstract/dummy-540x960-Utrecht.jpg"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/collection2-subcollection1-item2">
+    <edm:type>Collection</edm:type>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/collection2-subcollection1-item2">
+    <rdf:type rdf:resource="http://www.europeana.eu/schemas/edm/ProvidedCHO"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/collection2-subcollection1-item1-mods">
+    <dc:identifier>collection2-subcollection1-item1-mods</dc:identifier>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/collection2-subcollection1-item1-mods">
     <dc:description>TG9yZW0gaXBzdW0gZG9sb3Igc2l0IGFtZXQsIGNvbnNlY3RldHVyIGFkaXBpc2NpbmcgZWxpdC4gSW4gbGFjaW5pYSBzb2xsaWNpdHVkaW4gcmlzdXMgaW4gYmxhbmRp
 dC4gU3VzcGVuZGlzc2UgdWxsYW1jb3JwZXIgZGlnbmlzc2ltIGxlbywgbmVjIHBlbGxlbnRlc3F1ZSBuaXNsIHVsdHJpY2llcyBhYy4gTnVsbGEgZmFjaWxpc2kuIFNlZC
 B2ZWwgZmV1Z2lhdCBsaWd1bGEsIGEgaWFjdWxpcyBsZW8uIFF1aXNxdWUgbWFsZXN1YWRhIGF1Z3VlIGF0IHRyaXN0aXF1ZSBkYXBpYnVzLiBWZXN0aWJ1bHVtIGxvcmVt
@@ -237,29 +252,29 @@ ZlbmQgcG9ydGEsIGFudGUgcHVydXMgdm9sdXRwYXQgbWF1cmlzLCBpZCBwb3J0YSB0b3J0b3IganVzdG
 dW50IGV1IHJob25jdXMgdmVsLCBtYWxlc3VhZGEgbm9uIGxpZ3VsYS4gVmVzdGlidWx1bSBmYXVjaWJ1cyBoZW5kcmVyaXQgZGlhbSwgc2VkIGF1Y3RvciBlcmF0IHNhZ2
 l0dGlzIGFjLg==</dc:description>
   </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/uri/for/collection2/subcollection1/item1/proxy">
-    <ore:proxyFor rdf:resource="http://repository.lib.uchicago.edu/uri/for/collection2/subcollection1/item1"/>
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/collection2-subcollection1-item1-mods">
+    <ore:proxyFor rdf:resource="http://metadatastorage.lib.uchicago.edu/collection/collection2-subcollection1-item1"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/uri/for/collection2/subcollection1/item1/proxy">
-    <ore:proxyIn rdf:resource="http://repository.lib.uchicago.edu/uri/for/collection2/subcollection1/item1/aggregation"/>
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/collection2-subcollection1-item1-mods">
+    <ore:proxyIn rdf:resource="http://metadatastorage.lib.uchicago.edu/collection/collection2-subcollection1-item1/aggregation"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/uri/for/collection2/subcollection1/item1/proxy">
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/collection2-subcollection1-item1-mods">
     <rdf:type rdf:resource="http://www.openarchives.org/ore/terms/Proxy"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/uri/for/collection2/subcollection1/item2/proxy">
-    <dc:identifier>collection2/subcollection1/item2/proxy</dc:identifier>
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/collection2-subcollection1-item2-marc">
+    <dc:identifier>collection2-subcollection1-item2-marc</dc:identifier>
   </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/uri/for/collection2/subcollection1/item2/proxy">
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/collection2-subcollection1-item2-marc">
     <dc:description>IyBsb3JlbSBpcHN1bQ0KDQpmaWVsZCAxOiBzbWlsZXMNCmZpZWxkIDI6IGxhdWdodGVyDQpmaWVsZCAzOiBncmlucw0KZmllbGQgNDogYmx1
 c2hpbmc=</dc:description>
   </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/uri/for/collection2/subcollection1/item2/proxy">
-    <ore:proxyFor rdf:resource="http://repository.lib.uchicago.edu/uri/for/collection2/subcollection1/item2"/>
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/collection2-subcollection1-item2-marc">
+    <ore:proxyFor rdf:resource="http://metadatastorage.lib.uchicago.edu/collection/collection2-subcollection1-item2"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/uri/for/collection2/subcollection1/item2/proxy">
-    <ore:proxyIn rdf:resource="http://repository.lib.uchicago.edu/uri/for/collection2/subcollection1/item2/aggregation"/>
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/collection2-subcollection1-item2-marc">
+    <ore:proxyIn rdf:resource="http://metadatastorage.lib.uchicago.edu/collection/collection2-subcollection1-item2/aggregation"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://repository.lib.uchicago.edu/uri/for/collection2/subcollection1/item2/proxy">
+  <rdf:Description rdf:about="http://metadatastorage.lib.uchicago.edu/collection/collection2-subcollection1-item2-marc">
     <rdf:type rdf:resource="http://www.openarchives.org/ore/terms/Proxy"/>
   </rdf:Description>
 </rdf:RDF>

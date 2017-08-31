@@ -5,9 +5,6 @@
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
-@prefix dummy: <http://dummy-images.com/maps/>.
-@prefix dummyabstract: <http://dummy-images.com/abstract/>.
-@prefix metadatastorage <http://metadatastorage.lib.uchicago.edu/>.
 @base <http://metadatastorage.lib.uchicago.edu/>.
 
 ### To validate: rapper -r -i turtle -c collections.ttl
@@ -20,39 +17,39 @@
 
 ## root collection
 
-<metadatastorage:collection/ldr>
+<collection/ldr>
     dc:title "Library Digital Repository";
     dc:identifier "ldr";
-    dc:hasPart <metadatastorage:collection/collection1>;
+    dc:hasPart <collection/collection1>;
     dc:hasPart <collecton/collection2>;
     dc:hasPart <collection/collection3>;
     edm:type "Collection";
 a edm:ProvidedCHO.
 
-<metadatastorage:collection/ldr/aggregation>
+<collection/ldr/aggregation>
     dcterms:created "[YYYY]-[MM]-[DD]T[HH]:[MM]:[SS]"^^xsd:dateTime; # dcterms:created is machine-generated
     dcterms:modified "[YYYY]-[MM]-[DD]T[HH]:[MM]:[SS]"^^xsd:dateTime; # dcterms:modified is machine-generated
     edm:aggregatedCHO <collection/ldr>;
     edm:dataProvider "University of Chicago Library";
-    edm:isShownAt <metadatastorage:collection/ldr>;
+    edm:isShownAt <collection/ldr>;
     #edm:object <uri/for/collection2/subcollection1/logo.jpg>;
     edm:provider "University of Chicago Library";
     edm:rights <http://creativecommons.org/licenses/by-nc/4.0/>;
 a ore:Aggregation.
 
-<metadatastorage:collection/collection2-subcollection1>
+<collection/collection2-subcollection1>
     dc:title "Collection Two Sub-collection One";
     dc:identifier "collection2-subcollection1";
-    dc:isPartOf <metadatastorage:collection-collection1>;
-    dc:hasPart <metadatastorage:collection/collection2-subcollection1-item1>;
-    dc:hasPart <metadatastorage:collection/collection2-subcollection1-item2>;
+    dc:isPartOf <collection-collection1>;
+    dc:hasPart <collection/collection2-subcollection1-item1>;
+    dc:hasPart <collection/collection2-subcollection1-item2>;
     edm:type "Collection";
 a edm:ProvidedCHO.
 
-<metadatastorage:collection/collection2-subcollection1/aggregation>
+<collection/collection2-subcollection1/aggregation>
     dcterms:created "[YYYY]-[MM]-[DD]T[HH]:[MM]:[SS]"^^xsd:dateTime; # dcterms:created is machine-generated
     dcterms:modified "[YYYY]-[MM]-[DD]T[HH]:[MM]:[SS]"^^xsd:dateTime; # dcterms:modified is machine-generated
-    edm:aggregatedCHO <metadatastorage:collection/collection2-subcollection1>;
+    edm:aggregatedCHO <collection/collection2-subcollection1>;
     edm:dataProvider "University of Chicago Library";
     edm:isShownAt <http://metadatastorage.lib.uchicago.edu/collection/collection2-subcollection1>;
     #edm:object <collection/collection2-subcollection1/logo.jpg>; # is edm:object a required element? what use case are we thinking will need this field?
@@ -60,20 +57,19 @@ a edm:ProvidedCHO.
     edm:rights <http://creativecommons.org/licenses/by-nc/4.0/>;
 a ore:Aggregation.
 
-<metadatastorage:collection/collection2-subcollection1>
+<collection/collection2-subcollection1>
     dc:title "Collection Two Sub-collection Two";
     dc:identifier "collection2-subcollection2";
     dc:isPartOf <collection/collection2>;
-    dc:type "Collection";
     edm:type "Collection";
 a edm:ProvidedCHO.
 
-<metadatastorage:collection/collection2-subcollection2/aggregation>
+<collection/collection2-subcollection2/aggregation>
     dcterms:created "[YYYY]-[MM]-[DD]T[HH]:[MM]:[SS]"^^xsd:dateTime; # dcterms:created is machine-generated
     dcterms:modified "[YYYY]-[MM]-[DD]T[HH]:[MM]:[SS]"^^xsd:dateTime; # dcterms:modified is machine-generated
-    edm:aggregatedCHO <metadatastorage:collection/collection2-subcollection2>;
+    edm:aggregatedCHO <collection/collection2-subcollection2>;
     edm:dataProvider "University of Chicago Library";
-    edm:isShownAt <metadatastorage:collection/collection2-subcollection2>;
+    edm:isShownAt <collection/collection2-subcollection2>;
     #edm:object <collection/collection2-subcollection2/logo.jpg>;
     edm:provider "University of Chicago Library";
     edm:rights <http://creativecommons.org/licenses/by-nc/4.0/>;
@@ -83,14 +79,14 @@ a ore:Aggregation.
 
 ## start of leaf collections
 
-<metadatastorage:collection/collection2-item1>
+<collection/collection2-item1>
     dc:title "An Item in Collection Two";
     dc:identifier "collection2-item1";
     dc:date "2000"^^xsd:dateTime;
     dc:subject "elephants";
     dc:subject "tea kettle";
-    dc:isPartOf <metadatastorage:collection/collection2>;
-    dc:hasPart <dummy:dummy-375x500-WorldMap1689.jpg>;
+    dc:isPartOf <collection/collection2>;
+    dc:hasPart <http://dummy-images.com/maps/dummy-375x500-WorldMap1689.jpg>;
     edm:type "Collection";
 a edm:ProvidedCHO.
 
@@ -115,28 +111,28 @@ a edm:ProvidedCHO.
      dc:identifier "collection2-subcollection1-item1";
      dc:subject "elephants";
      dc:isPartOf <metadatstorage:collection/collection2-subcollection1>;
-     dc:hasPart <dummy:dummy-683x1024-WeekiWacheeSpring.jpg>;
-     dc:hasPart <dummy:dummy-454x280-Musicians.jpg>;
+     dc:hasPart <http://dummy-images.com/maps/dummy-683x1024-WeekiWacheeSpring.jpg>;
+     dc:hasPart <http://dummy-images.com/maps/dummy-454x280-Musicians.jpg>;
      edm:type "Collection";
 a edm:ProvidedCHO.
 
 # THIS CAN'T BE AN ITEM: IT HAS TWO PARTS. IN EAD/SEPIADES TERMS, at most it can be a folder.
- <metadatastorage:collection/collection2-subcollection1-item2>
+ <collection/collection2-subcollection1-item2>
      dc:title "An Item";
      dc:creator "Smith, John";
      dc:date "2017"^^xsd:dateTime;
      dc:identifier "collection2-subcollection1-item2";
      dc:subject "tea kettle";
-     dc:isPartOf <metadatastorage:collection/collection2-subcollection1>;
-     dc:hasPart <dummyabstract:dummy-375x500-Bottles.jpg>;
-     dc:hasPart <dummyabstract:dummy-540x960-Utrecht.jpg>;
+     dc:isPartOf <collection/collection2-subcollection1>;
+     dc:hasPart <http://dummy-images.com/abstract/dummy-375x500-Bottles.jpg>;
+     dc:hasPart <http://dummy-images.com/abstract/dummy-540x960-Utrecht.jpg>;
      edm:type "Collection"; # Duplicate the above here.
 a edm:ProvidedCHO.
 
 # ## end of leaf collections
 
 ## start of proxies for collections
-<metadatastorage:collection/collection2-subcollection1-item1-mods>
+<collection/collection2-subcollection1-item1-mods>
     dc:identifier "collection2-subcollection1-item1-mods";
     dc:description """TG9yZW0gaXBzdW0gZG9sb3Igc2l0IGFtZXQsIGNvbnNlY3RldHVyIGFkaXBpc2NpbmcgZWxpdC4gSW4gbGFjaW5pYSBzb2xsaWNpdHVkaW4gcmlzdXMgaW4gYmxhbmRp
 dC4gU3VzcGVuZGlzc2UgdWxsYW1jb3JwZXIgZGlnbmlzc2ltIGxlbywgbmVjIHBlbGxlbnRlc3F1ZSBuaXNsIHVsdHJpY2llcyBhYy4gTnVsbGEgZmFjaWxpc2kuIFNlZC
@@ -173,11 +169,11 @@ ore:proxyFor <collection/collection2-subcollection1-item1>;
 ore:proxyIn <collection/collection2-subcollection1-item1/aggregation>;
 a ore:Proxy. # omit dc:type for these
 
-<metadatastorage:collection/collection2-subcollection1-item2-marc>
+<collection/collection2-subcollection1-item2-marc>
     dc:identifier "collection2-subcollection1-item2-marc";
     dc:description """IyBsb3JlbSBpcHN1bQ0KDQpmaWVsZCAxOiBzbWlsZXMNCmZpZWxkIDI6IGxhdWdodGVyDQpmaWVsZCAzOiBncmlucw0KZmllbGQgNDogYmx1
 c2hpbmc=""";  # NOTICE THE """ around this because it breaks across lines!
-ore:proxyFor <metadatastorage:collection/collection2-subcollection1-item2>;
-ore:proxyIn <metadatastorage:collection/collection2-subcollection1-item2/aggregation>;
+ore:proxyFor <collection/collection2-subcollection1-item2>;
+ore:proxyIn <collection/collection2-subcollection1-item2/aggregation>;
 a ore:Proxy. # omit dc:type for these
 ## end of proxies for collections
