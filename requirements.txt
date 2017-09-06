@@ -1,3 +1,4 @@
 flask
 flask_env
 flask_restful
+rdflib
