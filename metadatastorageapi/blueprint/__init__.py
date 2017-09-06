@@ -13,12 +13,16 @@ from flask import Blueprint, Response, send_file
 from flask_restful import Resource, Api, reqparse
 from testlib.output import define_namespaces, build_envelope
 
-from .storagelib.filesystemstorage import FileSystemStorage
+from .storagelib.factory import StorageSystemFactory
 
 BLUEPRINT = Blueprint('metadatastorageapi', __name__)
 BLUEPRINT.config = {}
 API = Api(BLUEPRINT)
 LOG = logging.getLogger(__name__)
+
+def _get_storage_system():
+    storagesystem = StorageSystemFactory("xml-filesystem", location="./sandbox/collections.xml").build()
+    return storagesystem
 
 def _common_response_body_building(rtype="aggregate"):
         root = ElementTree.Element("{http://lib.uchicago.edu/ldr}output")
@@ -101,7 +105,8 @@ class AllCollections(Resource):
         be resolvable to a collection.
         """
         from metadatastorageapi import APP
-        collections = FileSystemStorage("sandbox/collections.xml").find_root()
+        storagesystem = _get_storage_system()
+        collections = storagesystem.find_root()
         root, metadata = _common_response_body_building()
         for n_value in collections:
             has_part = ElementTree.SubElement(metadata, "{http://purl.org/dc/elements/1.1/}hasPart")
@@ -122,7 +127,8 @@ class ListForCollection(Resource):
         The value of each dc:hasPart will be resolvable to a collection or an asset
         """
         from metadatastorageapi import APP
-        collections = FileSystemStorage("sandbox/collections.xml").find_specific_collection(collection_identifier)
+        storagesystem = _get_storage_system()
+        collections = storagesystem.find_specific_collection(collection_identifier)
         root, metadata = _common_response_body_building()
         for n_value in collections:
             has_part = ElementTree.SubElement(metadata, "{http://purl.org/dc/elements/1.1/}hasPart")
@@ -145,7 +151,8 @@ class CollectionCore(Resource):
         and/or dc:isPartOf xsi:type="dcterms:URI"
         """
         from metadatastorageapi import APP
-        core_metadata = FileSystemStorage("sandbox/collections.xml").find_core_metadata(collection_identifier)
+        storagesystem = _get_storage_system()
+        core_metadata = storagesystem.find_core_metadata(collection_identifier)
         root, metadata = _common_response_body_building(rtype="atomic")
         for n in core_metadata:
             new = ElementTree.SubElement(metadata, n)
@@ -171,7 +178,8 @@ class ListCollectionProxies(Resource):
         from metadatastorageapi import APP
 
         root, metadata = _common_response_body_building()
-        extensions = FileSystemStorage("sandbox/collections.xml").find_collection_extensions(collection_identifier)
+        storagesystem = _get_storage_system()
+        extensions = storagesystem.find_collection_extensions(collection_identifier)
         for n_value in extensions:
             rel = ElementTree.SubElement(metadata, "{http://purl.org/dc/elements/1.1/}relation")
             rel.set("type", "URI")
@@ -189,7 +197,8 @@ class CollectionProxy(Resource):
         The output will be a response body that is a text/base64 mimetype containing a base64 encoding of some proxy metadata
         """
         from metadatastorageapi import APP
-        extension = FileSystemStorage("sandbox/collections.xml").find_extension(extension_identifier)
+        storagesystem = _get_storage_system()
+        extension = storagesystem.find_extension(extension_identifier)
         return APP.response_class(extension.encode("utf-8"), mimetype="text/plain;base64")
 
 API.add_resource(Root, "/")
