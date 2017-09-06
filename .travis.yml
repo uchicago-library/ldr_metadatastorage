@@ -1,7 +1,7 @@
 env:
     global:
-        - METADATA_STORAGE_API_STORAGE_TYPE=XML-FILESYSTEM
-        - METADATA_STORAGE_API_STORAGE_LOCATION="sandbox/collections.xml"
+        - METADATA_STORAGE_API_STORAGE_TYPE=RDF-FILESYSTEM
+        - METADATA_STORAGE_API_STORAGE_LOCATION="sandbox/collections.rdf"
 language: python
 python:
     - "3.5"
