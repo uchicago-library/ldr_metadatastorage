@@ -14,4 +14,5 @@ class Configuration(metaclass=MetaFlaskEnv):
 
 APP = Flask(__name__)
 APP.config.from_object(Configuration)
+print(APP.config["METADATA_STORAGE_API_STORAGE_TYPE"])
 APP.register_blueprint(BLUEPRINT)
