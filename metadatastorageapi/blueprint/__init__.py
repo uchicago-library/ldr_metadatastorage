@@ -22,9 +22,8 @@ LOG = logging.getLogger(__name__)
 
 def _get_storage_system():
     from flask import current_app
-    print(current_app.config)
-    return StorageSystemFactory(current_app.config.get("METADATA_STORAGE_API_STORAGE_TYPE").lower(),
-                                location=current_app.config.get("METADATA_STORAGE_API_STORAGE_LOCATION").build())
+    return StorageSystemFactory(current_app.config.get("STORAGE_TYPE").lower(),
+                                location=current_app.config.get("STORAGE_LOCATION")).build()
 
 def _common_response_body_building(rtype="aggregate"):
         root = ElementTree.Element("{http://lib.uchicago.edu/ldr}output")

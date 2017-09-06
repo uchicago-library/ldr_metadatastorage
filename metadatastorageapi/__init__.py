@@ -8,11 +8,10 @@ from flask_env import MetaFlaskEnv
 from .blueprint import BLUEPRINT
 
 class Configuration(metaclass=MetaFlaskEnv):
-    ENV_PREFIX='METADATA_STORAGE_API'
+    ENV_PREFIX='METADATA_STORAGE_API_'
     DEBUG = False
     DEFER_CONFIG = False
 
 APP = Flask(__name__)
 APP.config.from_object(Configuration)
-print(APP.config["METADATA_STORAGE_API_STORAGE_TYPE"])
 APP.register_blueprint(BLUEPRINT)
