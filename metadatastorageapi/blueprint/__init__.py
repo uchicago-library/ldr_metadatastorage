@@ -22,6 +22,7 @@ LOG = logging.getLogger(__name__)
 
 def _get_storage_system():
     from flask import current_app
+    print(current_app.config.get("STORAGE_LOCATION"))
     return StorageSystemFactory(current_app.config.get("STORAGE_TYPE").lower(),
                                 location=current_app.config.get("STORAGE_LOCATION")).build()
 

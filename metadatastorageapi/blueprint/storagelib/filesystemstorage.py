@@ -7,6 +7,7 @@ from .storagesystem import StorageSystem
 class FileSystemStorage(StorageSystem):
     def __init__(self, filepath):
         self.filepath = path.abspath(filepath)
+        print(self.filepath)
         self.data_root = ElementTree.parse(self.filepath).getroot()
 
     def _match_collection(self, collection="root"):
