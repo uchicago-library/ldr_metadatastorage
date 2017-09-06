@@ -1,6 +1,6 @@
 env:
     global:
-        - METADATA_STORAGE_API_STORAGE_TYPE=XML
+        - METADATA_STORAGE_API_STORAGE_TYPE=XML-FILESYSTEM
         - METADATA_STORAGE_API_STORAGE_LOCATION="sandbox/collections.xml"
 language: python
 python:
