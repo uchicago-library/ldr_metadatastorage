@@ -8,7 +8,7 @@ from flask_env import MetaFlaskEnv
 from .blueprint import BLUEPRINT
 
 class Configuration(metaclass=MetaFlaskEnv):
-    ENV_PREFIX='METADATA_STORAGE_API'
+    ENV_PREFIX='MSAPI_'
     DEBUG = False
     DEFER_CONFIG = False
 

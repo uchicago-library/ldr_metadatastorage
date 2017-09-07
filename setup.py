@@ -5,8 +5,8 @@ validate POST data, validate GET requests
 
 The API should be storage backend agnostic like the asset storage API so that the
 library can switch backend when it needs to.
-
 """
+
 from setuptools import setup
 
 def readme():

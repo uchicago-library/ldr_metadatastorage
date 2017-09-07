@@ -18,7 +18,7 @@
 - cd into the repo directory
 - run python setup.py development
 - chmod +x debug.sh
-- run ``bash ./debug.sh```
+- run ``METADATA_STORAGE_API_STORAGE_TYPE=XML-FILESYSTEM|RDF-FILESYSTEM METADATA_STORAGE_API_STORAGE_LOCATION=/path/to/metadata_file ./debug.sh```
 - open up your browser and navigate to ```http://localhost:5000/``` or open up a shell and call ```curl http://localhost:5000/```. It should return the following output:
 
 ```xml
