@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <title>Cross-Browsing LDR Digital Collections</title>
+  <!-- Bootstrap core CSS -->
+  <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Custom styles for this template -->
+  <link href="navbar-top.css" rel="stylesheet">
+</head>
+
+<body>
+  <nav class="navbar navbar-default navbar-static-top">
+    <div class="container">
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#navbarData" aria-expanded="false"
+        aria-controls="navbar">
+               <span class="sr-only">Toggle navigation</span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+            </button>
+      <a class="navbar-brand" href="index.html">LDR Digital Collections</a>
+      <div id="navbarData" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="browse.html">Browse</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <form action="search.html" method="get">
+            <input name="query" id="query" placeholder="Enter search term" />
+            <button type="submit" class="btn btn-primary">Search</button>
+          </form>
+          <li><a href="advanced.html">Advanced Search</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+          <form method="get" action="search.html">
+              <div class="form-group">
+                <label for="title-query">Word or Phrase in Title</label>
+                <input type="email" class="form-control" id="title-query"/>
+              </div>
+              <div class="form-group">
+                <label for="title-query">Word or Phrase in Creator</label>
+                <input type="email" class="form-control" id="creator-query"/>
+              </div>
+              <div class="form-group">
+                <label for="title-query">Subject To Search</label>
+                <input type="email" class="form-control" id="subject-query"/>
+              </div>
+              <div class="form-group">
+                <label for="title-query">Identifier To Search</label>
+                <input type="email" class="form-control" id="identifier-query"/>
+              </div>
+              <button type="submit" class="btn btn-primary">Search</button>
+          </form>
+      </div>
+    </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n"
+    crossorigin="anonymous"></script>
+  <script src="bootstrap/jquery.js"></script>
+  <script src="bootstrap/js/bootstrap.min.js"></script>
+  <script src="custom.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <title>Cross-Browsing LDR Digital Collections</title>
+  <!-- Bootstrap core CSS -->
+  <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Custom styles for this template -->
+  <link href="navbar-top.css" rel="stylesheet">
+</head>
+
+<body>
+  <nav class="navbar navbar-default navbar-static-top">
+    <div class="container">
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#navbarData" aria-expanded="false"
+        aria-controls="navbar">
+               <span class="sr-only">Toggle navigation</span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+            </button>
+      <a class="navbar-brand" href="index.html">LDR Digital Collections</a>
+      <div id="navbarData" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="browse.html">Browse</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <form action="search.html" method="get">
+            <input name="query" id="query" placeholder="Enter search term" />
+            <input type="submit" value="Search">
+          </form>
+          <li><a href="advanced.html">Advanced Search</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <h1>Searching LDR Digital Collections</h1>
+        <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>Title</th>
+                    <th>Creator</th>
+                    <th>Date</th>
+                    <th>Links</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><a href="#">A Picture of 3 Chickens</a></td>
+                        <td>Some Author</td>
+                        <td>1100</td>
+                        <td>
+                            <a href="#">http://example.com/foo.jpg</a>,
+                            <a href="#">http://example.com/foo.tif</a>,
+                            <a href="#">http://example.com/foo.xml</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><a href="#">Some Publication Issue 2, Volume 12</a></td>
+                        <td>Another Author</td>
+                        <td>2200-12</td>
+                        <td>
+                            <a href="#">/search?identifier=some-publication-2-12</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><a href="#">Some Publication Issue 3, Volume 12</a></td>
+                        <td>An Author</td>
+                        <td>1912-03</td>
+                        <td>
+                            <a href="#">/search?identifier=some-publication-2-12</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><a href="#">Picture of A Building on Campus in Winter Time</a></td>
+                        <td>Jane Doe</td>
+                        <td>1200-01-01</td>
+                        <td>
+                            <a href="#">http://example.com/bar.jpg</a>,
+                            <a href="#">http://example.com/bar.tif</a>,
+                            <a href="#">http://example.com/bar.xml</a>
+                        </td>
+                    </tr>
+
+
+
+                </tbody>
+            </table>
+
+
+      </div>
+    </div>
+  </div>
+  <script src="bootstrap/jquery.js"></script>
+  <script src="bootstrap/js/bootstrap.min.js"></script>
+  <script src="custom.js"></script>
+</body>
+
+</html>
