@@ -1,6 +1,7 @@
 env:
-    - MSAPI_STORAGE_TYPE=XML-FILESYSTEM
-    - MSAPI_STORAGE_LOCATION="sandbox/collections.xml"
+    global:
+        - MSAPI_STORAGE_TYPE=XML-FILESYSTEM
+        - MSAPI_STORAGE_LOCATION="sandbox/collections.xml"
 language: python
 python:
     - "3.5"
