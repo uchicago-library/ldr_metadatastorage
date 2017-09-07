@@ -13,7 +13,6 @@ class RDFFileSystemStorage(StorageSystem):
 
     def find_root(self):
         root = URIRef(self._namespaces["ldr"]["ldr"])
-        print(root)
         query = self._graph.query(
             """SELECT DISTINCT ?aname ?bname
             WHERE {
@@ -21,8 +20,9 @@ class RDFFileSystemStorage(StorageSystem):
             }
             """
         )
-        print(query)
-        raise NotImplementedError
+        for n in query:
+            print(n)
+        return []
 
     def find_specific_collection(self, identifier):
         raise NotImplementedError
