@@ -1,6 +1,5 @@
 #!/bin/bash
-
-APP_SAVE=$FLASK_APP
 FLASK_APP=metadatastorageapi
-python -m flask run
+APP_SAVE=$FLASK_APP
+python -m flask run --debugger
 export FLASK_APP=$APP_SAVE
