@@ -27,12 +27,12 @@
       <div id="navbarData" class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
           <li><a href="index.html">Home</a></li>
-          <li><a href="browse.html">Browse</a></li>
+          <li><a href="browse.html">Browse Projects</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
           <form action="search.html" method="get">
             <input name="query" id="query" placeholder="Enter search term" />
-            <input type="submit" value="Search">
+            <button type="submit" class="btn btn-primary">Search</button>
           </form>
           <li><a href="advanced.html">Advanced Search</a></li>
         </ul>
@@ -54,7 +54,7 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td><a href="#">A Picture of 3 Chickens</a></td>
+                        <td>Picture of 3 Chickens</td>
                         <td>Some Author</td>
                         <td>1100</td>
                         <td>
@@ -64,23 +64,43 @@
                         </td>
                     </tr>
                     <tr>
-                        <td><a href="#">Some Publication Issue 2, Volume 12</a></td>
+                        <td>Some Publication Issue 2, Volume 12</td>
                         <td>Another Author</td>
                         <td>2200-12</td>
                         <td>
-                            <a href="#">/search?identifier=some-publication-2-12</a>
+                            <a href="search.html?identifier=some-publication-2-12">search.html?identifier=some-publication-2-12</a>
                         </td>
                     </tr>
                     <tr>
-                        <td><a href="#">Some Publication Issue 3, Volume 12</a></td>
+                        <td>Some Publication Issue 3, Volume 12</td>
                         <td>An Author</td>
                         <td>1912-03</td>
                         <td>
-                            <a href="#">/search?identifier=some-publication-2-12</a>
+                            <a href="search.html?identifier=some-publication-2-12">search.html?identifier=some-publication-2-12</a>
                         </td>
                     </tr>
                     <tr>
-                        <td><a href="#">Picture of A Building on Campus in Winter Time</a></td>
+                        <td>MODS Metdata for foo-0001-02-DG-RF12 </td>
+                        <td>University of Chicago Library</td>
+                        <td>2009-04-02-03</td>
+                        <td>
+                            <a href="http://metadatastorage.lib.uchicago.edu/collection/foo-00001-02-DF-RF12-mods/core">
+                              http://metadatastorage.lib.uchicago.edu/collection/foo-00001-02-DF-RF12-mods/core
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>MARC Metdata for baz-0A122G</td>
+                        <td>University of Chicago Library</td>
+                        <td>2001-04-02-03</td>
+                        <td>
+                            <a href="http://metadatastorage.lib.uchicago.edu/collection/baz-0A122G/core">
+                              http://metadatastorage.lib.uchicago.edu/collection/baz-0A122G/core
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Picture of A Building on Campus in Winter Time</td>
                         <td>Jane Doe</td>
                         <td>1200-01-01</td>
                         <td>
@@ -89,6 +109,17 @@
                             <a href="#">http://example.com/bar.xml</a>
                         </td>
                     </tr>
+                    <tr>
+                        <td>Page One of Volume 1916, Issue 0912 of Chicago Maroon</td>
+                        <td>University of Chicago</td>
+                        <td>1916-09-12</td>
+                        <td>
+                            <a href="http://digcollretriever.lib.uchicago.edu/mvol-0004-1916-0012_0001/jpg">http://digcollretriever.lib.uchicago.edu/mvol-0004-1916-0012_0001/jpg</a>,
+                            <a href="http://digcollretriever.lib.uchicago.edu/mvol-0004-1916-0012_0001/tif">http://digcollretriever.lib.uchicago.edu/mvol-0004-1916-0012_0001/tif</a>,
+                            <a href="http://digcollretriever.lib.uchicago.edu/mvol-0004-1916-0012_0001/alto">http://digcollretriever.lib.uchicago.edu/mvol-0004-1916-0012_0001/alto</a>,
+                        </td>
+                    </tr>
+
 
 
 
